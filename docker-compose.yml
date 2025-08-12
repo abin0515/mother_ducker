@@ -78,8 +78,45 @@ services:
     container_name: mother-ducker-nginx
     ports:
       - "80:80"
-    volumes:
-      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    command: |
+      sh -c "
+      cat > /etc/nginx/nginx.conf << 'EOF'
+      events {
+          worker_connections 1024;
+      }
+      http {
+          upstream user-service {
+              server user-service:8081;
+          }
+          upstream product-service {
+              server product-service:8082;
+          }
+          server {
+              listen 80;
+              server_name localhost;
+              location /api/users {
+                  proxy_pass http://user-service;
+                  proxy_set_header Host \$$host;
+                  proxy_set_header X-Real-IP \$$remote_addr;
+              }
+              location /api/products {
+                  proxy_pass http://product-service;
+                  proxy_set_header Host \$$host;
+                  proxy_set_header X-Real-IP \$$remote_addr;
+              }
+              location /health {
+                  return 200 'healthy';
+                  add_header Content-Type text/plain;
+              }
+              location / {
+                  return 200 '<h1>🦆 Mother Ducker API Gateway</h1><p>User Service: <a href=\"/api/users\">/api/users</a></p><p>Product Service: <a href=\"/api/products\">/api/products</a></p>';
+                  add_header Content-Type text/html;
+              }
+          }
+      }
+      EOF
+      nginx -g 'daemon off;'
+      "
     depends_on:
       - user-service
       - product-service
