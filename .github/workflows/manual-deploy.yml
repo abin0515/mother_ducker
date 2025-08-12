@@ -1,0 +1,61 @@
+name: Manual Deployment
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Environment to deploy to'
+        required: true
+        default: 'staging'
+        type: choice
+        options:
+        - staging
+        - production
+      service:
+        description: 'Service to deploy'
+        required: true
+        default: 'all'
+        type: choice
+        options:
+        - all
+        - user-service
+        - product-service
+      version:
+        description: 'Version/Tag to deploy (default: latest)'
+        required: false
+        default: 'latest'
+
+jobs:
+  manual-deploy:
+    name: Manual Deploy to ${{ github.event.inputs.environment }}
+    runs-on: ubuntu-latest
+    environment: ${{ github.event.inputs.environment }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Deploy User Service
+        if: github.event.inputs.service == 'all' || github.event.inputs.service == 'user-service'
+        run: |
+          echo "🚀 Deploying User Service to ${{ github.event.inputs.environment }}"
+          echo "Image: ghcr.io/${{ github.repository_owner }}/user-service:${{ github.event.inputs.version }}"
+          # Add deployment commands here
+
+      - name: Deploy Product Service
+        if: github.event.inputs.service == 'all' || github.event.inputs.service == 'product-service'
+        run: |
+          echo "🚀 Deploying Product Service to ${{ github.event.inputs.environment }}"
+          echo "Image: ghcr.io/${{ github.repository_owner }}/product-service:${{ github.event.inputs.version }}"
+          # Add deployment commands here
+
+      - name: Post-deployment tests
+        run: |
+          echo "✅ Running post-deployment health checks..."
+          # Add health check commands here
