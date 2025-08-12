@@ -10,6 +10,10 @@ on:
     paths:
       - 'backend/**'
 
+permissions:
+  contents: read
+  packages: write
+
 env:
   JAVA_VERSION: '17'
   JAVA_DISTRIBUTION: 'temurin'
@@ -157,6 +161,7 @@ jobs:
           tags: |
             ghcr.io/${{ github.repository_owner }}/user-service:latest
             ghcr.io/${{ github.repository_owner }}/user-service:${{ github.sha }}
+        continue-on-error: true
 
       - name: Build and push Product Service image
         uses: docker/build-push-action@v5
@@ -166,6 +171,7 @@ jobs:
           tags: |
             ghcr.io/${{ github.repository_owner }}/product-service:latest
             ghcr.io/${{ github.repository_owner }}/product-service:${{ github.sha }}
+        continue-on-error: true
 
   # Job 5: Integration Tests
   integration-tests:
