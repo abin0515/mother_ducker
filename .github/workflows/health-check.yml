@@ -1,0 +1,77 @@
+name: Health Check
+
+on:
+  schedule:
+    # Run every 6 hours
+    - cron: '0 */6 * * *'
+  workflow_dispatch:
+
+jobs:
+  health-check:
+    name: Service Health Check
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Start services
+        run: |
+          cd backend
+          docker-compose up -d
+
+      - name: Wait for services
+        run: |
+          echo "Waiting for services to be ready..."
+          sleep 45
+
+      - name: Check User Service health
+        run: |
+          for i in {1..5}; do
+            if curl -f http://localhost:8081/api/users/health; then
+              echo "✅ User Service is healthy"
+              break
+            else
+              echo "⏳ Attempt $i failed, retrying..."
+              sleep 10
+            fi
+          done
+
+      - name: Check Product Service health
+        run: |
+          for i in {1..5}; do
+            if curl -f http://localhost:8082/api/products/health; then
+              echo "✅ Product Service is healthy"
+              break
+            else
+              echo "⏳ Attempt $i failed, retrying..."
+              sleep 10
+            fi
+          done
+
+      - name: Test basic functionality
+        run: |
+          # Test User Service
+          echo "Testing User Service..."
+          USER_RESPONSE=$(curl -s -X POST http://localhost:8081/api/users \
+            -H "Content-Type: application/json" \
+            -d '{"name": "Health Check User", "email": "health@example.com"}')
+          echo "User created: $USER_RESPONSE"
+          
+          # Test Product Service
+          echo "Testing Product Service..."
+          PRODUCT_RESPONSE=$(curl -s -X POST http://localhost:8082/api/products \
+            -H "Content-Type: application/json" \
+            -d '{"name": "Health Check Product", "description": "Test product", "price": 1.00, "stock": 1}')
+          echo "Product created: $PRODUCT_RESPONSE"
+
+      - name: Cleanup
+        if: always()
+        run: |
+          cd backend
+          docker-compose down
+
+      - name: Notify on failure
+        if: failure()
+        run: |
+          echo "🚨 Health check failed! Services may be down." >> $GITHUB_STEP_SUMMARY
