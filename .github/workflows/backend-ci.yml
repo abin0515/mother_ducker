@@ -204,7 +204,7 @@ jobs:
       - name: Start services with Docker Compose
         run: |
           cd backend
-          docker-compose up -d --build
+          docker compose up -d --build
           
       - name: Wait for services to be ready
         run: |
@@ -219,9 +219,9 @@ jobs:
         if: always()
         run: |
           echo "=== User Service Logs ==="
-          docker-compose -f backend/docker-compose.yml logs user-service || true
+          docker compose -f backend/docker-compose.yml logs user-service || true
           echo "=== Product Service Logs ==="
-          docker-compose -f backend/docker-compose.yml logs product-service || true
+          docker compose -f backend/docker-compose.yml logs product-service || true
           
       - name: Test User Service health
         run: |
@@ -267,7 +267,7 @@ jobs:
         if: always()
         run: |
           cd backend
-          docker-compose down
+          docker compose down
 
   # Job 6: Deploy to Staging (optional)
   deploy-staging:
