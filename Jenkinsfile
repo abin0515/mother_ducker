@@ -11,9 +11,7 @@ pipeline {
         PRODUCT_SERVICE_IMAGE = "mother-ducker/product-service"
     }
     
-    tools {
-        maven 'Maven-3.9'  // Configure this in Jenkins Global Tools
-    }
+    // Using Maven from Docker containers instead of Jenkins tools
     
     stages {
         stage('Checkout') {
@@ -29,7 +27,7 @@ pipeline {
                     steps {
                         echo '🧪 Running User Service tests...'
                         dir('backend/user-service') {
-                            sh './mvnw clean test'
+                            sh 'docker run --rm -v $(pwd):/app -w /app maven:3.9-openjdk-17 mvn clean test'
                         }
                     }
                     post {
@@ -44,7 +42,7 @@ pipeline {
                     steps {
                         echo '🧪 Running Product Service tests...'
                         dir('backend/product-service') {
-                            sh './mvnw clean test'
+                            sh 'docker run --rm -v $(pwd):/app -w /app maven:3.9-openjdk-17 mvn clean test'
                         }
                     }
                     post {
