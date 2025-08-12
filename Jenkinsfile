@@ -27,7 +27,12 @@ pipeline {
                     steps {
                         echo '🧪 Running User Service tests...'
                         dir('backend/user-service') {
-                            sh 'docker run --rm -v $(pwd):/app -w /app maven:3.9-openjdk-17 mvn clean test'
+                            sh '''
+                                docker run --rm -v $(pwd):/app -w /app eclipse-temurin:17-jdk bash -c "
+                                    apt-get update && apt-get install -y maven && 
+                                    mvn clean test
+                                "
+                            '''
                         }
                     }
                     post {
@@ -46,7 +51,12 @@ pipeline {
                     steps {
                         echo '🧪 Running Product Service tests...'
                         dir('backend/product-service') {
-                            sh 'docker run --rm -v $(pwd):/app -w /app maven:3.9-openjdk-17 mvn clean test'
+                            sh '''
+                                docker run --rm -v $(pwd):/app -w /app eclipse-temurin:17-jdk bash -c "
+                                    apt-get update && apt-get install -y maven && 
+                                    mvn clean test
+                                "
+                            '''
                         }
                     }
                     post {
