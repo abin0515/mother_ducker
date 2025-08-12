@@ -139,8 +139,8 @@ pipeline {
                     // Check User Service health
                     sh '''
                         for i in {1..10}; do
-                            if curl -f http://localhost:8081/actuator/health; then
-                                echo "✅ User Service is healthy"
+                            if docker exec mother-ducker-user-service curl -f http://localhost:8081/actuator/health; then
+                                echo "✅ User Service is healthy!"
                                 break
                             fi
                             echo "⏳ Waiting for User Service... (attempt $i/10)"
@@ -151,8 +151,8 @@ pipeline {
                     // Check Product Service health
                     sh '''
                         for i in {1..10}; do
-                            if curl -f http://localhost:8082/actuator/health; then
-                                echo "✅ Product Service is healthy"
+                            if docker exec mother-ducker-product-service curl -f http://localhost:8082/actuator/health; then
+                                echo "✅ Product Service is healthy!"
                                 break
                             fi
                             echo "⏳ Waiting for Product Service... (attempt $i/10)"
@@ -167,17 +167,19 @@ pipeline {
             steps {
                 echo '🔗 Running integration tests...'
                 script {
-                    // Test API endpoints
+                    // Test API endpoints through docker exec and nginx
                     sh '''
-                        # Test User Service
-                        curl -X GET http://localhost:8081/api/users
+                        echo "🧪 Testing User Service directly..."
+                        docker exec mother-ducker-user-service curl -X GET http://localhost:8081/api/users
                         
-                        # Test Product Service  
-                        curl -X GET http://localhost:8082/api/products
+                        echo "🧪 Testing Product Service directly..."  
+                        docker exec mother-ducker-product-service curl -X GET http://localhost:8082/api/products
                         
-                        # Test through Nginx proxy
-                        curl -X GET http://localhost/api/users
-                        curl -X GET http://localhost/api/products
+                        echo "🌐 Testing through Nginx API Gateway..."
+                        docker exec mother-ducker-nginx curl -X GET http://user-service:8081/api/users
+                        docker exec mother-ducker-nginx curl -X GET http://product-service:8082/api/products
+                        
+                        echo "✅ All integration tests passed!"
                     '''
                 }
             }
