@@ -76,20 +76,22 @@ pipeline {
                 stage('Build User Service Image') {
                     steps {
                         echo '🐳 Building User Service Docker image...'
-                        script {
-                            def userServiceImage = docker.build("${USER_SERVICE_IMAGE}:${IMAGE_TAG}", "./backend/user-service")
-                            userServiceImage.tag("${USER_SERVICE_IMAGE}:latest")
-                        }
+                        sh '''
+                            cd backend/user-service
+                            docker build -t ${USER_SERVICE_IMAGE}:${IMAGE_TAG} .
+                            docker tag ${USER_SERVICE_IMAGE}:${IMAGE_TAG} ${USER_SERVICE_IMAGE}:latest
+                        '''
                     }
                 }
                 
                 stage('Build Product Service Image') {
                     steps {
                         echo '🐳 Building Product Service Docker image...'
-                        script {
-                            def productServiceImage = docker.build("${PRODUCT_SERVICE_IMAGE}:${IMAGE_TAG}", "./backend/product-service")
-                            productServiceImage.tag("${PRODUCT_SERVICE_IMAGE}:latest")
-                        }
+                        sh '''
+                            cd backend/product-service
+                            docker build -t ${PRODUCT_SERVICE_IMAGE}:${IMAGE_TAG} .
+                            docker tag ${PRODUCT_SERVICE_IMAGE}:${IMAGE_TAG} ${PRODUCT_SERVICE_IMAGE}:latest
+                        '''
                     }
                 }
             }
