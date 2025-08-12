@@ -125,23 +125,68 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Set up JDK ${{ env.JAVA_VERSION }}
+        uses: actions/setup-java@v4
+        with:
+          java-version: ${{ env.JAVA_VERSION }}
+          distribution: ${{ env.JAVA_DISTRIBUTION }}
+
+      - name: Build JARs for Docker
+        run: |
+          cd backend/user-service && mvn clean package -DskipTests
+          cd ../product-service && mvn clean package -DskipTests
+
       - name: Start services with Docker Compose
         run: |
           cd backend
-          docker-compose up -d
+          docker-compose up -d --build
           
       - name: Wait for services to be ready
         run: |
           echo "Waiting for services to start..."
-          sleep 30
+          sleep 45
+          
+      - name: Check Docker containers
+        run: |
+          docker ps
           
       - name: Test User Service health
         run: |
-          curl -f http://localhost:8081/api/users/health || exit 1
+          for i in {1..10}; do
+            if curl -f http://localhost:8081/api/users/health; then
+              echo "✅ User Service is healthy"
+              break
+            else
+              echo "⏳ Attempt $i failed, retrying in 5 seconds..."
+              sleep 5
+            fi
+          done
           
       - name: Test Product Service health
         run: |
-          curl -f http://localhost:8082/api/products/health || exit 1
+          for i in {1..10}; do
+            if curl -f http://localhost:8082/api/products/health; then
+              echo "✅ Product Service is healthy"
+              break
+            else
+              echo "⏳ Attempt $i failed, retrying in 5 seconds..."
+              sleep 5
+            fi
+          done
+
+      - name: Basic API tests
+        run: |
+          # Test User Service
+          echo "Testing User Service API..."
+          curl -X POST http://localhost:8081/api/users \
+            -H "Content-Type: application/json" \
+            -d '{"name": "Test User", "email": "test@example.com"}'
+          
+          # Test Product Service  
+          echo "Testing Product Service API..."
+          curl -X POST http://localhost:8082/api/products \
+            -H "Content-Type: application/json" \
+            -d '{"name": "Test Product", "description": "Test Description", "price": 99.99, "stock": 10}'
 
       - name: Stop services
         if: always()
