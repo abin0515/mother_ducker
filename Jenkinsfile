@@ -112,9 +112,10 @@ pipeline {
             steps {
                 echo '🚀 Deploying to local environment...'
                 script {
-                    // Stop existing containers
+                    // Stop existing containers and remove them forcefully
                     sh '''
                         docker-compose down || true
+                        docker rm -f mother-ducker-user-service mother-ducker-product-service mother-ducker-nginx || true
                         docker system prune -f || true
                     '''
                     
