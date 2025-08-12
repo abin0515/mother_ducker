@@ -8,6 +8,7 @@ import java.math.BigDecimal;
 
 @Entity
 @Table(name = "products")
+// 🧪 Test comment for automatic Jenkins build trigger
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
