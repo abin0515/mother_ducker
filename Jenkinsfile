@@ -32,8 +32,12 @@ pipeline {
                     }
                     post {
                         always {
-                            // Publish test results
-                            publishTestResults testResultsPattern: 'backend/user-service/target/surefire-reports/*.xml'
+                            // Publish test results using built-in junit step
+                            script {
+                                if (fileExists('backend/user-service/target/surefire-reports/*.xml')) {
+                                    junit 'backend/user-service/target/surefire-reports/*.xml'
+                                }
+                            }
                         }
                     }
                 }
@@ -47,8 +51,12 @@ pipeline {
                     }
                     post {
                         always {
-                            // Publish test results
-                            publishTestResults testResultsPattern: 'backend/product-service/target/surefire-reports/*.xml'
+                            // Publish test results using built-in junit step
+                            script {
+                                if (fileExists('backend/product-service/target/surefire-reports/*.xml')) {
+                                    junit 'backend/product-service/target/surefire-reports/*.xml'
+                                }
+                            }
                         }
                     }
                 }
@@ -174,26 +182,17 @@ pipeline {
         
         success {
             echo '✅ Pipeline completed successfully!'
-            // Send success notification
-            slackSend(
-                channel: '#deployments',
-                color: 'good',
-                message: "✅ Mother Ducker deployment successful! Build #${BUILD_NUMBER}\n" +
-                        "🔗 User Service: http://localhost:8081\n" +
-                        "🔗 Product Service: http://localhost:8082\n" +
-                        "🌐 Gateway: http://localhost"
-            )
+            echo "🔗 User Service: http://localhost:8081"
+            echo "🔗 Product Service: http://localhost:8082" 
+            echo "🌐 Gateway: http://localhost"
+            // Note: Install Slack plugin for notifications
         }
         
         failure {
             echo '❌ Pipeline failed!'
-            // Send failure notification
-            slackSend(
-                channel: '#deployments',
-                color: 'danger',
-                message: "❌ Mother Ducker deployment failed! Build #${BUILD_NUMBER}\n" +
-                        "📋 Check: ${BUILD_URL}"
-            )
+            echo "📋 Check build logs for details"
+            echo "🔗 Build URL: ${BUILD_URL}"
+            // Note: Install Slack plugin for notifications
         }
     }
 }
