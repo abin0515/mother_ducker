@@ -3,6 +3,7 @@ package com.example.userservice;
 import jakarta.persistence.*;
 
 
+
 @Entity
 @Table(name = "users")
 public class User {
