@@ -28,14 +28,9 @@ pipeline {
                         echo '🧪 Running User Service tests...'
                         dir('backend/user-service') {
                             sh '''
-                                echo "Current directory: $(pwd)"
-                                echo "Files in directory:"
-                                ls -la
-                                docker run --rm -v $(pwd):/app -w /app eclipse-temurin:17-jdk bash -c "
-                                    echo 'Files in container /app:' && ls -la /app &&
-                                    apt-get update && apt-get install -y maven && 
-                                    mvn clean test
-                                "
+                                # Build only the test stage of our Dockerfile
+                                docker build --target build -t user-service-test -f Dockerfile .
+                                docker run --rm user-service-test bash -c "mvn test"
                             '''
                         }
                     }
@@ -56,14 +51,9 @@ pipeline {
                         echo '🧪 Running Product Service tests...'
                         dir('backend/product-service') {
                             sh '''
-                                echo "Current directory: $(pwd)"
-                                echo "Files in directory:"
-                                ls -la
-                                docker run --rm -v $(pwd):/app -w /app eclipse-temurin:17-jdk bash -c "
-                                    echo 'Files in container /app:' && ls -la /app &&
-                                    apt-get update && apt-get install -y maven && 
-                                    mvn clean test
-                                "
+                                # Build only the test stage of our Dockerfile
+                                docker build --target build -t product-service-test -f Dockerfile .
+                                docker run --rm product-service-test bash -c "mvn test"
                             '''
                         }
                     }
