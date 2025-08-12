@@ -59,8 +59,7 @@ jobs:
       - name: Deploy User Service to Railway
         run: |
           cd backend/user-service
-          railway login --token ${{ secrets.RAILWAY_TOKEN }}
-          railway up --service user-service
+          railway up
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
 
@@ -80,8 +79,7 @@ jobs:
       - name: Deploy Product Service to Railway
         run: |
           cd backend/product-service
-          railway login --token ${{ secrets.RAILWAY_TOKEN }}
-          railway up --service product-service
+          railway up
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
 
