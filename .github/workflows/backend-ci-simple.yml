@@ -139,7 +139,7 @@ jobs:
       - name: Start services with Docker Compose
         run: |
           cd backend
-          docker-compose up -d --build
+          docker compose up -d --build
           
       - name: Wait for services to be ready
         run: |
@@ -192,7 +192,7 @@ jobs:
         if: always()
         run: |
           cd backend
-          docker-compose down
+          docker compose down
 
   # Job 5: Success Summary
   success:
