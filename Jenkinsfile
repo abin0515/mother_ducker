@@ -249,6 +249,64 @@ pipeline {
                 }
             }
         }
+        
+        stage('Cleanup Old Images') {
+            steps {
+                echo '🧹 Cleaning up old Docker images created by Jenkins...'
+                script {
+                    sh '''
+                        echo "📊 Docker usage before cleanup:"
+                        docker system df
+                        
+                        echo "🧹 Removing old Jenkins-built images..."
+                        
+                        # Keep only the 3 most recent builds for each service
+                        KEEP_COUNT=3
+                        
+                        # Clean up User Service images
+                        echo "🔄 Cleaning user-service images..."
+                        docker images ${USER_SERVICE_IMAGE} --format "{{.Tag}}" | grep -E "^[0-9]+$" | sort -nr | tail -n +$((KEEP_COUNT + 1)) | while read tag; do
+                            if [ ! -z "$tag" ] && [ "$tag" != "latest" ]; then
+                                echo "🗑️ Removing old image: ${USER_SERVICE_IMAGE}:$tag"
+                                docker rmi ${USER_SERVICE_IMAGE}:$tag || echo "⚠️ Could not remove ${USER_SERVICE_IMAGE}:$tag"
+                            fi
+                        done
+                        
+                        # Clean up Product Service images  
+                        echo "🔄 Cleaning product-service images..."
+                        docker images ${PRODUCT_SERVICE_IMAGE} --format "{{.Tag}}" | grep -E "^[0-9]+$" | sort -nr | tail -n +$((KEEP_COUNT + 1)) | while read tag; do
+                            if [ ! -z "$tag" ] && [ "$tag" != "latest" ]; then
+                                echo "🗑️ Removing old image: ${PRODUCT_SERVICE_IMAGE}:$tag"
+                                docker rmi ${PRODUCT_SERVICE_IMAGE}:$tag || echo "⚠️ Could not remove ${PRODUCT_SERVICE_IMAGE}:$tag"
+                            fi
+                        done
+                        
+                        # Clean up Frontend images
+                        echo "🔄 Cleaning frontend images..."
+                        docker images ${FRONTEND_IMAGE} --format "{{.Tag}}" | grep -E "^[0-9]+$" | sort -nr | tail -n +$((KEEP_COUNT + 1)) | while read tag; do
+                            if [ ! -z "$tag" ] && [ "$tag" != "latest" ]; then
+                                echo "🗑️ Removing old image: ${FRONTEND_IMAGE}:$tag"
+                                docker rmi ${FRONTEND_IMAGE}:$tag || echo "⚠️ Could not remove ${FRONTEND_IMAGE}:$tag"
+                            fi
+                        done
+                        
+                        # Clean up test images from this build
+                        echo "🧪 Cleaning up test images..."
+                        docker rmi user-service-test:latest || echo "⚠️ Could not remove user-service-test"
+                        docker rmi product-service-test:latest || echo "⚠️ Could not remove product-service-test"
+                        
+                        # Remove dangling images
+                        echo "🗑️ Removing dangling images..."
+                        docker image prune -f
+                        
+                        echo "📊 Docker usage after cleanup:"
+                        docker system df
+                        
+                        echo "✅ Image cleanup completed!"
+                    '''
+                }
+            }
+        }
     }
     
     post {
