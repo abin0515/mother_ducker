@@ -75,9 +75,8 @@ pipeline {
                         echo '🧪 Running Frontend tests...'
                         dir('frontend') {
                             sh '''
-                                # Build only the deps stage of our Dockerfile for testing
-                                docker build --target deps -t frontend-deps -f Dockerfile .
-                                docker run --rm -v $(pwd):/app -w /app frontend-deps sh -c "
+                                # Use Node.js Docker image directly for testing
+                                docker run --rm -v $(pwd):/workspace -w /workspace node:18-alpine sh -c "
                                     npm install -g pnpm &&
                                     pnpm install --frozen-lockfile &&
                                     pnpm run lint:strict &&
