@@ -93,6 +93,7 @@ export default function HomePage() {
   const createProduct = async () => {
     if (!newProduct.name || !newProduct.description || !newProduct.price) return;
     setLoading(true);
+    
     try {
       const response = await fetch('/api/products', {
         method: 'POST',
