@@ -5,6 +5,9 @@ const nextConfig = {
   },
 
   reactStrictMode: true,
+  
+  // Enable standalone output for Docker
+  output: 'standalone',
 
   // Uncoment to add domain whitelist
   // images: {

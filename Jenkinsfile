@@ -9,6 +9,7 @@ pipeline {
         // Service names
         USER_SERVICE_IMAGE = "mother-ducker/user-service"
         PRODUCT_SERVICE_IMAGE = "mother-ducker/product-service"
+        FRONTEND_IMAGE = "mother-ducker/frontend"
     }
     
     // Using Maven from Docker containers instead of Jenkins tools
@@ -68,6 +69,25 @@ pipeline {
                         }
                     }
                 }
+                
+                stage('Frontend Tests') {
+                    steps {
+                        echo '🧪 Running Frontend tests...'
+                        dir('frontend') {
+                            sh '''
+                                # Build only the deps stage of our Dockerfile for testing
+                                docker build --target deps -t frontend-deps -f Dockerfile .
+                                docker run --rm -v $(pwd):/app -w /app frontend-deps sh -c "
+                                    npm install -g pnpm &&
+                                    pnpm install --frozen-lockfile &&
+                                    pnpm run lint:strict &&
+                                    pnpm run typecheck &&
+                                    pnpm run test
+                                "
+                            '''
+                        }
+                    }
+                }
             }
         }
         
@@ -94,6 +114,17 @@ pipeline {
                         '''
                     }
                 }
+                
+                stage('Build Frontend Image') {
+                    steps {
+                        echo '🐳 Building Frontend Docker image...'
+                        sh '''
+                            cd frontend
+                            docker build -t ${FRONTEND_IMAGE}:${IMAGE_TAG} .
+                            docker tag ${FRONTEND_IMAGE}:${IMAGE_TAG} ${FRONTEND_IMAGE}:latest
+                        '''
+                    }
+                }
             }
         }
         
@@ -115,7 +146,7 @@ pipeline {
                     // Stop existing containers and remove them forcefully
                     sh '''
                         docker-compose down || true
-                        docker rm -f mother-ducker-user-service mother-ducker-product-service mother-ducker-nginx || true
+                        docker rm -f mother-ducker-user-service mother-ducker-product-service mother-ducker-frontend mother-ducker-nginx || true
                         docker system prune -f || true
                     '''
                     
@@ -123,7 +154,8 @@ pipeline {
                     sh '''
                         export USER_SERVICE_TAG=${IMAGE_TAG}
                         export PRODUCT_SERVICE_TAG=${IMAGE_TAG}
-                        docker-compose up -d user-service product-service nginx
+                        export FRONTEND_TAG=${IMAGE_TAG}
+                        docker-compose up -d user-service product-service frontend nginx
                     '''
                 }
             }
@@ -159,6 +191,18 @@ pipeline {
                             sleep 10
                         done
                     '''
+                    
+                    // Check Frontend health
+                    sh '''
+                        for i in {1..10}; do
+                            if docker exec mother-ducker-frontend curl -f http://localhost:3000/api/hello; then
+                                echo "✅ Frontend is healthy!"
+                                break
+                            fi
+                            echo "⏳ Waiting for Frontend... (attempt $i/10)"
+                            sleep 10
+                        done
+                    '''
                 }
             }
         }
@@ -175,9 +219,13 @@ pipeline {
                         echo "🧪 Testing Product Service directly..."  
                         docker exec mother-ducker-product-service curl -X GET http://localhost:8082/api/products
                         
+                        echo "🧪 Testing Frontend directly..."
+                        docker exec mother-ducker-frontend curl -X GET http://localhost:3000/api/hello
+                        
                         echo "🌐 Testing through Nginx API Gateway..."
                         docker exec mother-ducker-nginx curl -X GET http://user-service:8081/api/users
                         docker exec mother-ducker-nginx curl -X GET http://product-service:8082/api/products
+                        docker exec mother-ducker-nginx curl -X GET http://frontend:3000/
                         
                         echo "✅ All integration tests passed!"
                     '''
