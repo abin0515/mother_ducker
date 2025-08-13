@@ -72,7 +72,28 @@ services:
         /usr/local/bin/jenkins.sh
       "
 
-  # Nginx Load Balancer (Optional)
+  # Frontend Service (React/Next.js)
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: mother-ducker-frontend
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - NEXT_PUBLIC_API_URL=http://localhost
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/api/hello"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    networks:
+      - mother-ducker-network
+    restart: unless-stopped
+
+  # Nginx Load Balancer & API Gateway
   nginx:
     image: nginx:alpine
     container_name: mother-ducker-nginx
@@ -91,26 +112,62 @@ services:
           upstream product-service {
               server product-service:8082;
           }
+          upstream frontend {
+              server frontend:3000;
+          }
           server {
               listen 80;
               server_name localhost;
+              
+              # API Routes - Backend Services (Specific routes first)
               location /api/users {
                   proxy_pass http://user-service;
                   proxy_set_header Host \$$host;
                   proxy_set_header X-Real-IP \$$remote_addr;
+                  proxy_set_header X-Forwarded-For \$$proxy_add_x_forwarded_for;
+                  proxy_set_header X-Forwarded-Proto \$$scheme;
               }
               location /api/products {
                   proxy_pass http://product-service;
                   proxy_set_header Host \$$host;
                   proxy_set_header X-Real-IP \$$remote_addr;
+                  proxy_set_header X-Forwarded-For \$$proxy_add_x_forwarded_for;
+                  proxy_set_header X-Forwarded-Proto \$$scheme;
               }
+              
+              # Health Check Endpoint
               location /health {
                   return 200 'healthy';
                   add_header Content-Type text/plain;
               }
+              
+              # Next.js API Routes (catch remaining /api/ routes)
+              location /api/ {
+                  proxy_pass http://frontend;
+                  proxy_set_header Host \$$host;
+                  proxy_set_header X-Real-IP \$$remote_addr;
+                  proxy_set_header X-Forwarded-For \$$proxy_add_x_forwarded_for;
+                  proxy_set_header X-Forwarded-Proto \$$scheme;
+              }
+              
+              # Next.js Static Assets
+              location /_next/ {
+                  proxy_pass http://frontend;
+                  proxy_set_header Host \$$host;
+                  proxy_set_header X-Real-IP \$$remote_addr;
+              }
+              
+              # Frontend - React/Next.js App (Default Route)
               location / {
-                  return 200 '<h1>🦆 Mother Ducker API Gateway</h1><p>User Service: <a href=\"/api/users\">/api/users</a></p><p>Product Service: <a href=\"/api/products\">/api/products</a></p>';
-                  add_header Content-Type text/html;
+                  proxy_pass http://frontend;
+                  proxy_set_header Host \$$host;
+                  proxy_set_header X-Real-IP \$$remote_addr;
+                  proxy_set_header X-Forwarded-For \$$proxy_add_x_forwarded_for;
+                  proxy_set_header X-Forwarded-Proto \$$scheme;
+                  proxy_set_header Upgrade \$$http_upgrade;
+                  proxy_set_header Connection 'upgrade';
+                  proxy_cache_bypass \$$http_upgrade;
+                  proxy_redirect off;
               }
           }
       }
@@ -120,6 +177,7 @@ services:
     depends_on:
       - user-service
       - product-service
+      - frontend
     networks:
       - mother-ducker-network
     restart: unless-stopped
