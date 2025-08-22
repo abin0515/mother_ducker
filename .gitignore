@@ -56,3 +56,5 @@ logs/
 # Temporary files
 *.tmp
 *.temp
+backend/yuesaohub-firebase-adminsdk-fbsvc-a7175b2740.json
+backend/*firebase-adminsdk*.json
