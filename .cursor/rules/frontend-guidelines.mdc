@@ -1,0 +1,132 @@
+# Frontend Development Guidelines
+
+## Overview
+
+This is the main frontend guidelines file that references focused rule files for different aspects of frontend development. For specific patterns and best practices, refer to the following focused rule files:
+
+## Focused Rule Files
+
+### 📁 **component-patterns.mdc**
+- React component structure and organization
+- Server vs Client Components (Next.js App Router)
+- Component performance optimization
+- Component documentation standards
+
+### 📁 **typescript-standards.mdc**
+- TypeScript interface patterns
+- API response types
+- State management types
+- Utility types and type guards
+- Error handling types
+
+### 📁 **tailwind-guidelines.mdc**
+- Tailwind CSS class organization
+- Custom design system configuration
+- Responsive design patterns
+- Interactive states and animations
+- Dark mode support
+- Accessibility patterns
+
+### 📁 **app-router-patterns.mdc**
+- Next.js 13+ App Router file structure
+- Page components and layouts
+- API routes and data fetching
+- Loading and error states
+- Middleware patterns
+- SEO and metadata
+
+## Quick Reference
+
+### When to Apply Which Rules:
+
+**For Component Development:**
+- Apply `component-patterns.mdc` + `typescript-standards.mdc`
+
+**For Styling and UI:**
+- Apply `tailwind-guidelines.mdc` + `component-patterns.mdc`
+
+**For Next.js App Router:**
+- Apply `app-router-patterns.mdc` + `component-patterns.mdc`
+
+**For Full Frontend Development:**
+- Apply all focused rule files or mention "frontend-guidelines"
+
+### Usage Examples:
+
+```bash
+# Generate a new component
+"Create a user profile component following component-patterns"
+
+# Style a component
+"Style this component using tailwind-guidelines"
+
+# Create an API route
+"Create a users API route following app-router-patterns"
+
+# Full frontend development
+"Build a complete user management page following frontend-guidelines"
+```
+
+## Project Structure
+
+```
+src/
+├── app/                # Next.js App Router directory
+│   ├── (auth)/         # Route groups
+│   ├── (dashboard)/    # Route groups
+│   ├── api/            # API routes
+│   ├── globals.css     # Global styles
+│   ├── layout.tsx      # Root layout
+│   ├── page.tsx        # Home page
+│   ├── loading.tsx     # Loading UI
+│   ├── error.tsx       # Error UI
+│   └── not-found.tsx   # 404 page
+├── components/         # Reusable UI components
+│   ├── ui/            # Basic UI components
+│   ├── layout/        # Layout components
+│   └── features/      # Feature-specific components
+├── hooks/             # Custom React hooks
+├── utils/             # Utility functions
+├── types/             # TypeScript type definitions
+├── constants/         # Application constants
+├── services/          # API services
+├── store/             # State management
+├── lib/               # Library configurations
+├── styles/            # Additional styles
+└── assets/            # Static assets
+```
+
+## File Naming Conventions
+
+- **App Router Files**: `page.tsx`, `layout.tsx`, `loading.tsx`, `error.tsx`, `not-found.tsx`, `route.ts`
+- **Components**: PascalCase (e.g., `UserProfile.tsx`)
+- **Hooks**: camelCase with "use" prefix (e.g., `useAuth.ts`)
+- **Utilities**: camelCase (e.g., `formatDate.ts`)
+- **Types**: PascalCase (e.g., `UserTypes.ts`)
+- **Constants**: UPPER_SNAKE_CASE (e.g., `API_ENDPOINTS.ts`)
+- **Route Groups**: Parentheses (e.g., `(auth)`, `(dashboard)`)
+
+## Core Principles
+
+1. **Type Safety**: Use TypeScript for all components and functions
+2. **Performance**: Leverage Server Components and automatic optimizations
+3. **Accessibility**: Follow WCAG guidelines and use semantic HTML
+4. **Responsive Design**: Mobile-first approach with Tailwind CSS
+5. **Code Organization**: Clear separation of concerns and consistent patterns
+6. **Error Handling**: Graceful error states and user feedback
+7. **SEO**: Proper metadata and semantic structure
+
+## Quick Start Commands
+
+```bash
+# Apply all frontend guidelines
+"Follow frontend-guidelines for this task"
+
+# Apply specific patterns
+"Use component-patterns for this component"
+"Apply typescript-standards for type definitions"
+"Follow tailwind-guidelines for styling"
+"Use app-router-patterns for Next.js structure"
+```
+
+**Why**: This modular approach provides focused, maintainable rule files that are more likely to auto-load and provide targeted assistance for specific development tasks.

@@ -1,0 +1,143 @@
+# React + Next.js Component Development Patterns
+
+## Component Structure Standards
+
+### Component File Structure
+```typescript
+// 1. Imports (external libraries first, then internal)
+import React from 'react';
+import { useState, useEffect } from 'react';
+import { Button } from '@/components/ui/Button';
+import { useAuth } from '@/hooks/useAuth';
+import type { User } from '@/types/UserTypes';
+
+// 2. TypeScript interfaces
+interface UserProfileProps {
+  userId: string;
+  onUpdate?: (user: User) => void;
+  className?: string;
+}
+
+// 3. Component definition
+export const UserProfile: React.FC<UserProfileProps> = ({
+  userId,
+  onUpdate,
+  className = ''
+}) => {
+  // 4. State and hooks
+  const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
+  const { user: authUser } = useAuth();
+
+  // 5. Effects
+  useEffect(() => {
+    fetchUser();
+  }, [userId]);
+
+  // 6. Event handlers
+  const handleUpdate = async (updatedUser: User) => {
+    // Implementation
+  };
+
+  // 7. Render
+  if (loading) {
+    return <div className="animate-pulse">Loading...</div>;
+  }
+
+  return (
+    <div className={`bg-white rounded-lg shadow-md p-6 ${className}`}>
+      {/* Component content */}
+    </div>
+  );
+};
+```
+
+### Component Guidelines
+- **Single Responsibility**: Each component should have one clear purpose
+- **Props Interface**: Always define TypeScript interfaces for props
+- **Default Props**: Use destructuring with default values for optional props
+- **Conditional Rendering**: Use early returns for loading/error states
+- **Fragment Usage**: Use `<>` for multiple elements without wrapper
+
+### Server vs Client Components (Next.js App Router)
+```typescript
+// ✅ Server Component (default) - Good for data fetching, SEO
+// app/users/page.tsx
+import { UserList } from '@/components/features/UserList';
+
+export default async function UsersPage() {
+  // Server-side data fetching
+  const users = await fetchUsers();
+  
+  return (
+    <div>
+      <h1>Users</h1>
+      <UserList users={users} />
+    </div>
+  );
+}
+
+// ✅ Client Component - Good for interactivity, state
+// components/features/UserForm.tsx
+'use client';
+
+import { useState } from 'react';
+
+export function UserForm() {
+  const [formData, setFormData] = useState({});
+  
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    // Handle form submission
+  };
+  
+  return (
+    <form onSubmit={handleSubmit}>
+      {/* Form fields */}
+    </form>
+  );
+}
+```
+
+### Performance Optimization
+```typescript
+// ✅ Good: Memoize expensive components
+export const ExpensiveChart = React.memo<ChartProps>(({ data, config }) => {
+  // Expensive rendering logic
+  return <div>{/* Chart content */}</div>;
+});
+
+// ✅ Good: Memoize callbacks
+const handleClick = useCallback((id: string) => {
+  // Handle click logic
+}, []);
+```
+
+### Component Documentation
+```typescript
+/**
+ * UserProfile component displays user information and allows editing
+ * 
+ * @param userId - The unique identifier of the user
+ * @param onUpdate - Callback function called when user data is updated
+ * @param className - Additional CSS classes for styling
+ * 
+ * @example
+ * ```tsx
+ * <UserProfile 
+ *   userId="123" 
+ *   onUpdate={(user) => console.log('Updated:', user)}
+ *   className="bg-gray-50"
+ * />
+ * ```
+ */
+export const UserProfile: React.FC<UserProfileProps> = ({ /* ... */ }) => {
+  // Component implementation
+};
+```
+
+**Why**: Consistent component structure ensures readability, maintainability, and follows React best practices for component organization.
+description:
+globs:
+alwaysApply: false
+---

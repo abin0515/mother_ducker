@@ -1,0 +1,111 @@
+# Spring Boot Microservices Development Guidelines
+
+## 🎯 Core Principles
+- **Clean Architecture**: Separate concerns (Controller → Service → Repository)
+- **Microservices First**: Design for service independence and scalability
+- **Event-Driven**: Use RabbitMQ for loose coupling between services
+- **Firebase Auth**: Leverage Firebase for authentication, not Spring Security
+- **Docker Ready**: All services should be containerizable
+
+## 🏗️ Project Structure
+```
+service-name/
+├── src/main/java/com/yuzao/platform/servicename/
+│   ├── controller/     # REST API endpoints
+│   ├── service/        # Business logic
+│   ├── repository/     # Data access
+│   ├── entity/         # JPA entities
+│   ├── dto/           # Request/Response objects
+│   ├── event/         # RabbitMQ events
+│   ├── listener/      # Event listeners
+│   └── config/        # Configuration classes
+├── src/main/resources/
+│   └── application.yml
+├── Dockerfile
+└── pom.xml
+```
+
+## 🔧 Naming Conventions
+- **Controllers**: `*Controller` (UserController)
+- **Services**: `*Service` (UserService)
+- **Repositories**: `*Repository` (UserRepository)
+- **Entities**: `*` (User, Booking)
+- **DTOs**: `*Dto`, `*Request`, `*Response` (UserDto, CreateUserRequest)
+- **Events**: `*Event` (UserCreatedEvent)
+- **Listeners**: `*EventListener` (UserCreatedEventListener)
+
+## 🗄️ Database Patterns
+- **Use JPA entities** with proper annotations
+- **Include audit fields**: `createdAt`, `updatedAt`, `createdBy`, `updatedBy`
+- **Use BaseEntity** for common fields
+- **Link to Firebase**: Include `firebaseUid` field in User entities
+
+## 🔐 Authentication Strategy
+- **Firebase handles auth** - no Spring Security needed
+- **API Gateway validates tokens** and adds user info to headers
+- **Services read user context** from headers (`X-User-ID`, `X-User-Email`)
+
+## 📡 API Design
+- **RESTful endpoints** with proper HTTP methods
+- **Use ApiResponse<T>** wrapper for consistent responses
+- **OpenAPI annotations** for documentation
+- **Validation** with `@Valid` and Bean Validation
+
+## 🐰 Event-Driven Patterns
+- **Publish events** for important state changes
+- **Use RabbitMQ** for service communication
+- **Event classes** extend BaseEvent with eventId, timestamp, source
+- **Listeners** handle events asynchronously
+
+## 🧪 Testing Approach
+- **Unit tests** with Mockito for business logic
+- **Integration tests** for API endpoints
+- **Test-driven development** when possible
+- **Use TestRestTemplate** for API testing
+
+## 🐳 Containerization
+- **Multi-stage Dockerfiles** for optimized images
+- **Health checks** in Docker Compose
+- **Environment variables** for configuration
+- **Non-root users** for security
+
+## 📝 Code Quality
+- **Meaningful names** - self-documenting code
+- **Small methods** - max 20-30 lines
+- **Single responsibility** - one reason to change
+- **Fail fast** - validate early, throw exceptions immediately
+- **Use Optional** for nullable returns
+
+## 🚀 Performance
+- **Database indexes** on frequently queried fields
+- **Connection pooling** with HikariCP
+- **Caching** with Spring Cache
+- **Async processing** for non-critical operations
+
+## 🔧 Configuration
+- **Environment-based** configuration
+- **Externalized properties** for different environments
+- **Service discovery** with Eureka
+- **Health checks** with Spring Boot Actuator
+
+## 📊 Monitoring
+- **Spring Boot Actuator** for health and metrics
+- **Structured logging** with proper log levels
+- **Error tracking** with proper exception handling
+- **Performance metrics** for critical operations
+
+## 🎯 Key Success Factors
+1. **Service Independence** - Each service should be deployable independently
+2. **Loose Coupling** - Use events for service communication
+3. **Data Consistency** - Handle eventual consistency in distributed systems
+4. **Error Resilience** - Implement circuit breakers and retry mechanisms
+5. **Observability** - Log, monitor, and trace service interactions
+
+## 💡 Best Practices
+- **Start simple** - Add complexity only when needed
+- **Design for failure** - Services should handle other service failures gracefully
+- **Version APIs** - Use versioning for API evolution
+- **Document everything** - APIs, events, configuration
+- **Security first** - Validate all inputs, sanitize outputs
+
+This guide ensures scalable, maintainable microservices that can grow with your platform! 🚀

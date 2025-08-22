@@ -1,0 +1,269 @@
+# TypeScript Development Standards
+
+## Type Definitions
+
+### Interface Patterns
+```typescript
+// ✅ Good: Specific types with proper structure
+interface User {
+  id: string;
+  name: string;
+  email: string;
+  role: 'admin' | 'user' | 'moderator';
+  createdAt: Date;
+  profile?: {
+    avatar?: string;
+    bio?: string;
+  };
+}
+
+// ❌ Bad: Using 'any'
+const user: any = { /* ... */ };
+
+// ✅ Good: Generic types for reusable components
+interface ListProps<T> {
+  items: T[];
+  renderItem: (item: T, index: number) => React.ReactNode;
+  keyExtractor: (item: T) => string;
+}
+```
+
+### API Response Types
+```typescript
+// Base API response structure
+interface ApiResponse<T> {
+  data: T;
+  message: string;
+  success: boolean;
+  timestamp: string;
+}
+
+// Specific response types
+type UserResponse = ApiResponse<User>;
+type UsersResponse = ApiResponse<User[]>;
+type ErrorResponse = ApiResponse<null>;
+```
+
+### State Management Types
+```typescript
+// ✅ Good: Use descriptive names and proper typing
+const [isLoading, setIsLoading] = useState<boolean>(false);
+const [users, setUsers] = useState<User[]>([]);
+const [error, setError] = useState<string | null>(null);
+
+// ✅ Good: Complex state with useReducer
+interface FormState {
+  values: Record<string, any>;
+  errors: Record<string, string>;
+  touched: Record<string, boolean>;
+  isSubmitting: boolean;
+}
+```
+
+### Function Types
+```typescript
+// ✅ Good: Explicit function types
+type UserUpdateHandler = (user: User) => Promise<void>;
+type ValidationFunction = (value: string) => boolean;
+
+// ✅ Good: Generic functions
+function createApiClient<T>(baseUrl: string): {
+  get: (endpoint: string) => Promise<T>;
+  post: (endpoint: string, data: Partial<T>) => Promise<T>;
+} {
+  return {
+    get: async (endpoint) => {
+      const response = await fetch(`${baseUrl}${endpoint}`);
+      return response.json();
+    },
+    post: async (endpoint, data) => {
+      const response = await fetch(`${baseUrl}${endpoint}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+      return response.json();
+    },
+  };
+}
+```
+
+### Utility Types
+```typescript
+// ✅ Good: Use TypeScript utility types
+type UserWithoutId = Omit<User, 'id'>;
+type UserUpdateData = Partial<User>;
+type UserKeys = keyof User;
+type UserValues = User[UserKeys];
+
+// ✅ Good: Custom utility types
+type AsyncState<T> = {
+  data: T | null;
+  loading: boolean;
+  error: string | null;
+};
+
+type PaginatedResponse<T> = {
+  items: T[];
+  total: number;
+  page: number;
+  limit: number;
+  hasNext: boolean;
+  hasPrev: boolean;
+};
+```
+
+### Enum and Union Types
+```typescript
+// ✅ Good: Union types for simple cases
+type UserRole = 'admin' | 'user' | 'moderator';
+type HttpMethod = 'GET' | 'POST' | 'PUT' | 'DELETE';
+type Theme = 'light' | 'dark' | 'system';
+
+// ✅ Good: Enums for complex cases
+enum UserStatus {
+  ACTIVE = 'active',
+  INACTIVE = 'inactive',
+  SUSPENDED = 'suspended',
+  PENDING = 'pending',
+}
+
+// ✅ Good: Const assertions
+const API_ENDPOINTS = {
+  USERS: '/api/users',
+  PRODUCTS: '/api/products',
+  ORDERS: '/api/orders',
+} as const;
+
+type ApiEndpoint = typeof API_ENDPOINTS[keyof typeof API_ENDPOINTS];
+```
+
+### Error Handling Types
+```typescript
+// ✅ Good: Custom error types
+class ApiError extends Error {
+  constructor(
+    message: string,
+    public status: number,
+    public code?: string
+  ) {
+    super(message);
+    this.name = 'ApiError';
+  }
+}
+
+// ✅ Good: Result types for error handling
+type Result<T, E = Error> = 
+  | { success: true; data: T }
+  | { success: false; error: E };
+
+// ✅ Good: Async result types
+type AsyncResult<T, E = Error> = Promise<Result<T, E>>;
+```
+
+### Component Props Types
+```typescript
+// ✅ Good: Component props with proper typing
+interface ButtonProps {
+  children: React.ReactNode;
+  variant?: 'primary' | 'secondary' | 'danger';
+  size?: 'sm' | 'md' | 'lg';
+  disabled?: boolean;
+  onClick?: () => void;
+  className?: string;
+}
+
+// ✅ Good: Forwarded ref props
+interface InputProps {
+  value: string;
+  onChange: (value: string) => void;
+  placeholder?: string;
+  error?: string;
+  className?: string;
+}
+
+// ✅ Good: Generic component props
+interface DataTableProps<T> {
+  data: T[];
+  columns: Column<T>[];
+  onRowClick?: (item: T) => void;
+  loading?: boolean;
+}
+```
+
+### Hook Types
+```typescript
+// ✅ Good: Custom hook return types
+interface UseApiOptions<T> {
+  url: string;
+  method?: 'GET' | 'POST' | 'PUT' | 'DELETE';
+  body?: any;
+  dependencies?: any[];
+  onSuccess?: (data: T) => void;
+  onError?: (error: Error) => void;
+}
+
+interface UseApiReturn<T> {
+  data: T | null;
+  loading: boolean;
+  error: Error | null;
+  refetch: () => Promise<void>;
+}
+
+// ✅ Good: Hook implementation
+export const useApi = <T>({
+  url,
+  method = 'GET',
+  body,
+  dependencies = [],
+  onSuccess,
+  onError
+}: UseApiOptions<T>): UseApiReturn<T> => {
+  // Implementation
+};
+```
+
+### Type Guards
+```typescript
+// ✅ Good: Type guards for runtime type checking
+function isUser(obj: any): obj is User {
+  return (
+    typeof obj === 'object' &&
+    obj !== null &&
+    typeof obj.id === 'string' &&
+    typeof obj.name === 'string' &&
+    typeof obj.email === 'string'
+  );
+}
+
+// ✅ Good: Array type guards
+function isUserArray(arr: any[]): arr is User[] {
+  return arr.every(isUser);
+}
+
+// ✅ Good: Discriminated unions
+type ApiEvent = 
+  | { type: 'loading'; payload: boolean }
+  | { type: 'success'; payload: User }
+  | { type: 'error'; payload: string };
+
+function handleApiEvent(event: ApiEvent) {
+  switch (event.type) {
+    case 'loading':
+      // event.payload is boolean
+      break;
+    case 'success':
+      // event.payload is User
+      break;
+    case 'error':
+      // event.payload is string
+      break;
+  }
+}
+```
+
+**Why**: Strong typing prevents runtime errors, improves IDE support, makes refactoring safer, and ensures predictable data handling across the application.
+description:
+globs:
+alwaysApply: false
+---
