@@ -5,8 +5,9 @@ import com.google.firebase.auth.FirebaseAuthException;
 import com.yuesaohub.platform.gateway.dto.ErrorResponse;
 import com.yuesaohub.platform.gateway.service.FirebaseAuthService;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.cloud.gateway.filter.GatewayFilter;
-import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
+import org.springframework.cloud.gateway.filter.GatewayFilterChain;
+import org.springframework.cloud.gateway.filter.GlobalFilter;
+import org.springframework.core.Ordered;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.http.server.reactive.ServerHttpResponse;
@@ -16,48 +17,55 @@ import reactor.core.publisher.Mono;
 
 @Component
 @ConditionalOnProperty(name = "app.firebase.enabled", havingValue = "true", matchIfMissing = false)
-public class FirebaseAuthFilter extends AbstractGatewayFilterFactory<FirebaseAuthFilter.Config> {
+public class FirebaseAuthFilter implements GlobalFilter, Ordered {
 
     private final FirebaseAuthService firebaseAuthService;
     private final ObjectMapper objectMapper;
 
     public FirebaseAuthFilter(FirebaseAuthService firebaseAuthService, ObjectMapper objectMapper) {
-        super(Config.class);
         this.firebaseAuthService = firebaseAuthService;
         this.objectMapper = objectMapper;
     }
 
     @Override
-    public GatewayFilter apply(Config config) {
-        return (exchange, chain) -> {
-            ServerHttpRequest request = exchange.getRequest();
+    public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
+        ServerHttpRequest request = exchange.getRequest();
 
-            // Skip auth for public endpoints
-            if (isPublicEndpoint(request.getPath().value())) {
-                return chain.filter(exchange);
-            }
+        // Skip auth for OPTIONS requests (CORS preflight)
+        if (request.getMethod().name().equals("OPTIONS")) {
+            return chain.filter(exchange);
+        }
 
-            String token = extractToken(request);
-            if (token == null) {
-                return onError(exchange, "No token provided", HttpStatus.UNAUTHORIZED);
-            }
+        // Skip auth for public endpoints
+        if (isPublicEndpoint(request.getPath().value())) {
+            return chain.filter(exchange);
+        }
 
-            try {
-                var decodedToken = firebaseAuthService.verifyToken(token);
+        String token = extractToken(request);
+        if (token == null) {
+            return onError(exchange, "No token provided", HttpStatus.UNAUTHORIZED);
+        }
 
-                // Add user info to headers
-                ServerHttpRequest modifiedRequest = request.mutate()
-                    .header("X-User-ID", decodedToken.getUid())
-                    .header("X-User-Email", decodedToken.getEmail())
-                    .header("X-User-Name", decodedToken.getName())
-                    .build();
+        try {
+            var decodedToken = firebaseAuthService.verifyToken(token);
 
-                return chain.filter(exchange.mutate().request(modifiedRequest).build());
+            // Add user info to headers
+            ServerHttpRequest modifiedRequest = request.mutate()
+                .header("X-User-ID", decodedToken.getUid())
+                .header("X-User-Email", decodedToken.getEmail())
+                .header("X-User-Name", decodedToken.getName())
+                .build();
 
-            } catch (FirebaseAuthException e) {
-                return onError(exchange, "Invalid token", HttpStatus.UNAUTHORIZED);
-            }
-        };
+            return chain.filter(exchange.mutate().request(modifiedRequest).build());
+
+        } catch (FirebaseAuthException e) {
+            return onError(exchange, "Invalid token", HttpStatus.UNAUTHORIZED);
+        }
+    }
+
+    @Override
+    public int getOrder() {
+        return -100; // Execute before other filters
     }
 
     private boolean isPublicEndpoint(String path) {
@@ -89,9 +97,5 @@ public class FirebaseAuthFilter extends AbstractGatewayFilterFactory<FirebaseAut
         } catch (Exception e) {
             return Mono.error(e);
         }
-    }
-
-    public static class Config {
-        // Configuration properties if needed
     }
 }

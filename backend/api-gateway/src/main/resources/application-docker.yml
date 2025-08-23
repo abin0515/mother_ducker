@@ -1,7 +1,4 @@
 spring:
-  application:
-    name: api-gateway
-  
   cloud:
     gateway:
       discovery:
@@ -11,12 +8,15 @@ spring:
         enabled: false
       routes:
         - id: user-service
-          uri: http://localhost:8081
+          uri: http://user-service:8081
           predicates:
             - Path=/api/v1/users/**
           filters:
             - StripPrefix=1
 
+
+server:
+  port: 8080
 
 eureka:
   client:
@@ -29,19 +29,16 @@ management:
         include: health,info
   endpoint:
     health:
-      show-details: when-authorized
-
-logging:
-  level:
-    com.yuesao.platform: ${LOG_LEVEL:INFO}
-    org.springframework.cloud.gateway: DEBUG
-  pattern:
-    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+      show-details: always
 
 app:
   firebase:
-    enabled: ${FIREBASE_ENABLED:true}
-    service-account-path: ${FIREBASE_SERVICE_ACCOUNT_PATH:../yuesaohub-firebase-adminsdk-fbsvc-a7175b2740.json}
+    enabled: true
+    service-account-path: /app/firebase-service-account.json
 
-server:
-  port: 8080
+logging:
+  level:
+    com.yuesaohub.platform: INFO
+    org.springframework.cloud.gateway: DEBUG
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"

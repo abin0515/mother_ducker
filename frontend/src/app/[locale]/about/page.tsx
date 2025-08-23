@@ -1,9 +1,9 @@
 import { getTranslations, type Locale } from '@/lib/i18n';
 
 interface AboutPageProps {
-  params: {
+  params: Promise<{
     locale: Locale;
-  };
+  }>;
 }
 
 export default async function AboutPage({ params }: AboutPageProps) {

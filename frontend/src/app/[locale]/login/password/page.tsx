@@ -54,7 +54,7 @@ export default function LoginPasswordPage() {
       //   email: result.user.email,
       // };
       
-      // Redirect to dashboard
+      // Redirect to dashboard (will handle profile completion flow)
       router.push(`/${locale}/dashboard`);
     } catch (error: any) {
       console.error('Email login failed:', error);

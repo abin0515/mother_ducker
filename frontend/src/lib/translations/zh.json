@@ -142,5 +142,15 @@
     "passwordTooShort": "密码至少需要6个字符",
     "verificationCodeRequired": "请输入验证码",
     "verificationCodeInvalid": "验证码必须是6位数字"
+  },
+  "profile": {
+    "completeProfile": "完善您的个人资料",
+    "completeProfileDesc": "请提供您的信息以完成账户设置",
+    "email": "邮箱",
+    "phone": "手机号码",
+    "userType": "我是",
+    "parent": "家长",
+    "caregiver": "月嫂",
+    "creating": "正在创建个人资料..."
   }
 }

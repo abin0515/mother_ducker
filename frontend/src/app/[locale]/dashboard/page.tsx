@@ -3,13 +3,12 @@
 import { useAuth } from '@/hooks/useAuth';
 import { useRouter, useParams } from 'next/navigation';
 import { useEffect } from 'react';
-import { getTranslations, type Locale } from '@/lib/i18n';
+import { t, type Locale } from '@/lib/i18n';
 
 export default function DashboardPage() {
   const params = useParams();
   const locale = params.locale as Locale;
-  const t = getTranslations(locale);
-  const { user, loading, signOut } = useAuth();
+  const { user, backendUser, loading, signOut } = useAuth();
   const router = useRouter();
 
   useEffect(() => {
@@ -17,6 +16,13 @@ export default function DashboardPage() {
       router.push(`/${locale}/login`);
     }
   }, [user, loading, router, locale]);
+
+  useEffect(() => {
+    if (!loading && user && !backendUser) {
+      // User is authenticated but profile is not complete
+      router.push(`/${locale}/profile/complete`);
+    }
+  }, [user, backendUser, loading, router, locale]);
 
   const handleSignOut = async () => {
     try {
@@ -45,7 +51,7 @@ export default function DashboardPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-6">
             <div className="flex items-center">
-              <h1 className="text-2xl font-bold text-gray-900">{t.dashboard.title}</h1>
+              <h1 className="text-2xl font-bold text-gray-900">{t(locale, 'dashboard.title')}</h1>
             </div>
             <div className="flex items-center space-x-4">
               <div className="flex items-center space-x-3">
@@ -64,7 +70,7 @@ export default function DashboardPage() {
                 onClick={handleSignOut}
                 className="bg-gray-900 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-gray-800 transition-colors duration-200"
               >
-                {t.auth.logout}
+                {t(locale, 'navigation.logout')}
               </button>
             </div>
           </div>
@@ -76,10 +82,10 @@ export default function DashboardPage() {
           <div className="border-4 border-dashed border-gray-200 rounded-lg p-8">
             <div className="text-center">
               <h2 className="text-2xl font-bold text-gray-900 mb-4">
-                {t.dashboard.welcome}
+                {t(locale, 'dashboard.welcome')}
               </h2>
               <p className="text-gray-600 mb-6">
-                {t.dashboard.welcome}
+                {t(locale, 'dashboard.welcome')}
               </p>
               
               <div className="bg-green-50 border border-green-200 rounded-md p-4 mb-6">
@@ -91,7 +97,7 @@ export default function DashboardPage() {
                   </div>
                   <div className="ml-3">
                     <h3 className="text-sm font-medium text-green-800">
-                      {t.dashboard.welcome}
+                      {t(locale, 'dashboard.welcome')}
                     </h3>
                     <div className="mt-2 text-sm text-green-700">
                       <p>Email: {user.email}</p>
@@ -104,26 +110,26 @@ export default function DashboardPage() {
 
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <div className="bg-white p-6 rounded-lg shadow-sm border">
-                  <h3 className="text-lg font-semibold text-gray-900 mb-2">{t.dashboard.profile}</h3>
-                  <p className="text-gray-600 mb-4">{t.dashboard.welcome}</p>
+                  <h3 className="text-lg font-semibold text-gray-900 mb-2">{t(locale, 'dashboard.profile')}</h3>
+                  <p className="text-gray-600 mb-4">{t(locale, 'dashboard.welcome')}</p>
                   <button className="bg-blue-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-blue-700 transition-colors duration-200">
-                    {t.dashboard.profile}
+                    {t(locale, 'dashboard.profile')}
                   </button>
                 </div>
 
                 <div className="bg-white p-6 rounded-lg shadow-sm border">
-                  <h3 className="text-lg font-semibold text-gray-900 mb-2">{t.dashboard.bookings}</h3>
-                  <p className="text-gray-600 mb-4">{t.dashboard.welcome}</p>
+                  <h3 className="text-lg font-semibold text-gray-900 mb-2">{t(locale, 'dashboard.bookings')}</h3>
+                  <p className="text-gray-600 mb-4">{t(locale, 'dashboard.welcome')}</p>
                   <button className="bg-green-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-green-700 transition-colors duration-200">
-                    {t.dashboard.bookings}
+                    {t(locale, 'dashboard.bookings')}
                   </button>
                 </div>
 
                 <div className="bg-white p-6 rounded-lg shadow-sm border">
-                  <h3 className="text-lg font-semibold text-gray-900 mb-2">{t.dashboard.messages}</h3>
-                  <p className="text-gray-600 mb-4">{t.dashboard.welcome}</p>
+                  <h3 className="text-lg font-semibold text-gray-900 mb-2">{t(locale, 'dashboard.messages')}</h3>
+                  <p className="text-gray-600 mb-4">{t(locale, 'dashboard.welcome')}</p>
                   <button className="bg-purple-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-purple-700 transition-colors duration-200">
-                    {t.dashboard.messages}
+                    {t(locale, 'dashboard.messages')}
                   </button>
                 </div>
               </div>

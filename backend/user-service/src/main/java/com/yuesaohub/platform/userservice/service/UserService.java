@@ -8,10 +8,12 @@ import com.yuesaohub.platform.userservice.entity.User;
 import com.yuesaohub.platform.userservice.entity.UserType;
 import com.yuesaohub.platform.userservice.event.UserCreatedEvent;
 import com.yuesaohub.platform.userservice.repository.UserRepository;
-import com.yuzao.platform.shared.dto.ApiResponse;
-import com.yuzao.platform.shared.exception.UserNotFoundException;
+import com.yuesaohub.platform.shared.dto.ApiResponse;
+import com.yuesaohub.platform.shared.exception.UserNotFoundException;
 
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,13 +25,17 @@ import java.util.Optional;
 public class UserService {
 
     private final UserRepository userRepository;
-    private final RabbitTemplate rabbitTemplate;
     private final ObjectMapper objectMapper;
+    private RabbitTemplate rabbitTemplate;
 
-    public UserService(UserRepository userRepository, RabbitTemplate rabbitTemplate, ObjectMapper objectMapper) {
+    public UserService(UserRepository userRepository, ObjectMapper objectMapper) {
         this.userRepository = userRepository;
-        this.rabbitTemplate = rabbitTemplate;
         this.objectMapper = objectMapper;
+    }
+
+    @Autowired(required = false)
+    public void setRabbitTemplate(RabbitTemplate rabbitTemplate) {
+        this.rabbitTemplate = rabbitTemplate;
     }
 
     public UserDto createUser(CreateUserRequest request) {
@@ -84,6 +90,12 @@ public class UserService {
     }
 
     private void publishUserCreatedEvent(User user) {
+        if (rabbitTemplate == null) {
+            // RabbitMQ is not available, skip event publishing
+            System.out.println("RabbitMQ not available, skipping event publishing for user: " + user.getId());
+            return;
+        }
+
         try {
             UserCreatedEvent event = new UserCreatedEvent(
                 user.getId(),
@@ -96,7 +108,7 @@ public class UserService {
                 "user.created",
                 objectMapper.writeValueAsString(event)
             );
-        } catch (JsonProcessingException e) {
+        } catch (Exception e) {
             // Log error but don't fail the transaction
             System.err.println("Failed to publish user created event: " + e.getMessage());
         }

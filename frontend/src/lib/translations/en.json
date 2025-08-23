@@ -142,5 +142,15 @@
     "passwordTooShort": "Password must be at least 6 characters long",
     "verificationCodeRequired": "Please enter the verification code",
     "verificationCodeInvalid": "Verification code must be 6 digits"
+  },
+  "profile": {
+    "completeProfile": "Complete Your Profile",
+    "completeProfileDesc": "Please provide your information to complete your account setup",
+    "email": "Email",
+    "phone": "Phone Number",
+    "userType": "I am a",
+    "parent": "Parent",
+    "caregiver": "Postpartum Caregiver",
+    "creating": "Creating Profile..."
   }
 }

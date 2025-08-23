@@ -21,7 +21,7 @@ export function t(locale: Locale, key: string): string {
       value = value[k];
     } else {
       // Fallback to English if key not found
-      value = keys.reduce((obj, key) => obj?.[key], translations.en);
+      value = keys.reduce((obj: any, key) => obj?.[key], translations.en);
       break;
     }
   }

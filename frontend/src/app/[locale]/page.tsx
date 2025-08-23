@@ -2,9 +2,9 @@ import Link from 'next/link';
 import { getTranslations, type Locale } from '@/lib/i18n';
 
 interface HomePageProps {
-  params: {
+  params: Promise<{
     locale: Locale;
-  };
+  }>;
 }
 
 export default async function HomePage({ params }: HomePageProps) {

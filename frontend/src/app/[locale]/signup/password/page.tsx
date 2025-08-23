@@ -60,7 +60,7 @@ export default function SignupPasswordPage() {
       //   userType: 'PARENT' // or 'CAREGIVER'
       // };
       
-      // Redirect to dashboard
+      // Redirect to profile completion (dashboard will handle the flow)
       router.push(`/${locale}/dashboard`);
     } catch (error: any) {
       console.error('Email signup failed:', error);

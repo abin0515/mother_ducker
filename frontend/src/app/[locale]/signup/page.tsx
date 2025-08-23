@@ -65,7 +65,7 @@ export default function SignupPage() {
       //   photoURL: result.user.photoURL
       // };
       
-      // Redirect to dashboard or next step
+      // Redirect to dashboard (will handle profile completion flow)
       router.push(`/${locale}/dashboard`);
     } catch (error: any) {
       console.error('Gmail signup failed:', error);

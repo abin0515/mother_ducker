@@ -1,0 +1,43 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://postgres:5432/yuesaohub_platform
+    username: postgres
+    password: 990515
+    driver-class-name: org.postgresql.Driver
+  
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+  
+  rabbitmq:
+    host: rabbitmq
+    port: 5672
+    username: yuesaohub
+    password: yuesaohub_password
+
+server:
+  port: 8081
+
+eureka:
+  client:
+    enabled: false
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      show-details: always
+
+logging:
+  level:
+    com.yuesaohub.platform: INFO
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"

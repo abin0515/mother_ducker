@@ -1,0 +1,132 @@
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    container_name: yuesaohub-postgres
+    environment:
+      POSTGRES_DB: yuesaohub_platform
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 990515
+      PGDATA: /var/lib/postgresql/data/pgdata
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./backend/init-scripts:/docker-entrypoint-initdb.d
+    networks:
+      - yuesaohub-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d yuesaohub_platform"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # RabbitMQ Message Broker
+  rabbitmq:
+    image: rabbitmq:3.12-management-alpine
+    container_name: yuesaohub-rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: yuesaohub
+      RABBITMQ_DEFAULT_PASS: yuesaohub_password
+    ports:
+      - "5672:5672"   # AMQP port
+      - "15672:15672" # Management UI
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    networks:
+      - yuesaohub-network
+    healthcheck:
+      test: ["CMD", "rabbitmqctl", "status"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # User Service
+  user-service:
+    build:
+      context: ./backend
+      dockerfile: user-service/Dockerfile
+    container_name: yuesaohub-user-service
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/yuesaohub_platform
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: 990515
+      SPRING_RABBITMQ_HOST: rabbitmq
+      SPRING_RABBITMQ_USERNAME: yuesaohub
+      SPRING_RABBITMQ_PASSWORD: yuesaohub_password
+      EUREKA_CLIENT_ENABLED: false
+    ports:
+      - "8081:8081"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    networks:
+      - yuesaohub-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8081/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+  # API Gateway
+  api-gateway:
+    build:
+      context: ./backend
+      dockerfile: api-gateway/Dockerfile
+    container_name: yuesaohub-api-gateway
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      FIREBASE_ENABLED: true
+      FIREBASE_SERVICE_ACCOUNT_PATH: /app/firebase-service-account.json
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./backend/yuesaohub-firebase-adminsdk-fbsvc-a7175b2740.json:/app/firebase-service-account.json:ro
+    depends_on:
+      user-service:
+        condition: service_healthy
+    networks:
+      - yuesaohub-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Frontend (Next.js)
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: yuesaohub-frontend
+    environment:
+      NODE_ENV: production
+      NEXT_PUBLIC_API_BASE_URL: http://localhost:8080
+      NEXT_PUBLIC_FIREBASE_API_KEY: ${NEXT_PUBLIC_FIREBASE_API_KEY}
+      NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN: ${NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN}
+      NEXT_PUBLIC_FIREBASE_PROJECT_ID: ${NEXT_PUBLIC_FIREBASE_PROJECT_ID}
+      NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET: ${NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET}
+      NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID: ${NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID}
+      NEXT_PUBLIC_FIREBASE_APP_ID: ${NEXT_PUBLIC_FIREBASE_APP_ID}
+    ports:
+      - "3000:3000"
+    depends_on:
+      api-gateway:
+        condition: service_healthy
+    networks:
+      - yuesaohub-network
+
+networks:
+  yuesaohub-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+    driver: local
+  rabbitmq_data:
+    driver: local

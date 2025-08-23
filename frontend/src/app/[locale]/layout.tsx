@@ -5,14 +5,14 @@ import LanguageSwitcher from '@/components/LanguageSwitcher';
 
 interface LocaleLayoutProps {
   children: React.ReactNode;
-  params: {
-    locale: Locale;
-  };
+  params: Promise<{
+    locale: string;
+  }>;
 }
 
 export async function generateMetadata({ params }: LocaleLayoutProps): Promise<Metadata> {
   const { locale } = await params;
-  const t = getTranslations(locale);
+  const t = getTranslations(locale as Locale);
   
   return {
     title: t.common.appName,
@@ -22,7 +22,7 @@ export async function generateMetadata({ params }: LocaleLayoutProps): Promise<M
 
 export default async function LocaleLayout({ children, params }: LocaleLayoutProps) {
   const { locale } = await params;
-  const t = getTranslations(locale);
+  const t = getTranslations(locale as Locale);
   
   return (
     <>
@@ -49,7 +49,7 @@ export default async function LocaleLayout({ children, params }: LocaleLayoutPro
               <Link href={`/${locale}/login`} className="text-gray-600 hover:text-gray-900 transition-colors duration-200">
                 {t.navigation.login}
               </Link>
-              <LanguageSwitcher currentLocale={locale} />
+                             <LanguageSwitcher currentLocale={locale as Locale} />
             </div>
           </nav>
         </div>
@@ -69,3 +69,5 @@ export default async function LocaleLayout({ children, params }: LocaleLayoutPro
     </>
   );
 }
+
+

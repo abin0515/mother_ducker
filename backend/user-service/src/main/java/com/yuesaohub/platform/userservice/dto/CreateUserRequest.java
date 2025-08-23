@@ -15,7 +15,7 @@ public class CreateUserRequest {
     @NotBlank(message = "Email is required")
     private String email;
 
-    @Pattern(regexp = "^\\+[1-9]\\d{1,14}$", message = "Invalid phone number format")
+    @Pattern(regexp = "^(\\+?1[-.]?)?\\(?([0-9]{3})\\)?[-.]?([0-9]{3})[-.]?([0-9]{4})$", message = "Invalid phone number format. Please enter a valid US phone number (e.g., 1234567890, +1234567890, (123) 456-7890)")
     @NotBlank(message = "Phone number is required")
     private String phone;
 
