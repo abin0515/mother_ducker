@@ -1,0 +1,126 @@
+{
+  "common": {
+    "appName": "月嫂Hub",
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success",
+    "cancel": "Cancel",
+    "save": "Save",
+    "edit": "Edit",
+    "delete": "Delete",
+    "back": "Back",
+    "next": "Next",
+    "submit": "Submit",
+    "close": "Close"
+  },
+  "navigation": {
+    "home": "Home",
+    "about": "About",
+    "contact": "Contact",
+    "signup": "Sign Up",
+    "login": "Log In",
+    "dashboard": "Dashboard",
+    "logout": "Log Out",
+    "language": "Language"
+  },
+  "home": {
+    "title": "Welcome to 月嫂Hub",
+    "subtitle": "Connecting families with professional postpartum caregivers",
+    "description": "Find experienced and qualified postpartum caregivers for your family's needs",
+    "getStarted": "Get Started",
+    "learnMore": "Learn More"
+  },
+  "auth": {
+    "signup": {
+      "title": "Create your account",
+      "subtitle": "Join 月嫂Hub to connect with professional caregivers",
+      "emailPlaceholder": "Enter your email address",
+      "phonePlaceholder": "Enter your phone number",
+      "passwordPlaceholder": "Create a password",
+      "confirmPasswordPlaceholder": "Confirm your password",
+      "continueWithGoogle": "Continue with Google",
+      "continueWithPhone": "Continue with Phone",
+      "alreadyHaveAccount": "Already have an account?",
+      "loginLink": "Log in",
+      "termsAgreement": "By signing up, you agree to our Terms of Service and Privacy Policy"
+    },
+    "login": {
+      "title": "Welcome back",
+      "subtitle": "Sign in to your account",
+      "emailPlaceholder": "Enter your email address",
+      "passwordPlaceholder": "Enter your password",
+      "forgotPassword": "Forgot your password?",
+      "continueWithGoogle": "Continue with Google",
+      "dontHaveAccount": "Don't have an account?",
+      "signupLink": "Sign up"
+    },
+    "password": {
+      "title": "Enter your password",
+      "subtitle": "Complete your sign in",
+      "passwordPlaceholder": "Enter your password",
+      "showPassword": "Show password",
+      "hidePassword": "Hide password",
+      "editEmail": "Edit email",
+      "editPhone": "Edit phone number"
+    }
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "welcome": "Welcome back",
+    "profile": "Profile",
+    "settings": "Settings",
+    "bookings": "Bookings",
+    "messages": "Messages"
+  },
+  "about": {
+    "title": "About 月嫂Hub",
+    "description": "We are dedicated to connecting families with professional postpartum caregivers",
+    "mission": "Our Mission",
+    "missionText": "To provide families with access to qualified, experienced postpartum caregivers who can support them during this important time.",
+    "values": "Our Values",
+    "quality": "Quality",
+    "qualityText": "We ensure all caregivers meet high standards of professionalism and experience.",
+    "trust": "Trust",
+    "trustText": "Building trust between families and caregivers through verified profiles and reviews.",
+    "support": "Support",
+    "supportText": "Providing ongoing support to both families and caregivers throughout their journey."
+  },
+  "contact": {
+    "title": "Contact Us",
+    "subtitle": "Get in touch with our team",
+    "name": "Name",
+    "namePlaceholder": "Enter your name",
+    "email": "Email",
+    "emailPlaceholder": "Enter your email",
+    "message": "Message",
+    "messagePlaceholder": "Enter your message",
+    "sendMessage": "Send Message",
+    "contactInfo": "Contact Information",
+    "address": "Address",
+    "phone": "Phone",
+    "emailContact": "Email"
+  },
+  "errors": {
+    "required": "This field is required",
+    "invalidEmail": "Please enter a valid email address",
+    "invalidPhone": "Please enter a valid phone number",
+    "passwordTooShort": "Password must be at least 6 characters long",
+    "passwordsDoNotMatch": "Passwords do not match",
+    "invalidVerificationCode": "Invalid verification code",
+    "verificationSetupIssue": "Verification setup issue. Please refresh the page and try again.",
+    "failedToSendCode": "Failed to send verification code. Please try again.",
+    "invalidCredentials": "Invalid email or password",
+    "networkError": "Network error. Please check your connection and try again.",
+    "unknownError": "Something went wrong. Please try again."
+  },
+  "validation": {
+    "emailRequired": "Please enter your email address",
+    "emailInvalid": "Please enter a valid email address",
+    "phoneRequired": "Please enter your phone number",
+    "phoneInvalid": "Please enter a valid phone number",
+    "passwordRequired": "Please enter your password",
+    "passwordTooShort": "Password must be at least 6 characters long",
+    "verificationCodeRequired": "Please enter the verification code",
+    "verificationCodeInvalid": "Verification code must be 6 digits"
+  }
+}

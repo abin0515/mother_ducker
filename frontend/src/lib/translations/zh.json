@@ -1,0 +1,126 @@
+{
+  "common": {
+    "appName": "月嫂Hub",
+    "loading": "加载中...",
+    "error": "错误",
+    "success": "成功",
+    "cancel": "取消",
+    "save": "保存",
+    "edit": "编辑",
+    "delete": "删除",
+    "back": "返回",
+    "next": "下一步",
+    "submit": "提交",
+    "close": "关闭"
+  },
+  "navigation": {
+    "home": "首页",
+    "about": "关于我们",
+    "contact": "联系我们",
+    "signup": "注册",
+    "login": "登录",
+    "dashboard": "控制台",
+    "logout": "退出登录",
+    "language": "语言"
+  },
+  "home": {
+    "title": "欢迎来到月嫂Hub",
+    "subtitle": "连接家庭与专业产后护理师",
+    "description": "为您的家庭需求找到经验丰富且合格的产后护理师",
+    "getStarted": "开始使用",
+    "learnMore": "了解更多"
+  },
+  "auth": {
+    "signup": {
+      "title": "创建您的账户",
+      "subtitle": "加入月嫂Hub，连接专业护理师",
+      "emailPlaceholder": "输入您的邮箱地址",
+      "phonePlaceholder": "输入您的手机号码",
+      "passwordPlaceholder": "创建密码",
+      "confirmPasswordPlaceholder": "确认密码",
+      "continueWithGoogle": "使用Google继续",
+      "continueWithPhone": "使用手机号继续",
+      "alreadyHaveAccount": "已有账户？",
+      "loginLink": "登录",
+      "termsAgreement": "注册即表示您同意我们的服务条款和隐私政策"
+    },
+    "login": {
+      "title": "欢迎回来",
+      "subtitle": "登录您的账户",
+      "emailPlaceholder": "输入您的邮箱地址",
+      "passwordPlaceholder": "输入您的密码",
+      "forgotPassword": "忘记密码？",
+      "continueWithGoogle": "使用Google继续",
+      "dontHaveAccount": "没有账户？",
+      "signupLink": "注册"
+    },
+    "password": {
+      "title": "输入您的密码",
+      "subtitle": "完成登录",
+      "passwordPlaceholder": "输入您的密码",
+      "showPassword": "显示密码",
+      "hidePassword": "隐藏密码",
+      "editEmail": "编辑邮箱",
+      "editPhone": "编辑手机号"
+    }
+  },
+  "dashboard": {
+    "title": "控制台",
+    "welcome": "欢迎回来",
+    "profile": "个人资料",
+    "settings": "设置",
+    "bookings": "预约",
+    "messages": "消息"
+  },
+  "about": {
+    "title": "关于月嫂Hub",
+    "description": "我们致力于连接家庭与专业产后护理师",
+    "mission": "我们的使命",
+    "missionText": "为家庭提供合格、经验丰富的产后护理师，在这个重要时期为他们提供支持。",
+    "values": "我们的价值观",
+    "quality": "质量",
+    "qualityText": "我们确保所有护理师都符合高标准的专业性和经验要求。",
+    "trust": "信任",
+    "trustText": "通过验证的档案和评价，在家庭和护理师之间建立信任。",
+    "support": "支持",
+    "supportText": "在整个过程中为家庭和护理师提供持续支持。"
+  },
+  "contact": {
+    "title": "联系我们",
+    "subtitle": "与我们的团队取得联系",
+    "name": "姓名",
+    "namePlaceholder": "输入您的姓名",
+    "email": "邮箱",
+    "emailPlaceholder": "输入您的邮箱",
+    "message": "消息",
+    "messagePlaceholder": "输入您的消息",
+    "sendMessage": "发送消息",
+    "contactInfo": "联系信息",
+    "address": "地址",
+    "phone": "电话",
+    "emailContact": "邮箱"
+  },
+  "errors": {
+    "required": "此字段为必填项",
+    "invalidEmail": "请输入有效的邮箱地址",
+    "invalidPhone": "请输入有效的手机号码",
+    "passwordTooShort": "密码至少需要6个字符",
+    "passwordsDoNotMatch": "密码不匹配",
+    "invalidVerificationCode": "验证码无效",
+    "verificationSetupIssue": "验证设置问题。请刷新页面重试。",
+    "failedToSendCode": "发送验证码失败。请重试。",
+    "invalidCredentials": "邮箱或密码无效",
+    "networkError": "网络错误。请检查您的连接并重试。",
+    "unknownError": "出现未知错误。请重试。"
+  },
+  "validation": {
+    "emailRequired": "请输入您的邮箱地址",
+    "emailInvalid": "请输入有效的邮箱地址",
+    "phoneRequired": "请输入您的手机号码",
+    "phoneInvalid": "请输入有效的手机号码",
+    "passwordRequired": "请输入您的密码",
+    "passwordTooShort": "密码至少需要6个字符",
+    "verificationCodeRequired": "请输入验证码",
+    "verificationCodeInvalid": "验证码必须是6位数字"
+  }
+}
