@@ -52,8 +52,8 @@ export default async function HomePage({ params }: HomePageProps) {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
             </div>
-            <h3 className="text-xl font-semibold text-gray-900 mb-2">Quality Care</h3>
-            <p className="text-gray-600">Professional and experienced caregivers</p>
+            <h3 className="text-xl font-semibold text-gray-900 mb-2">{t.home.features.qualityCare.title}</h3>
+            <p className="text-gray-600">{t.home.features.qualityCare.description}</p>
           </div>
           
           <div className="text-center">
@@ -62,8 +62,8 @@ export default async function HomePage({ params }: HomePageProps) {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
               </svg>
             </div>
-            <h3 className="text-xl font-semibold text-gray-900 mb-2">Trust & Safety</h3>
-            <p className="text-gray-600">Verified profiles and secure connections</p>
+            <h3 className="text-xl font-semibold text-gray-900 mb-2">{t.home.features.trustSafety.title}</h3>
+            <p className="text-gray-600">{t.home.features.trustSafety.description}</p>
           </div>
           
           <div className="text-center">
@@ -72,8 +72,8 @@ export default async function HomePage({ params }: HomePageProps) {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
             </div>
-            <h3 className="text-xl font-semibold text-gray-900 mb-2">24/7 Support</h3>
-            <p className="text-gray-600">Round-the-clock assistance when you need it</p>
+            <h3 className="text-xl font-semibold text-gray-900 mb-2">{t.home.features.support.title}</h3>
+            <p className="text-gray-600">{t.home.features.support.description}</p>
           </div>
         </div>
       </div>

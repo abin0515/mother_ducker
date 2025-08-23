@@ -1,6 +1,6 @@
 {
   "common": {
-    "appName": "月嫂Hub",
+    "appName": "YuesaoHub",
     "loading": "加载中...",
     "error": "错误",
     "success": "成功",
@@ -24,16 +24,30 @@
     "language": "语言"
   },
   "home": {
-    "title": "欢迎来到月嫂Hub",
+    "title": "欢迎来到YuesaoHub",
     "subtitle": "连接家庭与专业产后护理师",
     "description": "为您的家庭需求找到经验丰富且合格的产后护理师",
     "getStarted": "开始使用",
-    "learnMore": "了解更多"
+    "learnMore": "了解更多",
+    "features": {
+      "qualityCare": {
+        "title": "质量护理",
+        "description": "专业且经验丰富的护理师"
+      },
+      "trustSafety": {
+        "title": "信任与安全",
+        "description": "验证的档案和安全连接"
+      },
+      "support": {
+        "title": "24/7 支持",
+        "description": "全天候协助，随时为您服务"
+      }
+    }
   },
   "auth": {
     "signup": {
       "title": "创建您的账户",
-      "subtitle": "加入月嫂Hub，连接专业护理师",
+      "subtitle": "加入YuesaoHub，连接专业护理师",
       "emailPlaceholder": "输入您的邮箱地址",
       "phonePlaceholder": "输入您的手机号码",
       "passwordPlaceholder": "创建密码",
@@ -62,7 +76,13 @@
       "hidePassword": "隐藏密码",
       "editEmail": "编辑邮箱",
       "editPhone": "编辑手机号"
-    }
+    },
+    "or": "或者",
+    "continue": "继续",
+    "continuing": "继续中...",
+    "signingUp": "注册中...",
+    "loggingIn": "登录中...",
+    "creatingAccount": "创建账户中..."
   },
   "dashboard": {
     "title": "控制台",
@@ -73,7 +93,7 @@
     "messages": "消息"
   },
   "about": {
-    "title": "关于月嫂Hub",
+    "title": "关于YuesaoHub",
     "description": "我们致力于连接家庭与专业产后护理师",
     "mission": "我们的使命",
     "missionText": "为家庭提供合格、经验丰富的产后护理师，在这个重要时期为他们提供支持。",

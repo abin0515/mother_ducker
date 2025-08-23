@@ -1,6 +1,6 @@
 # React + Next.js Component Development Patterns
 
-## Component Structure Standards
+## Component Structure
 
 ### Component File Structure
 ```typescript
@@ -27,7 +27,6 @@ export const UserProfile: React.FC<UserProfileProps> = ({
   // 4. State and hooks
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
-  const { user: authUser } = useAuth();
 
   // 5. Effects
   useEffect(() => {
@@ -59,85 +58,76 @@ export const UserProfile: React.FC<UserProfileProps> = ({
 - **Conditional Rendering**: Use early returns for loading/error states
 - **Fragment Usage**: Use `<>` for multiple elements without wrapper
 
-### Server vs Client Components (Next.js App Router)
-```typescript
-// ✅ Server Component (default) - Good for data fetching, SEO
-// app/users/page.tsx
-import { UserList } from '@/components/features/UserList';
+## Server vs Client Components
 
-export default async function UsersPage() {
-  // Server-side data fetching
+### Server Components (Default)
+```typescript
+// app/[locale]/users/page.tsx
+import { getTranslations, type Locale } from '@/lib/i18n';
+
+interface UsersPageProps {
+  params: { locale: Locale; };
+}
+
+export default async function UsersPage({ params }: UsersPageProps) {
+  const { locale } = await params;
+  const t = getTranslations(locale);
+  
   const users = await fetchUsers();
   
   return (
     <div>
-      <h1>Users</h1>
+      <h1>{t.users.title}</h1>
       <UserList users={users} />
     </div>
   );
 }
+```
 
-// ✅ Client Component - Good for interactivity, state
-// components/features/UserForm.tsx
+### Client Components
+```typescript
 'use client';
-
 import { useState } from 'react';
+import { useParams } from 'next/navigation';
+import { getTranslations, type Locale } from '@/lib/i18n';
 
 export function UserForm() {
+  const params = useParams();
+  const locale = params.locale as Locale;
+  const t = getTranslations(locale);
+  
   const [formData, setFormData] = useState({});
   
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    // Handle form submission
-  };
-  
   return (
-    <form onSubmit={handleSubmit}>
+    <form>
+      <h2>{t.users.form.title}</h2>
       {/* Form fields */}
     </form>
   );
 }
 ```
 
-### Performance Optimization
+## i18n Component Patterns
 ```typescript
-// ✅ Good: Memoize expensive components
-export const ExpensiveChart = React.memo<ChartProps>(({ data, config }) => {
-  // Expensive rendering logic
-  return <div>{/* Chart content */}</div>;
-});
+// ✅ Always use translation keys for user-facing text
+<h1>{t.feature.title}</h1>  // ✅ Correct
+<h1>Feature Title</h1>      // ❌ Incorrect
 
-// ✅ Good: Memoize callbacks
-const handleClick = useCallback((id: string) => {
-  // Handle click logic
-}, []);
+// ✅ Use translation keys for validation messages
+setError(t.validation.emailRequired);  // ✅ Correct
+setError('Please enter your email');   // ❌ Incorrect
+
+// ✅ Use locale-aware navigation
+router.push(`/${locale}/dashboard`);   // ✅ Correct
+router.push('/dashboard');             // ❌ Incorrect
 ```
 
-### Component Documentation
-```typescript
-/**
- * UserProfile component displays user information and allows editing
- * 
- * @param userId - The unique identifier of the user
- * @param onUpdate - Callback function called when user data is updated
- * @param className - Additional CSS classes for styling
- * 
- * @example
- * ```tsx
- * <UserProfile 
- *   userId="123" 
- *   onUpdate={(user) => console.log('Updated:', user)}
- *   className="bg-gray-50"
- * />
- * ```
- */
-export const UserProfile: React.FC<UserProfileProps> = ({ /* ... */ }) => {
-  // Component implementation
-};
-```
+## Key Principles
+- **Use Server Components** for data fetching and SEO
+- **Use Client Components** for interactivity and state
+- **Always include i18n** in component patterns
+- **Follow single responsibility** principle
+- **Use TypeScript interfaces** for all props
+- **Implement proper error handling** and loading states
 
-**Why**: Consistent component structure ensures readability, maintainability, and follows React best practices for component organization.
-description:
-globs:
-alwaysApply: false
----
+**Why**: Proper component patterns ensure maintainable code, good performance, and consistent user experience across the application.

@@ -35,76 +35,91 @@ This is the main frontend guidelines file that references focused rule files for
 - Middleware patterns
 - SEO and metadata
 
+### 📁 **i18n-guidelines.mdc**
+- Multi-language support implementation
+- Translation key structure and organization
+- Locale-aware routing patterns
+- Component internationalization
+- Form validation and error messages
+- Adding and removing features with i18n
+
+### 📁 **i18n-quick-reference.mdc**
+- Quick reference card for common i18n patterns
+- Essential commands and debugging tools
+- Fast access to most-used code snippets
+- Common mistakes and best practices
+
 ## Quick Reference
 
 ### When to Apply Which Rules:
 
 **For Component Development:**
-- Apply `component-patterns.mdc` + `typescript-standards.mdc`
+- Apply `component-patterns.mdc` + `typescript-standards.mdc` + `i18n-guidelines.mdc`
 
 **For Styling and UI:**
-- Apply `tailwind-guidelines.mdc` + `component-patterns.mdc`
+- Apply `tailwind-guidelines.mdc` + `component-patterns.mdc` + `i18n-guidelines.mdc`
 
 **For Next.js App Router:**
-- Apply `app-router-patterns.mdc` + `component-patterns.mdc`
+- Apply `app-router-patterns.mdc` + `component-patterns.mdc` + `i18n-guidelines.mdc`
 
 **For Full Frontend Development:**
 - Apply all focused rule files or mention "frontend-guidelines"
+
+**For Internationalization:**
+- Apply `i18n-guidelines.mdc` + `component-patterns.mdc`
+
+**For New Pages/Features:**
+- Apply `i18n-guidelines.mdc` + `component-patterns.mdc` + `app-router-patterns.mdc`
 
 ### Usage Examples:
 
 ```bash
 # Generate a new component
-"Create a user profile component following component-patterns"
+"Create a user profile component following component-patterns and i18n-guidelines"
 
 # Style a component
-"Style this component using tailwind-guidelines"
+"Style this component using tailwind-guidelines and i18n-guidelines"
 
 # Create an API route
 "Create a users API route following app-router-patterns"
 
 # Full frontend development
 "Build a complete user management page following frontend-guidelines"
+
+# Internationalization
+"Add multi-language support to this feature following i18n-guidelines"
+
+# New page with i18n
+"Create a new settings page following i18n-guidelines and component-patterns"
 ```
 
-## Project Structure
+## Key Directory Requirements
 
-```
-src/
-├── app/                # Next.js App Router directory
-│   ├── (auth)/         # Route groups
-│   ├── (dashboard)/    # Route groups
-│   ├── api/            # API routes
-│   ├── globals.css     # Global styles
-│   ├── layout.tsx      # Root layout
-│   ├── page.tsx        # Home page
-│   ├── loading.tsx     # Loading UI
-│   ├── error.tsx       # Error UI
-│   └── not-found.tsx   # 404 page
-├── components/         # Reusable UI components
-│   ├── ui/            # Basic UI components
-│   ├── layout/        # Layout components
-│   └── features/      # Feature-specific components
-├── hooks/             # Custom React hooks
-├── utils/             # Utility functions
-├── types/             # TypeScript type definitions
-├── constants/         # Application constants
-├── services/          # API services
-├── store/             # State management
-├── lib/               # Library configurations
-├── styles/            # Additional styles
-└── assets/            # Static assets
-```
+### Essential i18n Structure
+- **`app/[locale]/`**: All pages must be under locale-aware routing
+- **`lib/translations/`**: Contains `en.json` and `zh.json` translation files
+- **`lib/i18n.ts`**: Translation utilities and locale management
+
+### Core Directories
+- **`app/`**: Next.js App Router with locale-aware structure
+- **`components/`**: Reusable UI components including `LanguageSwitcher.tsx`
+- **`hooks/`**: Custom React hooks
+- **`lib/`**: Library configurations and utilities
+- **`types/`**: TypeScript type definitions
+
+*Note: Additional directories will be created as the project grows. Focus on maintaining the i18n structure and following the established patterns.*
 
 ## File Naming Conventions
 
 - **App Router Files**: `page.tsx`, `layout.tsx`, `loading.tsx`, `error.tsx`, `not-found.tsx`, `route.ts`
+- **Locale Directory**: `[locale]` (required for all pages)
 - **Components**: PascalCase (e.g., `UserProfile.tsx`)
 - **Hooks**: camelCase with "use" prefix (e.g., `useAuth.ts`)
 - **Utilities**: camelCase (e.g., `formatDate.ts`)
 - **Types**: PascalCase (e.g., `UserTypes.ts`)
 - **Constants**: UPPER_SNAKE_CASE (e.g., `API_ENDPOINTS.ts`)
-- **Route Groups**: Parentheses (e.g., `(auth)`, `(dashboard)`)
+- **Translation Files**: `en.json`, `zh.json` (lowercase with locale code)
+- **Route Groups**: Parentheses (e.g., `(auth)`, `(dashboard)`) - Note: Use `[locale]` instead for i18n
 
 ## Core Principles
 
@@ -115,6 +130,9 @@ src/
 5. **Code Organization**: Clear separation of concerns and consistent patterns
 6. **Error Handling**: Graceful error states and user feedback
 7. **SEO**: Proper metadata and semantic structure
+8. **Internationalization**: All user-facing content must support multiple languages
+9. **Locale-Aware Routing**: All pages must be under `[locale]` directory
+10. **Translation Management**: Use semantic translation keys and maintain both language files
 
 ## Quick Start Commands
 
@@ -127,6 +145,21 @@ src/
 "Apply typescript-standards for type definitions"
 "Follow tailwind-guidelines for styling"
 "Use app-router-patterns for Next.js structure"
+"Follow i18n-guidelines for multi-language support"
 ```
 
-**Why**: This modular approach provides focused, maintainable rule files that are more likely to auto-load and provide targeted assistance for specific development tasks.
+## Important Notes
+
+### i18n Integration
+- **All new pages must be created under `src/app/[locale]/`**
+- **All components must use translation keys for user-facing text**
+- **All navigation must use locale-aware paths (`/${locale}/path`)**
+- **Translation keys must be added to both `en.json` and `zh.json`**
+
+### Development Workflow
+1. **Add translation keys first** before implementing features
+2. **Test both languages** before considering features complete
+3. **Use semantic translation keys** that are reusable and maintainable
+4. **Follow the i18n checklist** before committing changes
+
+**Why**: This modular approach provides focused, maintainable rule files that are more likely to auto-load and provide targeted assistance for specific development tasks. The i18n integration ensures consistent multi-language support across all features.

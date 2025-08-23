@@ -1,252 +1,75 @@
 # Next.js 13+ App Router Patterns
 
-## App Router File Structure
+## i18n Routing Requirements
+- **All pages must be under `[locale]/` directory**
+- **API routes remain under `api/` (no locale needed)**
+- **Root layout should be minimal, locale layout handles i18n**
+- **Root page redirects to locale-specific path**
+- **Middleware handles locale detection and routing**
 
-### Directory Organization
-```
-app/
-├── (auth)/              # Route groups (auth-related pages)
-│   ├── login/
-│   │   └── page.tsx
-│   ├── register/
-│   │   └── page.tsx
-│   └── layout.tsx
-├── (dashboard)/         # Route groups (dashboard pages)
-│   ├── dashboard/
-│   │   └── page.tsx
-│   ├── profile/
-│   │   └── page.tsx
-│   └── layout.tsx
-├── api/                 # API routes
-│   ├── auth/
-│   │   └── route.ts
-│   └── users/
-│       └── route.ts
-├── globals.css          # Global styles
-├── layout.tsx           # Root layout
-├── page.tsx             # Home page
-├── loading.tsx          # Loading UI
-├── error.tsx            # Error UI
-└── not-found.tsx        # 404 page
-```
+## Page Components
 
-### Root Layout Pattern
+### Server Components (Default) with i18n
 ```typescript
-// app/layout.tsx - Root Layout (Server Component by default)
-import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
-import './globals.css';
+// app/[locale]/page.tsx
+import { getTranslations, type Locale } from '@/lib/i18n';
 
-const inter = Inter({ subsets: ['latin'] });
+interface PageProps {
+  params: { locale: Locale; };
+}
 
-export const metadata: Metadata = {
-  title: {
-    template: '%s | My App',
-    default: 'My App',
-  },
-  description: 'Built with Next.js 13+ App Router',
-  keywords: ['Next.js', 'React', 'TypeScript'],
-  authors: [{ name: 'Your Name' }],
-  creator: 'Your Name',
-  openGraph: {
-    type: 'website',
-    locale: 'en_US',
-    url: 'https://myapp.com',
-    title: 'My App',
-    description: 'Built with Next.js 13+ App Router',
-    siteName: 'My App',
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'My App',
-    description: 'Built with Next.js 13+ App Router',
-  },
-  robots: {
-    index: true,
-    follow: true,
-  },
-};
+export default async function Page({ params }: PageProps) {
+  const { locale } = await params;
+  const t = getTranslations(locale);
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body className={inter.className}>
-        <div className="min-h-screen bg-gray-50">
-          {children}
-        </div>
+    <div>
+      <h1>{t.page.title}</h1>
+      <p>{t.page.description}</p>
+    </div>
+  );
+}
+```
+
+### Layout Components
+```typescript
+// app/[locale]/layout.tsx
+import { getTranslations, type Locale } from '@/lib/i18n';
+
+interface LayoutProps {
+  children: React.ReactNode;
+  params: { locale: Locale; };
+}
+
+export default async function Layout({ children, params }: LayoutProps) {
+  const { locale } = await params;
+  const t = getTranslations(locale);
+
+  return (
+    <html lang={locale}>
+      <body>
+        <header>
+          <nav>{/* Navigation with locale-aware links */}</nav>
+        </header>
+        <main>{children}</main>
       </body>
     </html>
   );
 }
 ```
 
-## Page Components
-
-### Server Components (Default)
-```typescript
-// app/page.tsx - Home Page (Server Component)
-import { Suspense } from 'react';
-import { UserList } from '@/components/features/UserList';
-import { LoadingSpinner } from '@/components/ui/LoadingSpinner';
-
-export default async function HomePage() {
-  return (
-    <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold text-gray-900 mb-8">
-        Welcome to My App
-      </h1>
-      
-      <Suspense fallback={<LoadingSpinner />}>
-        <UserList />
-      </Suspense>
-    </div>
-  );
-}
-```
-
-### Dynamic Routes
-```typescript
-// app/users/[id]/page.tsx - Dynamic User Page
-import type { Metadata } from 'next';
-import { notFound } from 'next/navigation';
-
-interface Props {
-  params: { id: string };
-  searchParams: { [key: string]: string | string[] | undefined };
-}
-
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const user = await fetchUser(params.id);
-  
-  if (!user) {
-    return {
-      title: 'User Not Found',
-    };
-  }
-  
-  return {
-    title: `${user.name} - User Profile`,
-    description: `Profile page for ${user.name}`,
-    openGraph: {
-      title: `${user.name} - User Profile`,
-      description: `Profile page for ${user.name}`,
-      images: user.avatar ? [{ url: user.avatar }] : [],
-    },
-  };
-}
-
-export default async function UserPage({ params }: Props) {
-  const user = await fetchUser(params.id);
-  
-  if (!user) {
-    notFound();
-  }
-  
-  return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="bg-white rounded-lg shadow-md p-6">
-        <h1 className="text-2xl font-bold mb-4">{user.name}</h1>
-        <p className="text-gray-600">{user.email}</p>
-        {/* User content */}
-      </div>
-    </div>
-  );
-}
-```
-
-## Route Groups
-
-### Layout Organization
-```typescript
-// app/(auth)/layout.tsx - Auth Layout
-export default function AuthLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
-      <div className="max-w-md w-full space-y-8">
-        {children}
-      </div>
-    </div>
-  );
-}
-
-// app/(auth)/login/page.tsx - Login Page
-export default function LoginPage() {
-  return (
-    <div className="bg-white p-8 rounded-lg shadow-md">
-      <h2 className="text-2xl font-bold text-center mb-6">Sign In</h2>
-      {/* Login form */}
-    </div>
-  );
-}
-
-// app/(dashboard)/layout.tsx - Dashboard Layout
-import { Sidebar } from '@/components/layout/Sidebar';
-import { Header } from '@/components/layout/Header';
-
-export default function DashboardLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  return (
-    <div className="flex h-screen bg-gray-100">
-      <Sidebar />
-      <div className="flex-1 flex flex-col overflow-hidden">
-        <Header />
-        <main className="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100">
-          <div className="container mx-auto px-6 py-8">
-            {children}
-          </div>
-        </main>
-      </div>
-    </div>
-  );
-}
-```
-
-## API Routes
-
-### RESTful API Patterns
+### API Routes
 ```typescript
 // app/api/users/route.ts
 import { NextRequest, NextResponse } from 'next/server';
-import { z } from 'zod';
-
-const userSchema = z.object({
-  name: z.string().min(2).max(50),
-  email: z.string().email(),
-  role: z.enum(['admin', 'user', 'moderator']).default('user'),
-});
 
 export async function GET(request: NextRequest) {
   try {
-    const { searchParams } = new URL(request.url);
-    const page = parseInt(searchParams.get('page') || '1');
-    const limit = parseInt(searchParams.get('limit') || '10');
-    
-    const users = await fetchUsers({ page, limit });
-    
-    return NextResponse.json({
-      success: true,
-      data: users,
-      pagination: {
-        page,
-        limit,
-        total: users.length,
-      },
-    });
+    const users = await fetchUsers();
+    return NextResponse.json({ data: users, success: true });
   } catch (error) {
-    console.error('GET /api/users error:', error);
     return NextResponse.json(
-      { success: false, message: 'Failed to fetch users' },
+      { error: 'Failed to fetch users' },
       { status: 500 }
     );
   }
@@ -255,138 +78,30 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const validatedData = userSchema.parse(body);
-    
-    const user = await createUser(validatedData);
-    
-    return NextResponse.json({
-      success: true,
-      data: user,
-    }, { status: 201 });
+    const user = await createUser(body);
+    return NextResponse.json({ data: user, success: true });
   } catch (error) {
-    if (error instanceof z.ZodError) {
-      return NextResponse.json(
-        { 
-          success: false, 
-          message: 'Validation error', 
-          errors: error.errors 
-        },
-        { status: 400 }
-      );
-    }
-    
-    console.error('POST /api/users error:', error);
     return NextResponse.json(
-      { success: false, message: 'Failed to create user' },
+      { error: 'Failed to create user' },
       { status: 500 }
     );
   }
 }
 ```
 
-### Dynamic API Routes
+### Loading and Error States
 ```typescript
-// app/api/users/[id]/route.ts
-import { NextRequest, NextResponse } from 'next/server';
-
-interface Props {
-  params: { id: string };
-}
-
-export async function GET(request: NextRequest, { params }: Props) {
-  try {
-    const user = await fetchUser(params.id);
-    
-    if (!user) {
-      return NextResponse.json(
-        { success: false, message: 'User not found' },
-        { status: 404 }
-      );
-    }
-    
-    return NextResponse.json({
-      success: true,
-      data: user,
-    });
-  } catch (error) {
-    console.error(`GET /api/users/${params.id} error:`, error);
-    return NextResponse.json(
-      { success: false, message: 'Failed to fetch user' },
-      { status: 500 }
-    );
-  }
-}
-
-export async function PUT(request: NextRequest, { params }: Props) {
-  try {
-    const body = await request.json();
-    const user = await updateUser(params.id, body);
-    
-    return NextResponse.json({
-      success: true,
-      data: user,
-    });
-  } catch (error) {
-    console.error(`PUT /api/users/${params.id} error:`, error);
-    return NextResponse.json(
-      { success: false, message: 'Failed to update user' },
-      { status: 500 }
-    );
-  }
-}
-
-export async function DELETE(request: NextRequest, { params }: Props) {
-  try {
-    await deleteUser(params.id);
-    
-    return NextResponse.json({
-      success: true,
-      message: 'User deleted successfully',
-    });
-  } catch (error) {
-    console.error(`DELETE /api/users/${params.id} error:`, error);
-    return NextResponse.json(
-      { success: false, message: 'Failed to delete user' },
-      { status: 500 }
-    );
-  }
-}
-```
-
-## Loading and Error States
-
-### Loading UI
-```typescript
-// app/loading.tsx - Global Loading UI
+// app/[locale]/loading.tsx
 export default function Loading() {
   return (
     <div className="flex items-center justify-center min-h-screen">
-      <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600"></div>
+      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
     </div>
   );
 }
 
-// app/users/loading.tsx - Route-specific loading
-export default function UsersLoading() {
-  return (
-    <div className="space-y-4">
-      {[...Array(5)].map((_, i) => (
-        <div key={i} className="animate-pulse">
-          <div className="h-4 bg-gray-200 rounded w-3/4 mb-2"></div>
-          <div className="h-4 bg-gray-200 rounded w-1/2"></div>
-        </div>
-      ))}
-    </div>
-  );
-}
-```
-
-### Error UI
-```typescript
-// app/error.tsx - Global Error UI
+// app/[locale]/error.tsx
 'use client';
-
-import { useEffect } from 'react';
 
 export default function Error({
   error,
@@ -395,258 +110,21 @@ export default function Error({
   error: Error & { digest?: string };
   reset: () => void;
 }) {
-  useEffect(() => {
-    console.error('Global error:', error);
-  }, [error]);
-
   return (
     <div className="flex flex-col items-center justify-center min-h-screen">
-      <h2 className="text-2xl font-bold text-red-600 mb-4">
-        Something went wrong!
-      </h2>
-      <p className="text-gray-600 mb-4">
-        {error.message || 'An unexpected error occurred'}
-      </p>
-      <button
-        onClick={reset}
-        className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-      >
-        Try again
-      </button>
-    </div>
-  );
-}
-
-// app/users/error.tsx - Route-specific error
-'use client';
-
-export default function UsersError({
-  error,
-  reset,
-}: {
-  error: Error & { digest?: string };
-  reset: () => void;
-}) {
-  return (
-    <div className="text-center py-8">
-      <h2 className="text-xl font-semibold text-red-600 mb-2">
-        Failed to load users
-      </h2>
-      <button
-        onClick={reset}
-        className="text-blue-600 hover:text-blue-800 underline"
-      >
-        Try again
-      </button>
+      <h2>Something went wrong!</h2>
+      <button onClick={reset}>Try again</button>
     </div>
   );
 }
 ```
 
-### Not Found UI
-```typescript
-// app/not-found.tsx - 404 Page
-import Link from 'next/link';
+## Key Principles
+- **Use Server Components** for data fetching and SEO
+- **Use Client Components** only when needed (interactivity, state)
+- **Always include i18n** in page components
+- **Implement proper error handling** and loading states
+- **Use middleware** for locale detection and routing
+- **Keep API routes** separate from locale routing
 
-export default function NotFound() {
-  return (
-    <div className="flex flex-col items-center justify-center min-h-screen">
-      <h2 className="text-2xl font-bold mb-4">Page Not Found</h2>
-      <p className="text-gray-600 mb-4">Could not find requested resource</p>
-      <Link 
-        href="/"
-        className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-      >
-        Return Home
-      </Link>
-    </div>
-  );
-}
-```
-
-## Data Fetching Patterns
-
-### Server-Side Data Fetching
-```typescript
-// lib/api.ts - API utilities
-export async function fetchUsers(options?: {
-  page?: number;
-  limit?: number;
-  search?: string;
-}) {
-  const params = new URLSearchParams();
-  if (options?.page) params.append('page', options.page.toString());
-  if (options?.limit) params.append('limit', options.limit.toString());
-  if (options?.search) params.append('search', options.search);
-  
-  const response = await fetch(`${process.env.API_URL}/users?${params}`, {
-    next: { revalidate: 60 }, // Revalidate every 60 seconds
-  });
-  
-  if (!response.ok) {
-    throw new Error('Failed to fetch users');
-  }
-  
-  return response.json();
-}
-
-// app/users/page.tsx - Using server-side data fetching
-import { fetchUsers } from '@/lib/api';
-import { UserList } from '@/components/features/UserList';
-
-export default async function UsersPage({
-  searchParams,
-}: {
-  searchParams: { page?: string; search?: string };
-}) {
-  const users = await fetchUsers({
-    page: searchParams.page ? parseInt(searchParams.page) : 1,
-    search: searchParams.search,
-  });
-  
-  return (
-    <div>
-      <h1 className="text-2xl font-bold mb-6">Users</h1>
-      <UserList users={users} />
-    </div>
-  );
-}
-```
-
-### Parallel Data Fetching
-```typescript
-// app/dashboard/page.tsx - Parallel data fetching
-import { fetchUsers, fetchProducts, fetchStats } from '@/lib/api';
-
-export default async function DashboardPage() {
-  // Fetch data in parallel for better performance
-  const [users, products, stats] = await Promise.all([
-    fetchUsers({ limit: 5 }),
-    fetchProducts({ limit: 5 }),
-    fetchStats(),
-  ]);
-  
-  return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      <div className="bg-white p-6 rounded-lg shadow">
-        <h3 className="text-lg font-semibold mb-4">Recent Users</h3>
-        {/* Users list */}
-      </div>
-      
-      <div className="bg-white p-6 rounded-lg shadow">
-        <h3 className="text-lg font-semibold mb-4">Recent Products</h3>
-        {/* Products list */}
-      </div>
-      
-      <div className="bg-white p-6 rounded-lg shadow">
-        <h3 className="text-lg font-semibold mb-4">Statistics</h3>
-        {/* Stats display */}
-      </div>
-    </div>
-  );
-}
-```
-
-## Middleware Patterns
-
-### Authentication Middleware
-```typescript
-// middleware.ts
-import { NextResponse } from 'next/server';
-import type { NextRequest } from 'next/server';
-
-export function middleware(request: NextRequest) {
-  const { pathname } = request.nextUrl;
-  
-  // Check if user is authenticated
-  const token = request.cookies.get('auth-token');
-  
-  // Protected routes
-  const protectedRoutes = ['/dashboard', '/profile', '/settings'];
-  const isProtectedRoute = protectedRoutes.some(route => 
-    pathname.startsWith(route)
-  );
-  
-  // Auth routes (login, register)
-  const authRoutes = ['/login', '/register'];
-  const isAuthRoute = authRoutes.some(route => 
-    pathname.startsWith(route)
-  );
-  
-  // Redirect logic
-  if (isProtectedRoute && !token) {
-    return NextResponse.redirect(new URL('/login', request.url));
-  }
-  
-  if (isAuthRoute && token) {
-    return NextResponse.redirect(new URL('/dashboard', request.url));
-  }
-  
-  return NextResponse.next();
-}
-
-export const config = {
-  matcher: [
-    '/dashboard/:path*',
-    '/profile/:path*',
-    '/settings/:path*',
-    '/login',
-    '/register',
-  ],
-};
-```
-
-## SEO and Metadata
-
-### Dynamic Metadata
-```typescript
-// app/blog/[slug]/page.tsx
-import type { Metadata } from 'next';
-
-interface Props {
-  params: { slug: string };
-}
-
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const post = await fetchPost(params.slug);
-  
-  if (!post) {
-    return {
-      title: 'Post Not Found',
-    };
-  }
-  
-  return {
-    title: post.title,
-    description: post.excerpt,
-    openGraph: {
-      title: post.title,
-      description: post.excerpt,
-      type: 'article',
-      publishedTime: post.publishedAt,
-      authors: [post.author.name],
-      images: post.featuredImage ? [{ url: post.featuredImage }] : [],
-    },
-    twitter: {
-      card: 'summary_large_image',
-      title: post.title,
-      description: post.excerpt,
-      images: post.featuredImage ? [post.featuredImage] : [],
-    },
-  };
-}
-
-export async function generateStaticParams() {
-  const posts = await fetchPosts();
-  
-  return posts.map((post) => ({
-    slug: post.slug,
-  }));
-}
-```
-
-**Why**: App Router provides better performance with Server Components, improved routing patterns, and built-in optimizations for SEO and loading states.
-description:
-globs:
-alwaysApply: false
----
+**Why**: Proper App Router patterns ensure good performance, SEO, and maintainable code structure.

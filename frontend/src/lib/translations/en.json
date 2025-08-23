@@ -1,6 +1,6 @@
 {
   "common": {
-    "appName": "月嫂Hub",
+    "appName": "YuesaoHub",
     "loading": "Loading...",
     "error": "Error",
     "success": "Success",
@@ -24,16 +24,30 @@
     "language": "Language"
   },
   "home": {
-    "title": "Welcome to 月嫂Hub",
+    "title": "Welcome to YuesaoHub",
     "subtitle": "Connecting families with professional postpartum caregivers",
     "description": "Find experienced and qualified postpartum caregivers for your family's needs",
     "getStarted": "Get Started",
-    "learnMore": "Learn More"
+    "learnMore": "Learn More",
+    "features": {
+      "qualityCare": {
+        "title": "Quality Care",
+        "description": "Professional and experienced caregivers"
+      },
+      "trustSafety": {
+        "title": "Trust & Safety",
+        "description": "Verified profiles and secure connections"
+      },
+      "support": {
+        "title": "24/7 Support",
+        "description": "Round-the-clock assistance when you need it"
+      }
+    }
   },
   "auth": {
     "signup": {
       "title": "Create your account",
-      "subtitle": "Join 月嫂Hub to connect with professional caregivers",
+      "subtitle": "Join YuesaoHub to connect with professional caregivers",
       "emailPlaceholder": "Enter your email address",
       "phonePlaceholder": "Enter your phone number",
       "passwordPlaceholder": "Create a password",
@@ -62,7 +76,13 @@
       "hidePassword": "Hide password",
       "editEmail": "Edit email",
       "editPhone": "Edit phone number"
-    }
+    },
+    "or": "OR",
+    "continue": "Continue",
+    "continuing": "Continuing...",
+    "signingUp": "Signing up...",
+    "loggingIn": "Logging in...",
+    "creatingAccount": "Creating account..."
   },
   "dashboard": {
     "title": "Dashboard",
@@ -73,7 +93,7 @@
     "messages": "Messages"
   },
   "about": {
-    "title": "About 月嫂Hub",
+    "title": "About YuesaoHub",
     "description": "We are dedicated to connecting families with professional postpartum caregivers",
     "mission": "Our Mission",
     "missionText": "To provide families with access to qualified, experienced postpartum caregivers who can support them during this important time.",

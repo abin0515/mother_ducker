@@ -3,9 +3,13 @@
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/hooks/useAuth';
-import { useRouter } from 'next/navigation';
+import { useRouter, useParams } from 'next/navigation';
+import { getTranslations, type Locale } from '@/lib/i18n';
 
 export default function LoginPasswordPage() {
+  const params = useParams();
+  const locale = params.locale as Locale;
+  const t = getTranslations(locale);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -19,7 +23,7 @@ export default function LoginPasswordPage() {
     const storedEmail = sessionStorage.getItem('loginEmail');
     if (!storedEmail) {
       // If no email, redirect back to login
-      router.push('/login');
+      router.push(`/${locale}/login`);
       return;
     }
     setEmail(storedEmail);
@@ -31,7 +35,7 @@ export default function LoginPasswordPage() {
     
     // Validation
     if (!password) {
-      setError('Please enter your password');
+      setError(t.validation.passwordRequired);
       return;
     }
     
@@ -51,21 +55,21 @@ export default function LoginPasswordPage() {
       // };
       
       // Redirect to dashboard
-      router.push('/dashboard');
+      router.push(`/${locale}/dashboard`);
     } catch (error: any) {
       console.error('Email login failed:', error);
       
       // Handle specific Firebase errors
       if (error.code === 'auth/user-not-found') {
-        setError('No account found with this email. Please sign up first.');
+        setError(t.errors.invalidCredentials);
       } else if (error.code === 'auth/wrong-password') {
-        setError('Incorrect password. Please try again.');
+        setError(t.errors.invalidCredentials);
       } else if (error.code === 'auth/invalid-email') {
-        setError('Please enter a valid email address.');
+        setError(t.validation.emailInvalid);
       } else if (error.code === 'auth/too-many-requests') {
-        setError('Too many failed attempts. Please try again later.');
+        setError(t.errors.networkError);
       } else {
-        setError(error.message || 'Failed to login');
+        setError(error.message || t.errors.unknownError);
       }
     } finally {
       setIsLoading(false);
@@ -75,7 +79,7 @@ export default function LoginPasswordPage() {
   const handleEditEmail = () => {
     // Clear stored email and go back to login
     sessionStorage.removeItem('loginEmail');
-    router.push('/login');
+    router.push(`/${locale}/login`);
   };
 
   if (!email) {
@@ -93,10 +97,10 @@ export default function LoginPasswordPage() {
           <h1 className="text-3xl font-bold text-gray-900">月嫂Hub</h1>
         </div>
         <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-gray-900">
-          Welcome back
+          {t.auth.login.title}
         </h2>
         <p className="mt-2 text-center text-sm text-gray-600">
-          Enter your password to continue
+          {t.auth.password.subtitle}
         </p>
       </div>
 
@@ -111,7 +115,7 @@ export default function LoginPasswordPage() {
           <form className="space-y-6" onSubmit={handlePasswordSubmit}>
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-                Email address
+                {t.contact.email}
               </label>
               <div className="mt-1 flex">
                 <input
@@ -127,14 +131,14 @@ export default function LoginPasswordPage() {
                   onClick={handleEditEmail}
                   className="ml-2 px-3 py-2 text-sm font-medium text-blue-600 hover:text-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors duration-200"
                 >
-                  Edit
+                  {t.auth.password.editEmail}
                 </button>
               </div>
             </div>
 
             <div>
               <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-                Password
+                {t.auth.password.passwordPlaceholder.replace('Enter your password', 'Password')}
               </label>
               <div className="mt-1 relative">
                 <input
@@ -146,7 +150,7 @@ export default function LoginPasswordPage() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   className="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 pr-10 placeholder-gray-400 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500 sm:text-sm"
-                  placeholder="Enter your password"
+                  placeholder={t.auth.password.passwordPlaceholder}
                 />
                 <button
                   type="button"
@@ -175,11 +179,11 @@ export default function LoginPasswordPage() {
               >
                 {isLoading ? (
                   <div className="flex items-center">
-                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                    Signing in...
+                                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                  {t.auth.loggingIn}
                   </div>
                 ) : (
-                  'Sign In'
+                  t.auth.login.title
                 )}
               </button>
             </div>
@@ -187,9 +191,9 @@ export default function LoginPasswordPage() {
 
           <div className="mt-6 text-center">
             <p className="text-sm text-gray-600">
-              Don't have an account?{' '}
-              <Link href="/signup" className="font-medium text-blue-600 hover:text-blue-500 transition-colors duration-200">
-                Sign up
+              {t.auth.login.dontHaveAccount}{' '}
+              <Link href={`/${locale}/signup`} className="font-medium text-blue-600 hover:text-blue-500 transition-colors duration-200">
+                {t.auth.login.signupLink}
               </Link>
             </p>
           </div>

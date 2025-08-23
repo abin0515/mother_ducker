@@ -3,9 +3,13 @@
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/hooks/useAuth';
-import { useRouter } from 'next/navigation';
+import { useRouter, useParams } from 'next/navigation';
+import { getTranslations, type Locale } from '@/lib/i18n';
 
 export default function SignupPasswordPage() {
+  const params = useParams();
+  const locale = params.locale as Locale;
+  const t = getTranslations(locale);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -19,7 +23,7 @@ export default function SignupPasswordPage() {
     const storedEmail = sessionStorage.getItem('signupEmail');
     if (!storedEmail) {
       // If no email, redirect back to signup
-      router.push('/signup');
+      router.push(`/${locale}/signup`);
       return;
     }
     setEmail(storedEmail);
@@ -31,12 +35,12 @@ export default function SignupPasswordPage() {
     
     // Validation
     if (!password) {
-      setError('Please enter a password');
+      setError(t.validation.passwordRequired);
       return;
     }
     
     if (password.length < 6) {
-      setError('Password must be at least 6 characters long');
+      setError(t.validation.passwordTooShort);
       return;
     }
     
@@ -57,17 +61,17 @@ export default function SignupPasswordPage() {
       // };
       
       // Redirect to dashboard
-      router.push('/dashboard');
+      router.push(`/${locale}/dashboard`);
     } catch (error: any) {
       console.error('Email signup failed:', error);
       
       // Handle specific Firebase errors
       if (error.code === 'auth/email-already-in-use') {
-        setError('An account with this email already exists. Please try logging in instead.');
+        setError(t.errors.invalidCredentials);
       } else if (error.code === 'auth/weak-password') {
-        setError('Password is too weak. Please choose a stronger password.');
+        setError(t.validation.passwordTooShort);
       } else {
-        setError(error.message || 'Failed to create account');
+        setError(error.message || t.errors.unknownError);
       }
     } finally {
       setIsLoading(false);
@@ -77,7 +81,7 @@ export default function SignupPasswordPage() {
   const handleEditEmail = () => {
     // Clear stored email and go back to signup
     sessionStorage.removeItem('signupEmail');
-    router.push('/signup');
+    router.push(`/${locale}/signup`);
   };
 
   if (!email) {
@@ -95,10 +99,10 @@ export default function SignupPasswordPage() {
           <h1 className="text-3xl font-bold text-gray-900">月嫂Hub</h1>
         </div>
         <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-gray-900">
-          Create your account
+          {t.auth.signup.title}
         </h2>
         <p className="mt-2 text-center text-sm text-gray-600">
-          Set your password for 月嫂Hub to continue
+          {t.auth.password.subtitle}
         </p>
       </div>
 
@@ -113,7 +117,7 @@ export default function SignupPasswordPage() {
           <form className="space-y-6" onSubmit={handlePasswordSubmit}>
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-                Email address
+                {t.contact.email}
               </label>
               <div className="mt-1 flex">
                 <input
@@ -129,14 +133,14 @@ export default function SignupPasswordPage() {
                   onClick={handleEditEmail}
                   className="ml-2 px-3 py-2 text-sm font-medium text-blue-600 hover:text-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors duration-200"
                 >
-                  Edit
+                  {t.auth.password.editEmail}
                 </button>
               </div>
             </div>
 
             <div>
               <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-                Password
+                {t.auth.password.passwordPlaceholder.replace('Enter your password', 'Password')}
               </label>
               <div className="mt-1 relative">
                 <input
@@ -148,7 +152,7 @@ export default function SignupPasswordPage() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   className="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 pr-10 placeholder-gray-400 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500 sm:text-sm"
-                  placeholder="Password"
+                  placeholder={t.auth.password.passwordPlaceholder}
                 />
                 <button
                   type="button"
@@ -177,11 +181,11 @@ export default function SignupPasswordPage() {
               >
                 {isLoading ? (
                   <div className="flex items-center">
-                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                    Creating account...
+                                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                  {t.auth.creatingAccount}
                   </div>
                 ) : (
-                  'Continue'
+                  t.auth.continue
                 )}
               </button>
             </div>
@@ -189,9 +193,9 @@ export default function SignupPasswordPage() {
 
           <div className="mt-6 text-center">
             <p className="text-sm text-gray-600">
-              Already have an account?{' '}
-              <Link href="/login" className="font-medium text-blue-600 hover:text-blue-500 transition-colors duration-200">
-                Log in
+              {t.auth.signup.alreadyHaveAccount}{' '}
+              <Link href={`/${locale}/login`} className="font-medium text-blue-600 hover:text-blue-500 transition-colors duration-200">
+                {t.auth.signup.loginLink}
               </Link>
             </p>
           </div>

@@ -1,0 +1,167 @@
+# Internationalization (i18n) Guidelines
+
+## Core Principles
+
+### 1. Always Use Locale-Aware Routing
+- **✅ DO**: Place all pages under `src/app/[locale]/`
+- **❌ DON'T**: Create pages directly under `src/app/` (except root redirect)
+- **✅ DO**: Use `/${locale}/path` for all internal navigation
+- **❌ DON'T**: Use hardcoded paths like `/signup` or `/login`
+
+### 2. Translation Key Structure
+- **✅ DO**: Use nested, semantic key names
+- **✅ DO**: Group related translations under logical namespaces
+- **❌ DON'T**: Use generic keys like `text1`, `text2`
+
+```json
+{
+  "featureName": {
+    "title": "Feature Title",
+    "description": "Feature description",
+    "actions": {
+      "primary": "Primary Action",
+      "secondary": "Secondary Action"
+    },
+    "errors": {
+      "required": "This field is required",
+      "invalid": "Invalid input"
+    }
+  }
+}
+```
+
+## Component Implementation Patterns
+
+### Server Components (Pages)
+```typescript
+import { getTranslations, type Locale } from '@/lib/i18n';
+
+interface PageProps {
+  params: { locale: Locale; };
+}
+
+export default async function NewPage({ params }: PageProps) {
+  const { locale } = await params;
+  const t = getTranslations(locale);
+
+  return (
+    <div>
+      <h1>{t.featureName.title}</h1>
+      <p>{t.featureName.description}</p>
+    </div>
+  );
+}
+```
+
+### Client Components
+```typescript
+'use client';
+import { useParams } from 'next/navigation';
+import { getTranslations, type Locale } from '@/lib/i18n';
+
+export default function NewComponent() {
+  const params = useParams();
+  const locale = params.locale as Locale;
+  const t = getTranslations(locale);
+
+  return (
+    <div>
+      <h1>{t.featureName.title}</h1>
+      <p>{t.featureName.description}</p>
+    </div>
+  );
+}
+```
+
+### Navigation and Routing
+```typescript
+// ✅ Correct
+<Link href={`/${locale}/new-page`}>New Page</Link>
+router.push(`/${locale}/dashboard`);
+
+// ❌ Incorrect
+<Link href="/new-page">New Page</Link>
+router.push('/dashboard');
+```
+
+### Form Validation and Error Messages
+```typescript
+// ✅ Correct
+setError(t.validation.emailRequired);
+setError(t.errors.networkError);
+
+// ❌ Incorrect
+setError('Please enter your email');
+setError('Network error occurred');
+```
+
+## Adding New Features
+
+### Step 1: Add Translation Keys
+```json
+// en.json
+{
+  "newFeature": {
+    "title": "New Feature",
+    "description": "Description of the new feature",
+    "actions": {
+      "save": "Save",
+      "cancel": "Cancel"
+    }
+  }
+}
+
+// zh.json
+{
+  "newFeature": {
+    "title": "新功能",
+    "description": "新功能的描述",
+    "actions": {
+      "save": "保存",
+      "cancel": "取消"
+    }
+  }
+}
+```
+
+### Step 2: Create Locale-Aware Page
+```typescript
+// src/app/[locale]/new-feature/page.tsx
+import { getTranslations, type Locale } from '@/lib/i18n';
+
+interface NewFeaturePageProps {
+  params: { locale: Locale; };
+}
+
+export default async function NewFeaturePage({ params }: NewFeaturePageProps) {
+  const { locale } = await params;
+  const t = getTranslations(locale);
+
+  return (
+    <div>
+      <h1>{t.newFeature.title}</h1>
+      <p>{t.newFeature.description}</p>
+      <button>{t.newFeature.actions.save}</button>
+    </div>
+  );
+}
+```
+
+## Testing Checklist
+- [ ] All new pages are under `[locale]/` directory
+- [ ] All translation keys are added to both `en.json` and `zh.json`
+- [ ] All navigation uses locale-aware paths (`/${locale}/path`)
+- [ ] All user-facing text uses translation keys
+- [ ] All error and validation messages use translation keys
+- [ ] Language switching works correctly on new pages
+- [ ] No hardcoded English text remains in Chinese mode
+- [ ] No hardcoded Chinese text remains in English mode
+
+## Key Principles
+- **Always think in terms of multiple languages** when designing features
+- **Translation keys should be semantic and reusable**
+- **Test both languages** before considering a feature complete
+- **Keep translation files organized** and well-structured
+- **Document any special formatting or pluralization rules**
+
+**Why**: Consistent i18n implementation ensures the application remains fully internationalized as it grows and evolves.

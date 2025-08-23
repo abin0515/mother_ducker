@@ -1,0 +1,139 @@
+# i18n Quick Reference Card
+
+## 🚀 Quick Commands
+
+### Add New Feature with i18n
+```bash
+# 1. Add translation keys first
+# 2. Create page under [locale]/
+# 3. Use locale-aware routing
+# 4. Test both languages
+```
+
+### Debug i18n Issues
+```bash
+# Find hardcoded English text
+grep -r "Create\|Sign\|Login\|Register" src/app/[locale]/
+
+# Find hardcoded Chinese text  
+grep -r "创建\|注册\|登录\|首页" src/app/[locale]/
+
+# Find missing locale prefixes
+grep -r "href=\"/[^$]" src/app/[locale]/
+```
+
+## 📝 Essential Patterns
+
+### Server Component (Page)
+```typescript
+import { getTranslations, type Locale } from '@/lib/i18n';
+
+interface PageProps {
+  params: { locale: Locale; };
+}
+
+export default async function Page({ params }: PageProps) {
+  const { locale } = await params;
+  const t = getTranslations(locale);
+  
+  return <h1>{t.feature.title}</h1>;
+}
+```
+
+### Client Component
+```typescript
+'use client';
+import { useParams } from 'next/navigation';
+import { getTranslations, type Locale } from '@/lib/i18n';
+
+export default function Component() {
+  const params = useParams();
+  const locale = params.locale as Locale;
+  const t = getTranslations(locale);
+  
+  return <h1>{t.feature.title}</h1>;
+}
+```
+
+### Navigation
+```typescript
+// ✅ Correct
+<Link href={`/${locale}/page`}>Link</Link>
+router.push(`/${locale}/page`);
+
+// ❌ Incorrect
+<Link href="/page">Link</Link>
+router.push('/page');
+```
+
+### Form Validation
+```typescript
+// ✅ Correct
+setError(t.validation.emailRequired);
+setError(t.errors.networkError);
+
+// ❌ Incorrect
+setError('Please enter your email');
+```
+
+## 🗂️ Translation Structure
+
+### Key Organization
+```json
+{
+  "featureName": {
+    "title": "Feature Title",
+    "description": "Description",
+    "actions": {
+      "save": "Save",
+      "cancel": "Cancel"
+    },
+    "validation": {
+      "required": "Required field"
+    },
+    "errors": {
+      "network": "Network error"
+    }
+  }
+}
+```
+
+### Translation Files
+- **`lib/translations/en.json`**: English translations
+- **`lib/translations/zh.json`**: Chinese translations
+
+## ✅ Checklist
+
+Before committing i18n changes:
+
+- [ ] Translation keys added to both `en.json` and `zh.json`
+- [ ] Page is under `src/app/[locale]/` directory
+- [ ] All navigation uses `/${locale}/path` format
+- [ ] All user-facing text uses translation keys
+- [ ] Error/validation messages use translation keys
+- [ ] Language switching works on new pages
+- [ ] No hardcoded text in either language
+
+## 🚨 Common Mistakes
+
+1. **404 Errors**: Page not under `[locale]/` directory
+2. **Missing Translations**: Keys not in both language files
+3. **Hardcoded Text**: English/Chinese text in quotes
+4. **Wrong Navigation**: Missing `/${locale}/` prefix
+5. **Server Component**: Forgetting to `await params`
+
+## 🎯 Best Practices
+
+- **Think multi-language first** when designing features
+- **Add translations before implementing** features
+- **Use semantic key names** that are reusable
+- **Test both languages** before considering complete
+- **Keep translation files organized** and well-structured
+
+---
+
+**Remember**: Always apply `i18n-guidelines.mdc` for detailed patterns and complete implementation guidance.
+description:
+globs:
+alwaysApply: false
+---

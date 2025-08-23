@@ -3,9 +3,13 @@
 import Link from 'next/link';
 import { useState } from 'react';
 import { useAuth } from '@/hooks/useAuth';
-import { useRouter } from 'next/navigation';
+import { useRouter, useParams } from 'next/navigation';
+import { getTranslations, type Locale } from '@/lib/i18n';
 
 export default function SignupPage() {
+  const params = useParams();
+  const locale = params.locale as Locale;
+  const t = getTranslations(locale);
   const [email, setEmail] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
@@ -18,14 +22,14 @@ export default function SignupPage() {
     
     // Validation
     if (!email) {
-      setError('Please enter your email address');
+      setError(t.validation.emailRequired);
       return;
     }
     
     // Basic email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
-      setError('Please enter a valid email address');
+      setError(t.validation.emailInvalid);
       return;
     }
     
@@ -36,10 +40,10 @@ export default function SignupPage() {
       sessionStorage.setItem('signupEmail', email);
       
       // Navigate to password step
-      router.push('/signup/password');
+      router.push(`/${locale}/signup/password`);
     } catch (error: any) {
       console.error('Error proceeding to password step:', error);
-      setError('Something went wrong. Please try again.');
+      setError(t.errors.unknownError);
     } finally {
       setIsLoading(false);
     }
@@ -62,10 +66,10 @@ export default function SignupPage() {
       // };
       
       // Redirect to dashboard or next step
-      router.push('/dashboard');
+      router.push(`/${locale}/dashboard`);
     } catch (error: any) {
       console.error('Gmail signup failed:', error);
-      setError(error.message || 'Failed to sign up with Gmail');
+      setError(error.message || t.errors.unknownError);
     } finally {
       setIsLoading(false);
     }
@@ -78,7 +82,7 @@ export default function SignupPage() {
           <h1 className="text-3xl font-bold text-gray-900">月嫂Hub</h1>
         </div>
         <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-gray-900">
-          Create an account
+          {t.auth.signup.title}
         </h2>
       </div>
 
@@ -93,7 +97,7 @@ export default function SignupPage() {
           <form className="space-y-6" onSubmit={handleEmailSubmit}>
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-                Email address
+                {t.contact.email}
               </label>
               <div className="mt-1">
                 <input
@@ -105,7 +109,7 @@ export default function SignupPage() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   className="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500 sm:text-sm"
-                  placeholder="Enter your email"
+                  placeholder={t.auth.signup.emailPlaceholder}
                 />
               </div>
             </div>
@@ -118,11 +122,11 @@ export default function SignupPage() {
               >
                 {isLoading ? (
                   <div className="flex items-center">
-                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                    Continuing...
+                                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                  {t.auth.continuing}
                   </div>
                 ) : (
-                  'Continue'
+                  t.auth.continue
                 )}
               </button>
             </div>
@@ -134,7 +138,7 @@ export default function SignupPage() {
                 <div className="w-full border-t border-gray-300" />
               </div>
               <div className="relative flex justify-center text-sm">
-                <span className="bg-white px-2 text-gray-500">OR</span>
+                <span className="bg-white px-2 text-gray-500">{t.auth.or}</span>
               </div>
             </div>
 
@@ -152,8 +156,8 @@ export default function SignupPage() {
               >
                 {isLoading ? (
                   <div className="flex items-center">
-                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-gray-700 mr-2"></div>
-                    Signing up...
+                                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-gray-700 mr-2"></div>
+                  {t.auth.signingUp}
                   </div>
                 ) : (
                   <>
@@ -175,7 +179,7 @@ export default function SignupPage() {
                         d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
                       />
                     </svg>
-                    Continue with Google
+                    {t.auth.signup.continueWithGoogle}
                   </>
                 )}
               </button>
@@ -184,9 +188,9 @@ export default function SignupPage() {
 
           <div className="mt-6 text-center">
             <p className="text-sm text-gray-600">
-              Already have an account?{' '}
-              <Link href="/login" className="font-medium text-blue-600 hover:text-blue-500 transition-colors duration-200">
-                Log in
+              {t.auth.signup.alreadyHaveAccount}{' '}
+              <Link href={`/${locale}/login`} className="font-medium text-blue-600 hover:text-blue-500 transition-colors duration-200">
+                {t.auth.signup.loginLink}
               </Link>
             </p>
           </div>

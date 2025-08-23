@@ -1,23 +1,27 @@
 'use client';
 
 import { useAuth } from '@/hooks/useAuth';
-import { useRouter } from 'next/navigation';
+import { useRouter, useParams } from 'next/navigation';
 import { useEffect } from 'react';
+import { getTranslations, type Locale } from '@/lib/i18n';
 
 export default function DashboardPage() {
+  const params = useParams();
+  const locale = params.locale as Locale;
+  const t = getTranslations(locale);
   const { user, loading, signOut } = useAuth();
   const router = useRouter();
 
   useEffect(() => {
     if (!loading && !user) {
-      router.push('/login');
+      router.push(`/${locale}/login`);
     }
-  }, [user, loading, router]);
+  }, [user, loading, router, locale]);
 
   const handleSignOut = async () => {
     try {
       await signOut();
-      router.push('/login');
+      router.push(`/${locale}/login`);
     } catch (error) {
       console.error('Sign out failed:', error);
     }
@@ -41,7 +45,7 @@ export default function DashboardPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-6">
             <div className="flex items-center">
-              <h1 className="text-2xl font-bold text-gray-900">月嫂Hub Dashboard</h1>
+              <h1 className="text-2xl font-bold text-gray-900">{t.dashboard.title}</h1>
             </div>
             <div className="flex items-center space-x-4">
               <div className="flex items-center space-x-3">
@@ -60,7 +64,7 @@ export default function DashboardPage() {
                 onClick={handleSignOut}
                 className="bg-gray-900 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-gray-800 transition-colors duration-200"
               >
-                Sign Out
+                {t.auth.logout}
               </button>
             </div>
           </div>
@@ -72,10 +76,10 @@ export default function DashboardPage() {
           <div className="border-4 border-dashed border-gray-200 rounded-lg p-8">
             <div className="text-center">
               <h2 className="text-2xl font-bold text-gray-900 mb-4">
-                Welcome to 月嫂Hub!
+                {t.dashboard.welcome}
               </h2>
               <p className="text-gray-600 mb-6">
-                You have successfully signed in with Gmail. This is your dashboard where you can manage your profile and bookings.
+                {t.dashboard.welcome}
               </p>
               
               <div className="bg-green-50 border border-green-200 rounded-md p-4 mb-6">
@@ -87,7 +91,7 @@ export default function DashboardPage() {
                   </div>
                   <div className="ml-3">
                     <h3 className="text-sm font-medium text-green-800">
-                      Authentication Successful
+                      {t.dashboard.welcome}
                     </h3>
                     <div className="mt-2 text-sm text-green-700">
                       <p>Email: {user.email}</p>
@@ -100,26 +104,26 @@ export default function DashboardPage() {
 
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <div className="bg-white p-6 rounded-lg shadow-sm border">
-                  <h3 className="text-lg font-semibold text-gray-900 mb-2">Profile</h3>
-                  <p className="text-gray-600 mb-4">Manage your personal information and preferences</p>
+                  <h3 className="text-lg font-semibold text-gray-900 mb-2">{t.dashboard.profile}</h3>
+                  <p className="text-gray-600 mb-4">{t.dashboard.welcome}</p>
                   <button className="bg-blue-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-blue-700 transition-colors duration-200">
-                    Edit Profile
+                    {t.dashboard.profile}
                   </button>
                 </div>
 
                 <div className="bg-white p-6 rounded-lg shadow-sm border">
-                  <h3 className="text-lg font-semibold text-gray-900 mb-2">Bookings</h3>
-                  <p className="text-gray-600 mb-4">View and manage your service bookings</p>
+                  <h3 className="text-lg font-semibold text-gray-900 mb-2">{t.dashboard.bookings}</h3>
+                  <p className="text-gray-600 mb-4">{t.dashboard.welcome}</p>
                   <button className="bg-green-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-green-700 transition-colors duration-200">
-                    View Bookings
+                    {t.dashboard.bookings}
                   </button>
                 </div>
 
                 <div className="bg-white p-6 rounded-lg shadow-sm border">
-                  <h3 className="text-lg font-semibold text-gray-900 mb-2">Messages</h3>
-                  <p className="text-gray-600 mb-4">Communicate with service providers</p>
+                  <h3 className="text-lg font-semibold text-gray-900 mb-2">{t.dashboard.messages}</h3>
+                  <p className="text-gray-600 mb-4">{t.dashboard.welcome}</p>
                   <button className="bg-purple-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-purple-700 transition-colors duration-200">
-                    Open Messages
+                    {t.dashboard.messages}
                   </button>
                 </div>
               </div>
