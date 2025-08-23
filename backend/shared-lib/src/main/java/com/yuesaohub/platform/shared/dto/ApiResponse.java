@@ -1,4 +1,4 @@
-package com.yuzao.platform.shared.dto;
+package com.yuesaohub.platform.shared.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import java.time.LocalDateTime;

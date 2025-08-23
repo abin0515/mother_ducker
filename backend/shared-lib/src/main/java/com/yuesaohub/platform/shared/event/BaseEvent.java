@@ -1,4 +1,4 @@
-package com.yuzao.platform.shared.event;
+package com.yuesaohub.platform.shared.event;
 
 import java.time.LocalDateTime;
 import java.util.UUID;

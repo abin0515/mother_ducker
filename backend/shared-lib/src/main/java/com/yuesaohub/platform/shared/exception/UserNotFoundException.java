@@ -1,4 +1,4 @@
-package com.yuzao.platform.shared.exception;
+package com.yuesaohub.platform.shared.exception;
 
 public class UserNotFoundException extends RuntimeException {
     

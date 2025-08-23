@@ -1,7 +1,7 @@
 package com.yuesaohub.platform.userservice.event;
 
 import com.yuesaohub.platform.userservice.entity.UserType;
-import com.yuzao.platform.shared.event.BaseEvent;
+import com.yuesaohub.platform.shared.event.BaseEvent;
 
 public class UserCreatedEvent extends BaseEvent {
     private Long userId;

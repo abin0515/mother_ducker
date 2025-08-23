@@ -4,7 +4,7 @@ import com.yuesaohub.platform.userservice.dto.CreateUserRequest;
 import com.yuesaohub.platform.userservice.dto.UserDto;
 import com.yuesaohub.platform.userservice.entity.UserType;
 import com.yuesaohub.platform.userservice.service.UserService;
-import com.yuzao.platform.shared.dto.ApiResponse;
+import com.yuesaohub.platform.shared.dto.ApiResponse;
 
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
