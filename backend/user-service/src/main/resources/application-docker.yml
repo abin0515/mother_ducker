@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:postgresql://postgres:5432/yuesaohub_platform
+    url: jdbc:postgresql://192.168.1.174:5432/yuesaohub_platform
     username: postgres
     password: 990515
     driver-class-name: org.postgresql.Driver
