@@ -1,0 +1,42 @@
+tunnel: ff1483e6-0bb3-4134-bad9-5e2375563598
+credentials-file: C:\Users\86185\.cloudflared\ff1483e6-0bb3-4134-bad9-5e2375563598.json
+
+ingress:
+  # Root domain - Main frontend application
+  - hostname: yuesaohub.com
+    service: http://localhost:3000
+    originRequest:
+      httpHostHeader: localhost:3000
+      
+  # WWW subdomain - Main frontend application
+  - hostname: www.yuesaohub.com
+    service: http://localhost:3000
+    originRequest:
+      httpHostHeader: localhost:3000
+      
+  # App subdomain - Main frontend application (keep for compatibility)
+  - hostname: app.yuesaohub.com
+    service: http://localhost:3000
+    originRequest:
+      httpHostHeader: localhost:3000
+      
+  # API Gateway
+  - hostname: api.yuesaohub.com
+    service: http://localhost:8080
+    originRequest:
+      httpHostHeader: localhost:8080
+      
+  # RabbitMQ Management (optional - for admin access)
+  - hostname: rabbitmq.yuesaohub.com
+    service: http://localhost:15672
+    originRequest:
+      httpHostHeader: localhost:15672
+      
+  # PostgreSQL Database (SECURE ACCESS ONLY)
+  - hostname: db.yuesaohub.com
+    service: tcp://localhost:5432
+    originRequest:
+      noTLSVerify: true
+      
+  # Catch-all rule (required)
+  - service: http_status:404
