@@ -8,11 +8,11 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: 990515
       PGDATA: /var/lib/postgresql/data/pgdata
+      POSTGRES_HOST_AUTH_METHOD: trust
     ports:
-      - "5432:5432"
+      - "0.0.0.0:5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
-      - ./backend/init-scripts:/docker-entrypoint-initdb.d
     networks:
       - yuesaohub-network
     healthcheck:
@@ -49,7 +49,7 @@ services:
     container_name: yuesaohub-user-service
     environment:
       SPRING_PROFILES_ACTIVE: docker
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/yuesaohub_platform
+      SPRING_DATASOURCE_URL: jdbc:postgresql://192.168.1.174:5432/yuesaohub_platform
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: 990515
       SPRING_RABBITMQ_HOST: rabbitmq
@@ -104,15 +104,17 @@ services:
       context: ./frontend
       dockerfile: Dockerfile
     container_name: yuesaohub-frontend
+    env_file:
+      - docker.env
     environment:
       NODE_ENV: production
       NEXT_PUBLIC_API_BASE_URL: http://localhost:8080
-      NEXT_PUBLIC_FIREBASE_API_KEY: ${NEXT_PUBLIC_FIREBASE_API_KEY}
-      NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN: ${NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN}
-      NEXT_PUBLIC_FIREBASE_PROJECT_ID: ${NEXT_PUBLIC_FIREBASE_PROJECT_ID}
-      NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET: ${NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET}
-      NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID: ${NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID}
-      NEXT_PUBLIC_FIREBASE_APP_ID: ${NEXT_PUBLIC_FIREBASE_APP_ID}
+      NEXT_PUBLIC_FIREBASE_API_KEY: AIzaSyAZStLLXhlgu85Vf56EBxNErUs3x1UA5Cs
+      NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN: yuesaohub.firebaseapp.com
+      NEXT_PUBLIC_FIREBASE_PROJECT_ID: yuesaohub
+      NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET: yuesaohub.firebasestorage.app
+      NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID: 396664616947
+      NEXT_PUBLIC_FIREBASE_APP_ID: 1:396664616947:web:243922abf3b2983c694486
     ports:
       - "3000:3000"
     depends_on:
