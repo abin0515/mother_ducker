@@ -146,6 +146,8 @@
   "profile": {
     "completeProfile": "完善您的个人资料",
     "completeProfileDesc": "请提供您的信息以完成账户设置",
+    "personalInfo": "个人信息",
+    "personalInfoDesc": "更新您的个人信息和资料设置。",
     "email": "邮箱",
     "phone": "手机号码",
     "userType": "我是",

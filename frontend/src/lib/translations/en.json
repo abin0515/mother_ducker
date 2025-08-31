@@ -146,6 +146,8 @@
   "profile": {
     "completeProfile": "Complete Your Profile",
     "completeProfileDesc": "Please provide your information to complete your account setup",
+    "personalInfo": "Personal Information",
+    "personalInfoDesc": "Update your personal information and profile settings.",
     "email": "Email",
     "phone": "Phone Number",
     "userType": "I am a",
