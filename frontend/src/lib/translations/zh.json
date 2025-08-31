@@ -210,13 +210,77 @@
       "specialSkills": "特殊技能",
       "specialSkillsEmpty": "暂未填写特殊技能",
       "gallery": "作品展示",
-      "certificates": "证书资质"
+      "certificates": "证书资质",
+      "experienceAndEducation": "工作经历与教育背景"
     },
     
     "photoTypes": {
       "profile": "头像",
       "gallery": "作品",
       "certificate": "证书"
+    },
+    
+    "editing": {
+      "save": "保存",
+      "cancel": "取消",
+      "edit": "编辑",
+      "saving": "保存中...",
+      "clickToEdit": "点击编辑",
+      "editProfessional": "编辑专业信息",
+      "editExperience": "编辑个人经历",
+      "managePhotos": "管理照片",
+      "manageCertificates": "管理证书",
+      "updateFailed": "更新失败，请重试",
+      "loginRequired": "用户未登录",
+      "uploadFailed": "上传失败，请重试",
+      "deleteFailed": "删除图片失败，请重试",
+      "invalidEmail": "请输入有效的邮箱地址",
+      "invalidPhone": "请输入有效的手机号码"
+    },
+    
+    "placeholders": {
+      "fullName": "请输入您的姓名",
+      "displayName": "请输入显示昵称",
+      "age": "年龄",
+      "phone": "手机号码",
+      "wechat": "微信号",
+      "city": "城市",
+      "experience": "请输入工作年限",
+      "hourlyRate": "每小时价格",
+      "languages": "例如：普通话、粤语、英语",
+      "specializations": "请描述您的专业特长和优势",
+      "servicesOffered": "请详细描述您提供的服务内容",
+      "certifications": "请列出您的相关证书和资质",
+      "aboutMe": "请简单介绍一下您自己",
+      "professionalExperience": "请详细描述您的工作经历和经验",
+      "educationBackground": "请描述您的教育背景和学习经历",
+      "specialSkills": "请描述您的特殊技能和才艺"
+    },
+    
+    "imageUpload": {
+      "selectFiles": "点击选择文件",
+      "dragHere": "拖拽图片到这里，或者",
+      "dropToUpload": "放开以上传图片",
+      "uploading": "正在上传图片...",
+      "uploadProgress": "上传进度",
+      "removeImage": "删除图片",
+      "viewFullSize": "查看大图",
+      "supportedFormats": "支持格式：JPG、PNG、WebP",
+      "maxSize": "最大大小：{size}MB",
+      "maxCount": "最多 {count} 张",
+      "selectImageFile": "请选择图片文件",
+      "fileTooLarge": "图片大小不能超过 {size}MB",
+      "unsupportedFormat": "支持的格式：JPG、PNG、WebP",
+      "uploadTips": "上传建议：",
+      "tip1": "选择清晰、光线充足的照片",
+      "tip2": "避免模糊或过暗的图片",
+      "tip3Certificates": "确保证书内容清晰可读",
+      "tip3Gallery": "展示您最好的工作成果",
+      "tip3Profile": "使用正面、清晰的个人照片",
+      "noUploadPermission": "没有上传权限，请重新登录",
+      "uploadCanceled": "上传已取消",
+      "storageQuotaExceeded": "存储空间不足",
+      "networkError": "上传失败，请检查网络连接后重试"
     }
   }
 }

@@ -210,13 +210,77 @@
       "specialSkills": "Special Skills",
       "specialSkillsEmpty": "No special skills yet",
       "gallery": "Gallery",
-      "certificates": "Certificates"
+      "certificates": "Certificates",
+      "experienceAndEducation": "Experience & Education"
     },
     
     "photoTypes": {
       "profile": "Profile",
       "gallery": "Gallery",
       "certificate": "Certificate"
+    },
+    
+    "editing": {
+      "save": "Save",
+      "cancel": "Cancel",
+      "edit": "Edit",
+      "saving": "Saving...",
+      "clickToEdit": "Click to edit",
+      "editProfessional": "Edit Professional Info",
+      "editExperience": "Edit Experience",
+      "managePhotos": "Manage Photos",
+      "manageCertificates": "Manage Certificates",
+      "updateFailed": "Update failed, please try again",
+      "loginRequired": "User not logged in",
+      "uploadFailed": "Upload failed, please try again",
+      "deleteFailed": "Failed to delete image, please try again",
+      "invalidEmail": "Please enter a valid email address",
+      "invalidPhone": "Please enter a valid phone number"
+    },
+    
+    "placeholders": {
+      "fullName": "Enter your full name",
+      "displayName": "Enter display name",
+      "age": "Age",
+      "phone": "Phone number",
+      "wechat": "WeChat ID",
+      "city": "City",
+      "experience": "Enter years of experience",
+      "hourlyRate": "Hourly rate",
+      "languages": "e.g.: Mandarin, Cantonese, English",
+      "specializations": "Describe your specializations and strengths",
+      "servicesOffered": "Describe the services you provide",
+      "certifications": "List your relevant certificates and qualifications",
+      "aboutMe": "Tell us about yourself",
+      "professionalExperience": "Describe your work experience in detail",
+      "educationBackground": "Describe your educational background",
+      "specialSkills": "Describe your special skills and talents"
+    },
+    
+    "imageUpload": {
+      "selectFiles": "Click to select files",
+      "dragHere": "Drag images here, or",
+      "dropToUpload": "Drop to upload images",
+      "uploading": "Uploading images...",
+      "uploadProgress": "Upload Progress",
+      "removeImage": "Remove image",
+      "viewFullSize": "View full size",
+      "supportedFormats": "Supported: JPG, PNG, WebP",
+      "maxSize": "Max size: {size}MB",
+      "maxCount": "Up to {count} more",
+      "selectImageFile": "Please select an image file",
+      "fileTooLarge": "Image size cannot exceed {size}MB",
+      "unsupportedFormat": "Supported formats: JPG, PNG, WebP",
+      "uploadTips": "Upload Tips:",
+      "tip1": "Choose clear, well-lit photos",
+      "tip2": "Avoid blurry or dark images",
+      "tip3Certificates": "Ensure certificate content is clearly readable",
+      "tip3Gallery": "Show your best work",
+      "tip3Profile": "Use a clear, front-facing photo",
+      "noUploadPermission": "No upload permission, please login again",
+      "uploadCanceled": "Upload canceled",
+      "storageQuotaExceeded": "Storage quota exceeded",
+      "networkError": "Upload failed, please check your connection and try again"
     }
   }
 }

@@ -1,0 +1,365 @@
+'use client';
+
+import { useState, useEffect } from 'react';
+import { getTranslations, Locale } from '@/lib/i18n';
+import { useParams } from 'next/navigation';
+import { UserDto } from '@/lib/api';
+import ImageUploadSection from './ImageUploadSection';
+
+interface ProfileEditModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  profile: UserDto;
+  section: 'professional' | 'experience' | 'photos' | 'certificates';
+  onSave: (updates: Partial<UserDto>) => Promise<void>;
+}
+
+/**
+ * Modal for editing complex profile sections
+ * Optimized for 月嫂 with large interface and clear navigation
+ */
+export default function ProfileEditModal({
+  isOpen,
+  onClose,
+  profile,
+  section,
+  onSave
+}: ProfileEditModalProps) {
+  const params = useParams();
+  const locale = params.locale as Locale;
+  const t = getTranslations(locale);
+  const [formData, setFormData] = useState<Partial<UserDto>>({});
+  const [isSaving, setIsSaving] = useState(false);
+  const [error, setError] = useState<string>('');
+
+  const formatWithParams = (template: string, params: Record<string, any>) => {
+    return template.replace(/{(\w+)}/g, (match, key) => params[key] || match);
+  };
+
+  // Initialize form data when modal opens
+  useEffect(() => {
+    if (isOpen) {
+      setFormData({
+        yearsOfExperience: profile.yearsOfExperience,
+        hourlyRate: profile.hourlyRate,
+        languages: profile.languages,
+        specializations: profile.specializations,
+        servicesOffered: profile.servicesOffered,
+        certifications: profile.certifications,
+        aboutMe: profile.aboutMe,
+        professionalExperience: profile.professionalExperience,
+        educationBackground: profile.educationBackground,
+        specialSkills: profile.specialSkills,
+        galleryPhotos: profile.galleryPhotos,
+        certificatesPhotos: profile.certificatesPhotos
+      });
+      setError('');
+    }
+  }, [isOpen, profile]);
+
+  const handleInputChange = (field: keyof UserDto, value: any) => {
+    setFormData(prev => ({ ...prev, [field]: value }));
+  };
+
+  const handleSave = async () => {
+    try {
+      setIsSaving(true);
+      setError('');
+      
+      await onSave(formData);
+      onClose();
+      
+    } catch (error) {
+      console.error('Save failed:', error);
+      setError(error instanceof Error ? error.message : t.profile.editing.updateFailed);
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  const handleImagesUpdate = async (field: 'galleryPhotos' | 'certificatesPhotos', urls: string[]) => {
+    const jsonString = JSON.stringify(urls);
+    handleInputChange(field, jsonString);
+  };
+
+  if (!isOpen) return null;
+
+  const getSectionTitle = () => {
+    switch (section) {
+      case 'professional': return t.profile.professional.title;
+      case 'experience': return t.profile.sections.experienceAndEducation;
+      case 'photos': return t.profile.sections.gallery;
+      case 'certificates': return t.profile.sections.certificates;
+      default: return t.profile.editProfile;
+    }
+  };
+
+  const renderSectionContent = () => {
+    switch (section) {
+      case 'professional':
+        return (
+          <div className="space-y-6">
+            {/* Years of Experience */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                {t.profile.professional.experience}
+              </label>
+              <input
+                type="number"
+                value={formData.yearsOfExperience || ''}
+                onChange={(e) => handleInputChange('yearsOfExperience', parseInt(e.target.value) || 0)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                placeholder={t.profile.placeholders.experience}
+                min="0"
+                max="50"
+              />
+            </div>
+
+            {/* Hourly Rate */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                {t.profile.professional.serviceRate}
+              </label>
+              <div className="flex items-center">
+                <span className="text-gray-500 mr-2">¥</span>
+                <input
+                  type="number"
+                  value={formData.hourlyRate || ''}
+                  onChange={(e) => handleInputChange('hourlyRate', parseFloat(e.target.value) || 0)}
+                  className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  placeholder={t.profile.placeholders.hourlyRate}
+                  min="0"
+                  step="0.01"
+                />
+                <span className="text-gray-500 ml-2">/小时</span>
+              </div>
+            </div>
+
+            {/* Languages */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                {t.profile.professional.languages}
+              </label>
+              <input
+                type="text"
+                value={formData.languages || ''}
+                onChange={(e) => handleInputChange('languages', e.target.value)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                placeholder={t.profile.placeholders.languages}
+                maxLength={200}
+              />
+            </div>
+
+            {/* Specializations */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                {t.profile.professional.specializations}
+              </label>
+              <textarea
+                value={formData.specializations || ''}
+                onChange={(e) => handleInputChange('specializations', e.target.value)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none"
+                placeholder={t.profile.placeholders.specializations}
+                rows={4}
+                maxLength={500}
+              />
+            </div>
+
+            {/* Services Offered */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                {t.profile.professional.servicesOffered}
+              </label>
+              <textarea
+                value={formData.servicesOffered || ''}
+                onChange={(e) => handleInputChange('servicesOffered', e.target.value)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none"
+                placeholder={t.profile.placeholders.servicesOffered}
+                rows={4}
+                maxLength={500}
+              />
+            </div>
+
+            {/* Certifications */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                {t.profile.professional.certifications}
+              </label>
+              <textarea
+                value={formData.certifications || ''}
+                onChange={(e) => handleInputChange('certifications', e.target.value)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none"
+                placeholder={t.profile.placeholders.certifications}
+                rows={3}
+                maxLength={300}
+              />
+            </div>
+          </div>
+        );
+
+      case 'experience':
+        return (
+          <div className="space-y-6">
+            {/* About Me */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                {t.profile.sections.aboutMe}
+              </label>
+              <textarea
+                value={formData.aboutMe || ''}
+                onChange={(e) => handleInputChange('aboutMe', e.target.value)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none"
+                placeholder={t.profile.placeholders.aboutMe}
+                rows={4}
+                maxLength={500}
+              />
+            </div>
+
+            {/* Professional Experience */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                {t.profile.sections.workExperience}
+              </label>
+              <textarea
+                value={formData.professionalExperience || ''}
+                onChange={(e) => handleInputChange('professionalExperience', e.target.value)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none"
+                placeholder={t.profile.placeholders.professionalExperience}
+                rows={6}
+                maxLength={1000}
+              />
+            </div>
+
+            {/* Education Background */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                {t.profile.sections.education}
+              </label>
+              <textarea
+                value={formData.educationBackground || ''}
+                onChange={(e) => handleInputChange('educationBackground', e.target.value)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none"
+                placeholder={t.profile.placeholders.educationBackground}
+                rows={4}
+                maxLength={500}
+              />
+            </div>
+
+            {/* Special Skills */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                {t.profile.sections.specialSkills}
+              </label>
+              <textarea
+                value={formData.specialSkills || ''}
+                onChange={(e) => handleInputChange('specialSkills', e.target.value)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none"
+                placeholder={t.profile.placeholders.specialSkills}
+                rows={4}
+                maxLength={500}
+              />
+            </div>
+          </div>
+        );
+
+      case 'photos':
+        return (
+          <div>
+            <ImageUploadSection
+              title={t.profile.sections.gallery}
+              images={formData.galleryPhotos ? JSON.parse(formData.galleryPhotos) : []}
+              category="gallery"
+              maxImages={10}
+              onImagesUpdate={(urls) => handleImagesUpdate('galleryPhotos', urls)}
+              aspectRatio="square"
+            />
+          </div>
+        );
+
+      case 'certificates':
+        return (
+          <div>
+            <ImageUploadSection
+              title={t.profile.sections.certificates}
+              images={formData.certificatesPhotos ? JSON.parse(formData.certificatesPhotos) : []}
+              category="certificates"
+              maxImages={8}
+              onImagesUpdate={(urls) => handleImagesUpdate('certificatesPhotos', urls)}
+              aspectRatio="video"
+            />
+          </div>
+        );
+
+      default:
+        return null;
+    }
+  };
+
+  return (
+    <div className="fixed inset-0 z-50 overflow-y-auto">
+      {/* Backdrop */}
+      <div className="fixed inset-0 bg-black bg-opacity-50" onClick={onClose}></div>
+      
+      {/* Modal */}
+      <div className="relative min-h-screen flex items-center justify-center p-4">
+        <div className="relative bg-white rounded-lg shadow-xl w-full max-w-2xl max-h-[90vh] flex flex-col">
+          
+          {/* Header */}
+          <div className="flex items-center justify-between p-6 border-b border-gray-200">
+            <h2 className="text-xl font-semibold text-gray-900">
+              {getSectionTitle()}
+            </h2>
+            <button
+              onClick={onClose}
+              className="text-gray-400 hover:text-gray-600 transition-colors"
+            >
+              <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+          
+          {/* Content */}
+          <div className="flex-1 overflow-y-auto p-6">
+            {renderSectionContent()}
+          </div>
+          
+          {/* Footer */}
+          <div className="flex items-center justify-between p-6 border-t border-gray-200">
+            {/* Error Message */}
+            {error && (
+              <div className="flex items-center text-red-600 text-sm">
+                <svg className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                {error}
+              </div>
+            )}
+            
+            {/* Buttons */}
+            <div className="flex items-center space-x-3 ml-auto">
+              <button
+                onClick={onClose}
+                disabled={isSaving}
+                className="px-4 py-2 text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              >
+                {t.profile.editing.cancel}
+              </button>
+              <button
+                onClick={handleSave}
+                disabled={isSaving}
+                className="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-2 transition-colors min-w-[80px] justify-center"
+              >
+                {isSaving ? (
+                  <div className="animate-spin h-4 w-4 border-2 border-white border-t-transparent rounded-full"></div>
+                ) : (
+                  <span>{t.profile.editing.save}</span>
+                )}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}

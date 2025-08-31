@@ -144,6 +144,59 @@ class ApiService {
     const result: ApiResponse<UserDto> = await response.json();
     return result.data;
   }
+
+  async updateProfile(firebaseUid: string, updates: Partial<UserDto>): Promise<UserDto> {
+    const headers = await this.getAuthHeaders();
+    
+    const response = await fetch(`${API_BASE_URL}/api/v1/users/firebase/${firebaseUid}/profile`, {
+      method: 'PUT',
+      headers,
+      body: JSON.stringify(updates),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
+    }
+
+    const result: ApiResponse<UserDto> = await response.json();
+    return result.data;
+  }
+
+  async updateProfileField(firebaseUid: string, fieldName: string, value: any): Promise<UserDto> {
+    const headers = await this.getAuthHeaders();
+    
+    const response = await fetch(`${API_BASE_URL}/api/v1/users/firebase/${firebaseUid}/profile/${fieldName}`, {
+      method: 'PATCH',
+      headers,
+      body: JSON.stringify({ value }),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
+    }
+
+    const result: ApiResponse<UserDto> = await response.json();
+    return result.data;
+  }
+
+  async getProfileCompletion(firebaseUid: string): Promise<{ percentage: number; missingFields: string[] }> {
+    const headers = await this.getAuthHeaders();
+    
+    const response = await fetch(`${API_BASE_URL}/api/v1/users/firebase/${firebaseUid}/profile/completion`, {
+      method: 'GET',
+      headers,
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
+    }
+
+    const result: ApiResponse<{ percentage: number; missingFields: string[] }> = await response.json();
+    return result.data;
+  }
 }
 
 export const apiService = new ApiService();

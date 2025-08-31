@@ -1,9 +1,12 @@
 com/yuesaohub/platform/userservice/event/UserCreatedEvent.class
 com/yuesaohub/platform/userservice/repository/UserRepository.class
 com/yuesaohub/platform/userservice/dto/CreateUserRequest.class
+com/yuesaohub/platform/userservice/entity/VerificationStatus.class
 com/yuesaohub/platform/userservice/entity/User.class
 com/yuesaohub/platform/userservice/UserServiceApplication.class
 com/yuesaohub/platform/userservice/service/UserService.class
 com/yuesaohub/platform/userservice/dto/UserDto.class
 com/yuesaohub/platform/userservice/entity/UserType.class
+com/yuesaohub/platform/userservice/dto/UpdateProfileRequest.class
 com/yuesaohub/platform/userservice/controller/UserController.class
+com/yuesaohub/platform/userservice/exception/GlobalExceptionHandler.class

@@ -5,6 +5,8 @@ import { useRouter, useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { getTranslations, type Locale } from '@/lib/i18n';
 import { apiService, UserDto } from '@/lib/api';
+import InlineEditField from '@/components/profile/InlineEditField';
+import ProfileEditModal from '@/components/profile/ProfileEditModal';
 
 export default function ProfilePage() {
   const params = useParams();
@@ -14,6 +16,10 @@ export default function ProfilePage() {
   const router = useRouter();
   const [profileData, setProfileData] = useState<UserDto | null>(null);
   const [loadingProfile, setLoadingProfile] = useState(false);
+  const [editingModal, setEditingModal] = useState<{
+    isOpen: boolean;
+    section: 'professional' | 'experience' | 'photos' | 'certificates';
+  }>({ isOpen: false, section: 'professional' });
 
   useEffect(() => {
     if (!loading && !user) {
@@ -58,6 +64,57 @@ export default function ProfilePage() {
 
   const formatWithParams = (template: string, params: Record<string, any>) => {
     return template.replace(/{(\w+)}/g, (match, key) => params[key] || match);
+  };
+
+  // Handle inline field updates
+  const handleFieldUpdate = async (fieldName: string, value: string | number) => {
+    if (!user?.uid) throw new Error(t.profile.editing.loginRequired);
+    
+    try {
+      await apiService.updateProfileField(user.uid, fieldName, value);
+      
+      // Update local state
+      const updatedProfile = { ...profile, [fieldName]: value };
+      setProfileData(updatedProfile);
+      
+      // Also update the backendUser in useAuth if it's the same user
+      // This would require extending the useAuth hook, for now we'll refetch
+      await fetchProfileData();
+      
+    } catch (error) {
+      console.error('Field update failed:', error);
+      throw new Error(t.profile.editing.updateFailed);
+    }
+  };
+
+  // Handle complex section updates via modal
+  const handleSectionUpdate = async (updates: Partial<UserDto>) => {
+    if (!user?.uid) throw new Error(t.profile.editing.loginRequired);
+    
+    try {
+      await apiService.updateProfile(user.uid, updates);
+      
+      // Update local state
+      const updatedProfile = { ...profile, ...updates };
+      setProfileData(updatedProfile);
+      
+      // Refetch to ensure consistency
+      await fetchProfileData();
+      
+    } catch (error) {
+      console.error('Section update failed:', error);
+      throw new Error(t.profile.editing.updateFailed);
+    }
+  };
+
+  // Open modal for complex editing
+  const openEditModal = (section: 'professional' | 'experience' | 'photos' | 'certificates') => {
+    setEditingModal({ isOpen: true, section });
+  };
+
+  // Close modal
+  const closeEditModal = () => {
+    setEditingModal({ isOpen: false, section: 'professional' });
   };
 
   const formatPhotoPlaceholder = (type: string) => (
@@ -154,12 +211,28 @@ export default function ProfilePage() {
                   
                   {/* Basic Info */}
                   <div className="mt-4">
-                    <h2 className="text-xl font-bold text-gray-900">
-                      {profile.fullName || t.profile.fields.notSet}
-                    </h2>
-                    <p className="text-gray-600">
-                      {profile.displayName || t.profile.fields.notSet}
-                    </p>
+                    <div className="space-y-2">
+                      <InlineEditField
+                        value={profile.fullName}
+                        fieldName="fullName"
+                        fieldType="text"
+                        placeholder={t.profile.placeholders.fullName}
+                        onSave={handleFieldUpdate}
+                        displayClassName="text-xl font-bold text-gray-900 text-center"
+                        inputClassName="text-xl font-bold text-center"
+                        maxLength={50}
+                      />
+                      <InlineEditField
+                        value={profile.displayName}
+                        fieldName="displayName"
+                        fieldType="text"
+                        placeholder={t.profile.placeholders.displayName}
+                        onSave={handleFieldUpdate}
+                        displayClassName="text-gray-600 text-center"
+                        inputClassName="text-center"
+                        maxLength={30}
+                      />
+                    </div>
                     <div className="mt-2 flex justify-center">
                       <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
                         profile.userType === 'CAREGIVER' 
@@ -175,21 +248,64 @@ export default function ProfilePage() {
                   <div className="mt-6 space-y-3">
                     <div className="flex items-center justify-between text-sm">
                       <span className="text-gray-500">{t.profile.fields.age}:</span>
-                      <span className="text-gray-900">{profile.age || t.profile.fields.notSet}</span>
+                      <div className="flex-1 ml-2">
+                        <InlineEditField
+                          value={profile.age}
+                          fieldName="age"
+                          fieldType="number"
+                          placeholder={t.profile.placeholders.age}
+                          onSave={handleFieldUpdate}
+                          displayClassName="text-gray-900 text-right"
+                          inputClassName="text-right"
+                          min={18}
+                          max={80}
+                        />
+                      </div>
                     </div>
                     <div className="flex items-center justify-between text-sm">
                       <span className="text-gray-500">{t.profile.fields.phone}:</span>
-                      <span className="text-gray-900">{profile.primaryPhone || t.profile.fields.notSet}</span>
+                      <div className="flex-1 ml-2">
+                        <InlineEditField
+                          value={profile.primaryPhone}
+                          fieldName="primaryPhone"
+                          fieldType="tel"
+                          placeholder={t.profile.placeholders.phone}
+                          onSave={handleFieldUpdate}
+                          displayClassName="text-gray-900 text-right"
+                          inputClassName="text-right"
+                          maxLength={20}
+                        />
+                      </div>
                     </div>
                     <div className="flex items-center justify-between text-sm">
                       <span className="text-gray-500">{t.profile.fields.wechat}:</span>
-                      <span className="text-gray-900">{profile.wechatId || t.profile.fields.notSet}</span>
+                      <div className="flex-1 ml-2">
+                        <InlineEditField
+                          value={profile.wechatId}
+                          fieldName="wechatId"
+                          fieldType="text"
+                          placeholder={t.profile.placeholders.wechat}
+                          onSave={handleFieldUpdate}
+                          displayClassName="text-gray-900 text-right"
+                          inputClassName="text-right"
+                          maxLength={50}
+                        />
+                      </div>
                     </div>
                     <div className="flex items-center justify-between text-sm">
                       <span className="text-gray-500">{t.profile.fields.location}:</span>
-                      <span className="text-gray-900">
-                        {profile.city && profile.province ? `${profile.city}, ${profile.province}` : t.profile.fields.notSet}
-                      </span>
+                      <div className="flex-1 ml-2">
+                        <InlineEditField
+                          value={profile.city && profile.province ? `${profile.city}, ${profile.province}` : profile.city}
+                          fieldName="city"
+                          fieldType="text"
+                          placeholder={t.profile.placeholders.city}
+                          onSave={handleFieldUpdate}
+                          displayClassName="text-gray-900 text-right"
+                          inputClassName="text-right"
+                          maxLength={50}
+                        />
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -204,7 +320,18 @@ export default function ProfilePage() {
             {profile.userType === 'CAREGIVER' && (
               <div className="bg-white overflow-hidden shadow rounded-lg">
                 <div className="px-4 py-5 sm:p-6">
-                  <h3 className="text-lg font-medium text-gray-900 mb-4">{t.profile.professional.title}</h3>
+                  <div className="flex items-center justify-between mb-4">
+                    <h3 className="text-lg font-medium text-gray-900">{t.profile.professional.title}</h3>
+                    <button
+                      onClick={() => openEditModal('professional')}
+                      className="text-blue-600 hover:text-blue-700 text-sm font-medium flex items-center space-x-1"
+                    >
+                      <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                      </svg>
+                      <span>{t.profile.editing.edit}</span>
+                    </button>
+                  </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                       <label className="text-sm font-medium text-gray-500">{t.profile.professional.experience}</label>
@@ -262,7 +389,18 @@ export default function ProfilePage() {
             {profile.userType === 'CAREGIVER' && (
               <div className="bg-white overflow-hidden shadow rounded-lg">
                 <div className="px-4 py-5 sm:p-6">
-                  <h3 className="text-lg font-medium text-gray-900 mb-4">{t.profile.sections.workExperience}</h3>
+                  <div className="flex items-center justify-between mb-4">
+                    <h3 className="text-lg font-medium text-gray-900">{t.profile.sections.workExperience}</h3>
+                    <button
+                      onClick={() => openEditModal('experience')}
+                      className="text-blue-600 hover:text-blue-700 text-sm font-medium flex items-center space-x-1"
+                    >
+                      <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                      </svg>
+                      <span>{t.profile.editing.edit}</span>
+                    </button>
+                  </div>
                   <p className="text-gray-900 whitespace-pre-wrap">
                     {profile.professionalExperience || t.profile.sections.workExperienceEmpty}
                   </p>
@@ -295,7 +433,18 @@ export default function ProfilePage() {
             {/* Gallery Photos */}
             <div className="bg-white overflow-hidden shadow rounded-lg">
               <div className="px-4 py-5 sm:p-6">
-                <h3 className="text-lg font-medium text-gray-900 mb-4">{t.profile.sections.gallery}</h3>
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-lg font-medium text-gray-900">{t.profile.sections.gallery}</h3>
+                  <button
+                    onClick={() => openEditModal('photos')}
+                    className="text-blue-600 hover:text-blue-700 text-sm font-medium flex items-center space-x-1"
+                  >
+                    <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 16m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    </svg>
+                    <span>{t.profile.editing.managePhotos}</span>
+                  </button>
+                </div>
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                   {profile.galleryPhotos ? (
                     JSON.parse(profile.galleryPhotos).map((photo: string, index: number) => (
@@ -316,7 +465,18 @@ export default function ProfilePage() {
             {profile.userType === 'CAREGIVER' && (
               <div className="bg-white overflow-hidden shadow rounded-lg">
                 <div className="px-4 py-5 sm:p-6">
-                  <h3 className="text-lg font-medium text-gray-900 mb-4">{t.profile.sections.certificates}</h3>
+                  <div className="flex items-center justify-between mb-4">
+                    <h3 className="text-lg font-medium text-gray-900">{t.profile.sections.certificates}</h3>
+                    <button
+                      onClick={() => openEditModal('certificates')}
+                      className="text-blue-600 hover:text-blue-700 text-sm font-medium flex items-center space-x-1"
+                    >
+                      <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                      </svg>
+                      <span>{t.profile.editing.manageCertificates}</span>
+                    </button>
+                  </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {profile.certificatesPhotos ? (
                       JSON.parse(profile.certificatesPhotos).map((cert: string, index: number) => (
@@ -337,16 +497,50 @@ export default function ProfilePage() {
           </div>
         </div>
 
-        {/* Edit Profile Button */}
-        <div className="mt-8 flex justify-center">
+        {/* Quick Action Buttons */}
+        <div className="mt-8 flex flex-wrap justify-center gap-4">
+          {profile.userType === 'CAREGIVER' && (
+            <>
+              <button 
+                onClick={() => openEditModal('professional')}
+                className="bg-blue-600 text-white px-6 py-3 rounded-md hover:bg-blue-700 transition-colors flex items-center space-x-2"
+              >
+                <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2-2v2m8 0V6a2 2 0 00-2 2H10a2 2 0 00-2-2V6m8 0h2a2 2 0 012 2v6.5" />
+                </svg>
+                <span>{t.profile.editing.editProfessional}</span>
+              </button>
+              <button 
+                onClick={() => openEditModal('photos')}
+                className="bg-green-600 text-white px-6 py-3 rounded-md hover:bg-green-700 transition-colors flex items-center space-x-2"
+              >
+                <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 16m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                </svg>
+                <span>{t.profile.editing.managePhotos}</span>
+              </button>
+            </>
+          )}
           <button 
-            className="bg-blue-600 text-white px-8 py-3 rounded-md hover:bg-blue-700 transition-colors"
-            onClick={() => alert(t.profile.editComingSoon)}
+            onClick={() => openEditModal('experience')}
+            className="bg-purple-600 text-white px-6 py-3 rounded-md hover:bg-purple-700 transition-colors flex items-center space-x-2"
           >
-            {t.profile.editProfile}
+            <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+            </svg>
+            <span>{t.profile.editing.editExperience}</span>
           </button>
         </div>
       </div>
+
+      {/* Profile Edit Modal */}
+      <ProfileEditModal
+        isOpen={editingModal.isOpen}
+        onClose={closeEditModal}
+        profile={profile}
+        section={editingModal.section}
+        onSave={handleSectionUpdate}
+      />
     </div>
   );
 }

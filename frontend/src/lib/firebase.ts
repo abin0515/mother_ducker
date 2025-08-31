@@ -1,5 +1,6 @@
 import { initializeApp } from 'firebase/app';
 import { getAuth, GoogleAuthProvider } from 'firebase/auth';
+import { getStorage } from 'firebase/storage';
 
 // Firebase configuration
 // You'll need to replace these with your actual Firebase project config
@@ -14,8 +15,12 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-    // Initialize Firebase Authentication and get a reference to the service
+
+// Initialize Firebase Authentication and get a reference to the service
 export const auth = getAuth(app);
+
+// Initialize Firebase Storage and get a reference to the service
+export const storage = getStorage(app);
 
 // Create Google Auth Provider
 export const googleProvider = new GoogleAuthProvider();
