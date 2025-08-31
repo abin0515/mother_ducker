@@ -10,13 +10,63 @@ export interface CreateUserRequest {
 }
 
 export interface UserDto {
+  // Core Identity
   id: number;
-  firebaseUid: string;
-  email: string;
-  phone: string;
-  userType: 'CAREGIVER' | 'PARENT' | 'ADMIN';
   createdAt: string;
   updatedAt: string;
+  firebaseUid: string;
+  email: string;
+  userType: 'CAREGIVER' | 'PARENT' | 'ADMIN';
+
+  // Basic Information
+  fullName?: string;
+  displayName?: string;
+  age?: number;
+  profilePhotoUrl?: string;
+
+  // Contact Information
+  primaryPhone?: string;
+  wechatId?: string;
+  wechatQrCodeUrl?: string;
+  xiaohongshuHandle?: string;
+
+  // Location & Service
+  city?: string;
+  province?: string;
+  country?: string;
+  serviceAreas?: string;
+  currentLocation?: string;
+  willingToRelocate?: boolean;
+
+  // Professional Information
+  yearsOfExperience?: number;
+  languages?: string;
+  specializations?: string;
+  certifications?: string;
+  servicesOffered?: string;
+  hourlyRate?: number;
+
+  // Rich Content
+  aboutMe?: string;
+  professionalExperience?: string;
+  educationBackground?: string;
+  specialSkills?: string;
+
+  // Media
+  galleryPhotos?: string;
+  certificatesPhotos?: string;
+
+  // Social Proof
+  totalRating?: number;
+  totalReviews?: number;
+
+  // Platform Management
+  profileCompletionPercentage?: number;
+  isFeatured?: boolean;
+  isActive?: boolean;
+  lastActiveAt?: string;
+  profileViews?: number;
+  verificationStatus?: 'UNVERIFIED' | 'PENDING' | 'VERIFIED';
 }
 
 export interface ApiResponse<T> {

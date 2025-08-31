@@ -1,6 +1,7 @@
 package com.yuesaohub.platform.userservice.controller;
 
 import com.yuesaohub.platform.userservice.dto.CreateUserRequest;
+import com.yuesaohub.platform.userservice.dto.UpdateProfileRequest;
 import com.yuesaohub.platform.userservice.dto.UserDto;
 import com.yuesaohub.platform.userservice.entity.UserType;
 import com.yuesaohub.platform.userservice.service.UserService;
@@ -54,5 +55,67 @@ public class UserController {
     public ResponseEntity<ApiResponse<List<UserDto>>> getAllUsers() {
         List<UserDto> users = userService.getAllUsers();
         return ResponseEntity.ok(ApiResponse.success(users));
+    }
+
+    // Profile completion endpoints
+    
+    @PutMapping("/firebase/{firebaseUid}/profile")
+    public ResponseEntity<ApiResponse<UserDto>> updateProfileByFirebaseUid(
+            @PathVariable String firebaseUid, 
+            @Valid @RequestBody UpdateProfileRequest request) {
+        UserDto updatedUser = userService.updateProfile(firebaseUid, request);
+        return ResponseEntity.ok(ApiResponse.success(updatedUser, "Profile updated successfully"));
+    }
+
+    @PutMapping("/{id}/profile")
+    public ResponseEntity<ApiResponse<UserDto>> updateProfileById(
+            @PathVariable Long id, 
+            @Valid @RequestBody UpdateProfileRequest request) {
+        UserDto updatedUser = userService.updateProfile(id, request);
+        return ResponseEntity.ok(ApiResponse.success(updatedUser, "Profile updated successfully"));
+    }
+
+    @PatchMapping("/firebase/{firebaseUid}/profile/{fieldName}")
+    public ResponseEntity<ApiResponse<UserDto>> updateProfileField(
+            @PathVariable String firebaseUid,
+            @PathVariable String fieldName,
+            @RequestBody Object value) {
+        UserDto updatedUser = userService.updateProfileField(firebaseUid, fieldName, value);
+        return ResponseEntity.ok(ApiResponse.success(updatedUser, "Profile field updated successfully"));
+    }
+
+    @GetMapping("/firebase/{firebaseUid}/profile/completion")
+    public ResponseEntity<ApiResponse<Integer>> getProfileCompletion(@PathVariable String firebaseUid) {
+        Integer completion = userService.getProfileCompletion(firebaseUid);
+        return ResponseEntity.ok(ApiResponse.success(completion, "Profile completion retrieved"));
+    }
+
+    // Specialized endpoints for caregivers
+    
+    @GetMapping("/caregivers")
+    public ResponseEntity<ApiResponse<List<UserDto>>> getAllCaregivers() {
+        List<UserDto> caregivers = userService.getUsersByType(UserType.CAREGIVER);
+        return ResponseEntity.ok(ApiResponse.success(caregivers));
+    }
+
+    @GetMapping("/caregivers/featured")
+    public ResponseEntity<ApiResponse<List<UserDto>>> getFeaturedCaregivers() {
+        List<UserDto> caregivers = userService.getUsersByType(UserType.CAREGIVER)
+            .stream()
+            .filter(user -> user.getIsFeatured() != null && user.getIsFeatured())
+            .filter(user -> user.getIsActive() != null && user.getIsActive())
+            .toList();
+        return ResponseEntity.ok(ApiResponse.success(caregivers));
+    }
+
+    @GetMapping("/caregivers/verified")
+    public ResponseEntity<ApiResponse<List<UserDto>>> getVerifiedCaregivers() {
+        List<UserDto> caregivers = userService.getUsersByType(UserType.CAREGIVER)
+            .stream()
+            .filter(user -> user.getVerificationStatus() != null && 
+                           user.getVerificationStatus().name().equals("VERIFIED"))
+            .filter(user -> user.getIsActive() != null && user.getIsActive())
+            .toList();
+        return ResponseEntity.ok(ApiResponse.success(caregivers));
     }
 }

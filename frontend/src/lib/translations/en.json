@@ -146,13 +146,77 @@
   "profile": {
     "completeProfile": "Complete Your Profile",
     "completeProfileDesc": "Please provide your information to complete your account setup",
-    "personalInfo": "Personal Information",
+    "personalInfo": "Profile",
     "personalInfoDesc": "Update your personal information and profile settings.",
     "email": "Email",
     "phone": "Phone Number",
     "userType": "I am a",
     "parent": "Parent",
     "caregiver": "Postpartum Caregiver",
-    "creating": "Creating Profile..."
+    "creating": "Creating Profile...",
+    
+    "title": "Profile",
+    "completionRate": "Profile Completion",
+    "editProfile": "Edit Profile",
+    "editComingSoon": "Edit functionality coming soon!",
+    "completeRegistration": "Complete Registration",
+    "completeRegistrationDesc": "Please complete your basic information first, then you can view and edit detailed profile.",
+    
+    "verification": {
+      "verified": "Verified",
+      "pending": "Pending",
+      "unverified": "Unverified"
+    },
+    
+    "userTypes": {
+      "caregiver": "Caregiver",
+      "parent": "Parent"
+    },
+    
+    "fields": {
+      "fullName": "Full Name",
+      "displayName": "Display Name",
+      "age": "Age",
+      "phone": "Phone",
+      "wechat": "WeChat",
+      "location": "Location",
+      "notSet": "Not Set",
+      "noPhoto": "No {type} Photos",
+      "uploadLater": "Upload Later"
+    },
+    
+    "professional": {
+      "title": "Professional Information",
+      "experience": "Experience",
+      "experienceYears": "{years} years",
+      "serviceRate": "Service Rate",
+      "hourlyRate": "¥{rate}/hour",
+      "languages": "Languages",
+      "rating": "Rating",
+      "ratingDisplay": "{rating}★ ({reviews} reviews)",
+      "noRating": "No ratings yet",
+      "specializations": "Specializations",
+      "servicesOffered": "Services Offered",
+      "certifications": "Certifications"
+    },
+    
+    "sections": {
+      "aboutMe": "About Me",
+      "aboutMeEmpty": "No personal introduction yet",
+      "workExperience": "Work Experience",
+      "workExperienceEmpty": "No work experience yet",
+      "education": "Education",
+      "educationEmpty": "No education background yet",
+      "specialSkills": "Special Skills",
+      "specialSkillsEmpty": "No special skills yet",
+      "gallery": "Gallery",
+      "certificates": "Certificates"
+    },
+    
+    "photoTypes": {
+      "profile": "Profile",
+      "gallery": "Gallery",
+      "certificate": "Certificate"
+    }
   }
 }

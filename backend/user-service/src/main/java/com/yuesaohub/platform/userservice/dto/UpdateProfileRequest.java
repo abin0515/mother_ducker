@@ -1,137 +1,85 @@
 package com.yuesaohub.platform.userservice.dto;
 
+import jakarta.validation.constraints.*;
+
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 
-import com.yuesaohub.platform.userservice.entity.UserType;
-import com.yuesaohub.platform.userservice.entity.VerificationStatus;
-
-public class UserDto {
-    // Core Identity
-    private Long id;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
-    private String firebaseUid;
-    private String email;
-    private UserType userType;
-
+public class UpdateProfileRequest {
+    
     // Basic Information
+    @Size(max = 255, message = "Full name cannot exceed 255 characters")
     private String fullName;
+    
+    @Size(max = 255, message = "Display name cannot exceed 255 characters")
     private String displayName;
+    
+    @Min(value = 18, message = "Age must be at least 18")
+    @Max(value = 100, message = "Age cannot exceed 100")
     private Integer age;
+    
+    @Size(max = 500, message = "Profile photo URL cannot exceed 500 characters")
     private String profilePhotoUrl;
 
     // Contact Information
+    @Pattern(regexp = "^[+]?[0-9]{10,15}$", message = "Invalid phone number format")
     private String primaryPhone;
+    
+    @Size(max = 100, message = "WeChat ID cannot exceed 100 characters")
     private String wechatId;
+    
+    @Size(max = 500, message = "WeChat QR code URL cannot exceed 500 characters")
     private String wechatQrCodeUrl;
+    
+    @Size(max = 100, message = "Xiaohongshu handle cannot exceed 100 characters")
     private String xiaohongshuHandle;
 
     // Location & Service
+    @Size(max = 100, message = "City cannot exceed 100 characters")
     private String city;
+    
+    @Size(max = 100, message = "Province cannot exceed 100 characters")
     private String province;
+    
+    @Size(max = 100, message = "Country cannot exceed 100 characters")
     private String country;
+    
     private String serviceAreas;
+    
+    @Size(max = 255, message = "Current location cannot exceed 255 characters")
     private String currentLocation;
+    
     private Boolean willingToRelocate;
 
     // Professional Information
+    @Min(value = 0, message = "Years of experience cannot be negative")
+    @Max(value = 50, message = "Years of experience cannot exceed 50")
     private Integer yearsOfExperience;
+    
     private String languages;
     private String specializations;
     private String certifications;
     private String servicesOffered;
+    
+    @DecimalMin(value = "0.0", message = "Hourly rate cannot be negative")
+    @DecimalMax(value = "1000.0", message = "Hourly rate cannot exceed 1000")
     private BigDecimal hourlyRate;
 
     // Rich Content
+    @Size(max = 2000, message = "About me cannot exceed 2000 characters")
     private String aboutMe;
+    
     private String professionalExperience;
     private String educationBackground;
     private String specialSkills;
 
-    // Media
+    // Media (JSON arrays as strings)
     private String galleryPhotos;
     private String certificatesPhotos;
 
-    // Social Proof
-    private BigDecimal totalRating;
-    private Integer totalReviews;
-
-    // Platform Management
-    private Integer profileCompletionPercentage;
-    private Boolean isFeatured;
-    private Boolean isActive;
-    private LocalDateTime lastActiveAt;
-    private Integer profileViews;
-    private VerificationStatus verificationStatus;
-
-    // Constructors
-    public UserDto() {}
-
-    // Constructor for basic user info (backward compatibility)
-    public UserDto(Long id, String firebaseUid, UserType userType, String email, String primaryPhone, 
-                   LocalDateTime createdAt, LocalDateTime updatedAt) {
-        this.id = id;
-        this.firebaseUid = firebaseUid;
-        this.userType = userType;
-        this.email = email;
-        this.primaryPhone = primaryPhone;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
-    }
+    // Default constructor
+    public UpdateProfileRequest() {}
 
     // Getters and Setters
-    
-    // Core Identity
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
-    }
-
-    public String getFirebaseUid() {
-        return firebaseUid;
-    }
-
-    public void setFirebaseUid(String firebaseUid) {
-        this.firebaseUid = firebaseUid;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public UserType getUserType() {
-        return userType;
-    }
-
-    public void setUserType(UserType userType) {
-        this.userType = userType;
-    }
-
-    // Basic Information
     public String getFullName() {
         return fullName;
     }
@@ -164,7 +112,6 @@ public class UserDto {
         this.profilePhotoUrl = profilePhotoUrl;
     }
 
-    // Contact Information
     public String getPrimaryPhone() {
         return primaryPhone;
     }
@@ -197,7 +144,6 @@ public class UserDto {
         this.xiaohongshuHandle = xiaohongshuHandle;
     }
 
-    // Location & Service
     public String getCity() {
         return city;
     }
@@ -246,7 +192,6 @@ public class UserDto {
         this.willingToRelocate = willingToRelocate;
     }
 
-    // Professional Information
     public Integer getYearsOfExperience() {
         return yearsOfExperience;
     }
@@ -295,7 +240,6 @@ public class UserDto {
         this.hourlyRate = hourlyRate;
     }
 
-    // Rich Content
     public String getAboutMe() {
         return aboutMe;
     }
@@ -328,7 +272,6 @@ public class UserDto {
         this.specialSkills = specialSkills;
     }
 
-    // Media
     public String getGalleryPhotos() {
         return galleryPhotos;
     }
@@ -343,71 +286,5 @@ public class UserDto {
 
     public void setCertificatesPhotos(String certificatesPhotos) {
         this.certificatesPhotos = certificatesPhotos;
-    }
-
-    // Social Proof
-    public BigDecimal getTotalRating() {
-        return totalRating;
-    }
-
-    public void setTotalRating(BigDecimal totalRating) {
-        this.totalRating = totalRating;
-    }
-
-    public Integer getTotalReviews() {
-        return totalReviews;
-    }
-
-    public void setTotalReviews(Integer totalReviews) {
-        this.totalReviews = totalReviews;
-    }
-
-    // Platform Management
-    public Integer getProfileCompletionPercentage() {
-        return profileCompletionPercentage;
-    }
-
-    public void setProfileCompletionPercentage(Integer profileCompletionPercentage) {
-        this.profileCompletionPercentage = profileCompletionPercentage;
-    }
-
-    public Boolean getIsFeatured() {
-        return isFeatured;
-    }
-
-    public void setIsFeatured(Boolean isFeatured) {
-        this.isFeatured = isFeatured;
-    }
-
-    public Boolean getIsActive() {
-        return isActive;
-    }
-
-    public void setIsActive(Boolean isActive) {
-        this.isActive = isActive;
-    }
-
-    public LocalDateTime getLastActiveAt() {
-        return lastActiveAt;
-    }
-
-    public void setLastActiveAt(LocalDateTime lastActiveAt) {
-        this.lastActiveAt = lastActiveAt;
-    }
-
-    public Integer getProfileViews() {
-        return profileViews;
-    }
-
-    public void setProfileViews(Integer profileViews) {
-        this.profileViews = profileViews;
-    }
-
-    public VerificationStatus getVerificationStatus() {
-        return verificationStatus;
-    }
-
-    public void setVerificationStatus(VerificationStatus verificationStatus) {
-        this.verificationStatus = verificationStatus;
     }
 }

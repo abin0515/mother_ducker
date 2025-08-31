@@ -146,13 +146,77 @@
   "profile": {
     "completeProfile": "完善您的个人资料",
     "completeProfileDesc": "请提供您的信息以完成账户设置",
-    "personalInfo": "个人信息",
+    "personalInfo": "个人资料",
     "personalInfoDesc": "更新您的个人信息和资料设置。",
     "email": "邮箱",
     "phone": "手机号码",
     "userType": "我是",
     "parent": "家长",
     "caregiver": "月嫂",
-    "creating": "正在创建个人资料..."
+    "creating": "正在创建个人资料...",
+    
+    "title": "个人资料",
+    "completionRate": "资料完成度",
+    "editProfile": "编辑个人资料",
+    "editComingSoon": "编辑功能即将开放！",
+    "completeRegistration": "立即完成注册",
+    "completeRegistrationDesc": "请先完成基本信息注册，然后就可以查看和编辑详细资料了。",
+    
+    "verification": {
+      "verified": "已验证",
+      "pending": "待验证", 
+      "unverified": "未验证"
+    },
+    
+    "userTypes": {
+      "caregiver": "月嫂",
+      "parent": "家长"
+    },
+    
+    "fields": {
+      "fullName": "姓名",
+      "displayName": "昵称",
+      "age": "年龄",
+      "phone": "电话",
+      "wechat": "微信",
+      "location": "位置",
+      "notSet": "未设置",
+      "noPhoto": "暂无{type}照片",
+      "uploadLater": "稍后可上传"
+    },
+    
+    "professional": {
+      "title": "专业信息",
+      "experience": "工作经验",
+      "experienceYears": "{years}年",
+      "serviceRate": "服务价格",
+      "hourlyRate": "¥{rate}/小时",
+      "languages": "语言能力",
+      "rating": "服务评分",
+      "ratingDisplay": "{rating}★ ({reviews}条评价)",
+      "noRating": "暂无评价",
+      "specializations": "专业特长",
+      "servicesOffered": "服务范围",
+      "certifications": "证书资质"
+    },
+    
+    "sections": {
+      "aboutMe": "个人简介",
+      "aboutMeEmpty": "暂未填写个人简介",
+      "workExperience": "工作经历",
+      "workExperienceEmpty": "暂未填写工作经历",
+      "education": "教育背景",
+      "educationEmpty": "暂未填写教育背景",
+      "specialSkills": "特殊技能",
+      "specialSkillsEmpty": "暂未填写特殊技能",
+      "gallery": "作品展示",
+      "certificates": "证书资质"
+    },
+    
+    "photoTypes": {
+      "profile": "头像",
+      "gallery": "作品",
+      "certificate": "证书"
+    }
   }
 }
