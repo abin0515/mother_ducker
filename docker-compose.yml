@@ -49,12 +49,12 @@ services:
     container_name: yuesaohub-user-service
     environment:
       SPRING_PROFILES_ACTIVE: docker
-      SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/yuesaohub_platform
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/yuesaohub_platform
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: 990515
       SPRING_RABBITMQ_HOST: rabbitmq
       SPRING_RABBITMQ_USERNAME: yuesaohub
-      SPRING_RABBITMQ_PASSWORD: yuesaohub_password
+      SPRING_RABBITMQ_PASSWORD: 990515
       EUREKA_CLIENT_ENABLED: false
     ports:
       - "8081:8081"
