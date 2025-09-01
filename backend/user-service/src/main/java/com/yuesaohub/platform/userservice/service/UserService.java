@@ -193,31 +193,31 @@ public class UserService {
 
     private void updateSingleField(User user, String fieldName, Object value) {
         switch (fieldName.toLowerCase()) {
-            case "fullname" -> user.setFullName((String) value);
-            case "displayname" -> user.setDisplayName((String) value);
-            case "age" -> user.setAge((Integer) value);
-            case "profilephotourl" -> user.setProfilePhotoUrl((String) value);
-            case "primaryphone" -> user.setPrimaryPhone((String) value);
-            case "wechatid" -> user.setWechatId((String) value);
-            case "wechatqrcodeurl" -> user.setWechatQrCodeUrl((String) value);
-            case "xiaohongshuhandle" -> user.setXiaohongshuHandle((String) value);
-            case "city" -> user.setCity((String) value);
-            case "province" -> user.setProvince((String) value);
-            case "country" -> user.setCountry((String) value);
-            case "serviceareas" -> user.setServiceAreas((String) value);
-            case "currentlocation" -> user.setCurrentLocation((String) value);
-            case "willingtorelocate" -> user.setWillingToRelocate((Boolean) value);
-            case "yearsofexperience" -> user.setYearsOfExperience((Integer) value);
-            case "languages" -> user.setLanguages((String) value);
-            case "specializations" -> user.setSpecializations((String) value);
-            case "certifications" -> user.setCertifications((String) value);
-            case "servicesoffered" -> user.setServicesOffered((String) value);
-            case "aboutme" -> user.setAboutMe((String) value);
-            case "professionalexperience" -> user.setProfessionalExperience((String) value);
-            case "educationbackground" -> user.setEducationBackground((String) value);
-            case "specialskills" -> user.setSpecialSkills((String) value);
-            case "galleryphotos" -> user.setGalleryPhotos((String) value);
-            case "certificatesphotos" -> user.setCertificatesPhotos((String) value);
+            case "fullname" -> user.setFullName(convertToString(value));
+            case "displayname" -> user.setDisplayName(convertToString(value));
+            case "age" -> user.setAge(convertToInteger(value));
+            case "profilephotourl" -> user.setProfilePhotoUrl(convertToString(value));
+            case "primaryphone" -> user.setPrimaryPhone(convertToString(value));
+            case "wechatid" -> user.setWechatId(convertToString(value));
+            case "wechatqrcodeurl" -> user.setWechatQrCodeUrl(convertToString(value));
+            case "xiaohongshuhandle" -> user.setXiaohongshuHandle(convertToString(value));
+            case "city" -> user.setCity(convertToString(value));
+            case "province" -> user.setProvince(convertToString(value));
+            case "country" -> user.setCountry(convertToString(value));
+            case "serviceareas" -> user.setServiceAreas(convertToString(value));
+            case "currentlocation" -> user.setCurrentLocation(convertToString(value));
+            case "willingtorelocate" -> user.setWillingToRelocate(convertToBoolean(value));
+            case "yearsofexperience" -> user.setYearsOfExperience(convertToInteger(value));
+            case "languages" -> user.setLanguages(convertToString(value));
+            case "specializations" -> user.setSpecializations(convertToString(value));
+            case "certifications" -> user.setCertifications(convertToString(value));
+            case "servicesoffered" -> user.setServicesOffered(convertToString(value));
+            case "aboutme" -> user.setAboutMe(convertToString(value));
+            case "professionalexperience" -> user.setProfessionalExperience(convertToString(value));
+            case "educationbackground" -> user.setEducationBackground(convertToString(value));
+            case "specialskills" -> user.setSpecialSkills(convertToString(value));
+            case "galleryphotos" -> user.setGalleryPhotos(convertToString(value));
+            case "certificatesphotos" -> user.setCertificatesPhotos(convertToString(value));
             default -> throw new IllegalArgumentException("Unknown field: " + fieldName);
         }
     }
@@ -327,5 +327,37 @@ public class UserService {
         dto.setVerificationStatus(user.getVerificationStatus());
 
         return dto;
+    }
+
+    // Helper methods for type conversion from JSON deserialization
+    private String convertToString(Object value) {
+        if (value == null) return null;
+        return value.toString();
+    }
+
+    private Integer convertToInteger(Object value) {
+        if (value == null) return null;
+        if (value instanceof Integer) return (Integer) value;
+        if (value instanceof Number) return ((Number) value).intValue();
+        if (value instanceof String) {
+            try {
+                return Integer.parseInt((String) value);
+            } catch (NumberFormatException e) {
+                throw new IllegalArgumentException("Invalid integer value: " + value);
+            }
+        }
+        throw new IllegalArgumentException("Cannot convert to Integer: " + value.getClass().getSimpleName());
+    }
+
+    private Boolean convertToBoolean(Object value) {
+        if (value == null) return null;
+        if (value instanceof Boolean) return (Boolean) value;
+        if (value instanceof String) {
+            String str = ((String) value).toLowerCase();
+            if ("true".equals(str) || "1".equals(str)) return true;
+            if ("false".equals(str) || "0".equals(str)) return false;
+            throw new IllegalArgumentException("Invalid boolean value: " + value);
+        }
+        throw new IllegalArgumentException("Cannot convert to Boolean: " + value.getClass().getSimpleName());
     }
 }

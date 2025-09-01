@@ -1,6 +1,7 @@
 package com.yuesaohub.platform.userservice.controller;
 
 import com.yuesaohub.platform.userservice.dto.CreateUserRequest;
+import com.yuesaohub.platform.userservice.dto.FieldUpdateRequest;
 import com.yuesaohub.platform.userservice.dto.UpdateProfileRequest;
 import com.yuesaohub.platform.userservice.dto.UserDto;
 import com.yuesaohub.platform.userservice.entity.UserType;
@@ -79,8 +80,8 @@ public class UserController {
     public ResponseEntity<ApiResponse<UserDto>> updateProfileField(
             @PathVariable String firebaseUid,
             @PathVariable String fieldName,
-            @RequestBody Object value) {
-        UserDto updatedUser = userService.updateProfileField(firebaseUid, fieldName, value);
+            @RequestBody FieldUpdateRequest request) {
+        UserDto updatedUser = userService.updateProfileField(firebaseUid, fieldName, request.getValue());
         return ResponseEntity.ok(ApiResponse.success(updatedUser, "Profile field updated successfully"));
     }
 
