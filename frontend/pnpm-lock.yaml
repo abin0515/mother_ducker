@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      '@googlemaps/react-wrapper':
+        specifier: ^1.2.0
+        version: 1.2.0(react@19.1.0)
       clsx:
         specifier: ^2.0.0
         version: 2.1.1
@@ -54,6 +57,9 @@ importers:
       '@testing-library/react':
         specifier: ^15.0.7
         version: 15.0.7(@types/react@19.1.8)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      '@types/google.maps':
+        specifier: ^3.58.1
+        version: 3.58.1
       '@types/node':
         specifier: ^18.19.123
         version: 18.19.123
@@ -1075,6 +1081,14 @@ packages:
   '@firebase/webchannel-wrapper@1.0.4':
     resolution: {integrity: sha512-6m8+P+dE/RPl4OPzjTxcTbQ0rGeRyeTvAi9KwIffBVCiAMKrfXfLZaqD1F+m8t4B5/Q5aHsMozOgirkH1F5oMQ==}
 
+  '@googlemaps/js-api-loader@1.16.10':
+    resolution: {integrity: sha512-c2erv2k7P2ilYzMmtYcMgAR21AULosQuUHJbStnrvRk2dG93k5cqptDrh9A8p+ZNlyhiqEOgHW7N9PAizdUM7Q==}
+
+  '@googlemaps/react-wrapper@1.2.0':
+    resolution: {integrity: sha512-8gloOyRDKcjfuMW2VvsDQ3jSnIpa+e1IBJkQL75ORMSQ/TVj6lyGeMLwGE94pj/IlTpWp7yo0LyJuVqxaK7ByA==}
+    peerDependencies:
+      react: '>=16.8.0'
+
   '@grpc/grpc-js@1.9.15':
     resolution: {integrity: sha512-nqE7Hc0AzI+euzUwDAy0aY5hCp10r734gMGRdU+qOPX0XSceI2ULrcXB5U2xSc5VkWwalCj4M7GzCAygZl2KoQ==}
     engines: {node: ^8.13.0 || >=10.10.0}
@@ -1589,6 +1603,9 @@ packages:
 
   '@types/babel__traverse@7.20.7':
     resolution: {integrity: sha512-dkO5fhS7+/oos4ciWxyEyjWe48zmG6wbCheo/G2ZnHx4fs3EU6YC6UM8rk56gAjNJ9P3MTH2jo5jb92/K6wbng==}
+
+  '@types/google.maps@3.58.1':
+    resolution: {integrity: sha512-X9QTSvGJ0nCfMzYOnaVs/k6/4L+7F5uCS+4iUmkLEls6J9S/Phv+m/i3mDeyc49ZBgwab3EFO1HEoBY7k98EGQ==}
 
   '@types/graceful-fs@4.1.9':
     resolution: {integrity: sha512-olP3sd1qOEe5dXTSaFvQG+02VdRXcdytWLAZsAq1PecU8uqQAhkrnbli7DagjtXKW/Bl7YJbUsa8MPcuc8LHEQ==}
@@ -5979,6 +5996,13 @@ snapshots:
 
   '@firebase/webchannel-wrapper@1.0.4': {}
 
+  '@googlemaps/js-api-loader@1.16.10': {}
+
+  '@googlemaps/react-wrapper@1.2.0(react@19.1.0)':
+    dependencies:
+      '@googlemaps/js-api-loader': 1.16.10
+      react: 19.1.0
+
   '@grpc/grpc-js@1.9.15':
     dependencies:
       '@grpc/proto-loader': 0.7.15
@@ -6567,6 +6591,8 @@ snapshots:
   '@types/babel__traverse@7.20.7':
     dependencies:
       '@babel/types': 7.28.2
+
+  '@types/google.maps@3.58.1': {}
 
   '@types/graceful-fs@4.1.9':
     dependencies:

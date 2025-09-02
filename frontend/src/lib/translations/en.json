@@ -379,6 +379,21 @@
       "hongkong": "Hong Kong",
       "macau": "Macau",
       "taiwan": "Taiwan"
+    },
+
+    "location": {
+      "currentLocation": "Current Location",
+      "getCurrentLocation": "Get Current Location",
+      "gettingLocation": "Getting location...",
+      "clearLocation": "Clear Location",
+      "coordinates": "Coordinates",
+      "loadingMap": "Loading map...",
+      "mapError": "Failed to load map",
+      "geolocationError": "Unable to get your location. Please check browser permissions.",
+      "geolocationNotSupported": "Your browser doesn't support geolocation",
+      "instructions": "Click on the map to set location, or use 'Get Current Location' button",
+      "dragHint": "You can also drag the marker on the map to adjust the position",
+      "noLocationSet": "Current location not set"
     }
   }
 }

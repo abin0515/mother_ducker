@@ -18,6 +18,7 @@
     "prepare": "node -e \"process.env.CI || require('husky').install()\""
   },
   "dependencies": {
+    "@googlemaps/react-wrapper": "^1.2.0",
     "clsx": "^2.0.0",
     "firebase": "^12.1.0",
     "lucide-react": "^0.438.0",
@@ -35,6 +36,7 @@
     "@tailwindcss/forms": "^0.5.10",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^15.0.7",
+    "@types/google.maps": "^3.58.1",
     "@types/node": "^18.19.123",
     "@types/react": "^19.1.8",
     "@types/testing-library__jest-dom": "^5.14.9",

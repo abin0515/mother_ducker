@@ -9,12 +9,13 @@ import LanguageSelector from '../../ui/LanguageSelector';
 import SpecializationSelector from '../../ui/SpecializationSelector';
 import ServiceSelector from '../../ui/ServiceSelector';
 import ProvinceSelector from '../../ui/ProvinceSelector';
+import CurrentLocationMap from '../../ui/CurrentLocationMap';
 
 interface ProfileEditModalProps {
   isOpen: boolean;
   onClose: () => void;
   profile: UserDto;
-  section: 'professional' | 'experience' | 'photos' | 'certificates' | 'basic';
+  section: 'professional' | 'experience' | 'photos' | 'certificates' | 'basic' | 'location';
   onSave: (updates: Partial<UserDto>) => Promise<void>;
 }
 
@@ -51,6 +52,7 @@ export default function ProfileEditModal({
         primaryPhone: profile.primaryPhone,
         wechatId: profile.wechatId,
         province: profile.province,
+        currentLocation: profile.currentLocation,
         // Professional fields
         yearsOfExperience: profile.yearsOfExperience,
 
@@ -99,6 +101,7 @@ export default function ProfileEditModal({
   const getSectionTitle = () => {
     switch (section) {
       case 'basic': return t.profile.sections.basicInfo;
+      case 'location': return t.profile.location.currentLocation;
       case 'professional': return t.profile.professional.title;
       case 'experience': return t.profile.sections.workExperienceAndSkills;
       case 'photos': return t.profile.sections.gallery;
@@ -338,6 +341,23 @@ export default function ProfileEditModal({
                 value={formData.province || ''}
                 onChange={(value) => handleInputChange('province', value)}
                 placeholder={t.profile.placeholders.province}
+              />
+            </div>
+          </div>
+        );
+
+      case 'location':
+        return (
+          <div className="space-y-6">
+            {/* Current Location Map */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                {t.profile.location.currentLocation}
+              </label>
+              <CurrentLocationMap
+                value={formData.currentLocation || ''}
+                onChange={(value) => handleInputChange('currentLocation', value)}
+                readonly={false}
               />
             </div>
           </div>
