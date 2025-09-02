@@ -201,6 +201,7 @@
     },
     
     "sections": {
+      "basicInfo": "Basic Information",
       "aboutMe": "About Me",
       "aboutMeEmpty": "No personal introduction yet",
       "workExperience": "Work Experience",

@@ -201,6 +201,7 @@
     },
     
     "sections": {
+      "basicInfo": "基本信息",
       "aboutMe": "个人简介",
       "aboutMeEmpty": "暂未填写个人简介",
       "workExperience": "工作经历",

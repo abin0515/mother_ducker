@@ -10,7 +10,7 @@ interface ProfileEditModalProps {
   isOpen: boolean;
   onClose: () => void;
   profile: UserDto;
-  section: 'professional' | 'experience' | 'photos' | 'certificates';
+  section: 'professional' | 'experience' | 'photos' | 'certificates' | 'basic';
   onSave: (updates: Partial<UserDto>) => Promise<void>;
 }
 
@@ -86,6 +86,7 @@ export default function ProfileEditModal({
 
   const getSectionTitle = () => {
     switch (section) {
+      case 'basic': return t.profile.sections.basicInfo;
       case 'professional': return t.profile.professional.title;
       case 'experience': return t.profile.sections.experienceAndEducation;
       case 'photos': return t.profile.sections.gallery;
@@ -287,6 +288,102 @@ export default function ProfileEditModal({
               onImagesUpdate={(urls) => handleImagesUpdate('certificatesPhotos', urls)}
               aspectRatio="video"
             />
+          </div>
+        );
+
+      case 'basic':
+        return (
+          <div className="space-y-6">
+            {/* Full Name */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                {t.profile.fields.fullName}
+              </label>
+              <input
+                type="text"
+                value={formData.fullName || ''}
+                onChange={(e) => handleInputChange('fullName', e.target.value)}
+                placeholder={t.profile.placeholders.fullName}
+                maxLength={50}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              />
+            </div>
+
+            {/* Display Name */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                {t.profile.fields.displayName}
+              </label>
+              <input
+                type="text"
+                value={formData.displayName || ''}
+                onChange={(e) => handleInputChange('displayName', e.target.value)}
+                placeholder={t.profile.placeholders.displayName}
+                maxLength={30}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              />
+            </div>
+
+            {/* Age */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                {t.profile.fields.age}
+              </label>
+              <input
+                type="number"
+                value={formData.age || ''}
+                onChange={(e) => handleInputChange('age', parseInt(e.target.value) || 0)}
+                placeholder={t.profile.placeholders.age}
+                min={18}
+                max={80}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              />
+            </div>
+
+            {/* Phone */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                {t.profile.fields.phone}
+              </label>
+              <input
+                type="tel"
+                value={formData.primaryPhone || ''}
+                onChange={(e) => handleInputChange('primaryPhone', e.target.value)}
+                placeholder={t.profile.placeholders.phone}
+                maxLength={20}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              />
+            </div>
+
+            {/* WeChat ID */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                {t.profile.fields.wechat}
+              </label>
+              <input
+                type="text"
+                value={formData.wechatId || ''}
+                onChange={(e) => handleInputChange('wechatId', e.target.value)}
+                placeholder={t.profile.placeholders.wechat}
+                maxLength={50}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              />
+            </div>
+
+            {/* City */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                {t.profile.fields.location}
+              </label>
+              <input
+                type="text"
+                value={formData.city || ''}
+                onChange={(e) => handleInputChange('city', e.target.value)}
+                placeholder={t.profile.placeholders.city}
+                maxLength={50}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              />
+            </div>
           </div>
         );
 

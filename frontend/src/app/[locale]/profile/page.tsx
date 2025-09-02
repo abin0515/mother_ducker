@@ -19,7 +19,7 @@ export default function ProfilePage() {
   const [loadingProfile, setLoadingProfile] = useState(false);
   const [editingModal, setEditingModal] = useState<{
     isOpen: boolean;
-    section: 'professional' | 'experience' | 'photos' | 'certificates';
+    section: 'professional' | 'experience' | 'photos' | 'certificates' | 'basic';
   }>({ isOpen: false, section: 'professional' });
 
   useEffect(() => {
@@ -109,7 +109,7 @@ export default function ProfilePage() {
   };
 
   // Open modal for complex editing
-  const openEditModal = (section: 'professional' | 'experience' | 'photos' | 'certificates') => {
+  const openEditModal = (section: 'professional' | 'experience' | 'photos' | 'certificates' | 'basic') => {
     setEditingModal({ isOpen: true, section });
   };
 
@@ -233,27 +233,29 @@ export default function ProfilePage() {
                   
                   {/* Basic Info */}
                   <div className="mt-4">
-                    <div className="space-y-2">
-                      <InlineEditField
-                        value={profile.fullName}
-                        fieldName="fullName"
-                        fieldType="text"
-                        placeholder={t.profile.placeholders.fullName}
-                        onSave={handleFieldUpdate}
-                        displayClassName="text-xl font-bold text-gray-900 text-center"
-                        inputClassName="text-xl font-bold text-center"
-                        maxLength={50}
-                      />
-                      <InlineEditField
-                        value={profile.displayName}
-                        fieldName="displayName"
-                        fieldType="text"
-                        placeholder={t.profile.placeholders.displayName}
-                        onSave={handleFieldUpdate}
-                        displayClassName="text-gray-600 text-center"
-                        inputClassName="text-center"
-                        maxLength={30}
-                      />
+                    <div className="flex items-center justify-between mb-4">
+                      <h3 className="text-lg font-medium text-gray-900">{t.profile.sections.basicInfo}</h3>
+                      <button
+                        onClick={() => openEditModal('basic')}
+                        className="text-blue-600 hover:text-blue-700 text-sm font-medium flex items-center space-x-1"
+                      >
+                        <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                        </svg>
+                        <span>{t.profile.editing.edit}</span>
+                      </button>
+                    </div>
+                    <div className="space-y-3">
+                      {/* Full Name */}
+                      <div className="flex items-center justify-center space-x-2">
+                        <span className="text-sm font-medium text-gray-700">{t.profile.fields.fullName}:</span>
+                        <span className="text-gray-900 text-right">{profile.fullName || t.profile.placeholders.fullName}</span>
+                      </div>
+                      {/* Display Name */}
+                      <div className="flex items-center justify-center space-x-2">
+                        <span className="text-sm font-medium text-gray-700">{t.profile.fields.displayName}:</span>
+                        <span className="text-gray-900 text-right">{profile.displayName || t.profile.placeholders.displayName}</span>
+                      </div>
                     </div>
                     <div className="mt-2 flex justify-center">
                       <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
@@ -270,63 +272,32 @@ export default function ProfilePage() {
                   <div className="mt-6 space-y-3">
                     <div className="flex items-center justify-between text-sm">
                       <span className="text-gray-500">{t.profile.fields.age}:</span>
-                      <div className="flex-1 ml-2">
-                        <InlineEditField
-                          value={profile.age}
-                          fieldName="age"
-                          fieldType="number"
-                          placeholder={t.profile.placeholders.age}
-                          onSave={handleFieldUpdate}
-                          displayClassName="text-gray-900 text-right"
-                          inputClassName="text-right"
-                          min={18}
-                          max={80}
-                        />
-                      </div>
+                      <span className="text-gray-900 text-right">{profile.age || t.profile.placeholders.age}</span>
                     </div>
                     <div className="flex items-center justify-between text-sm">
                       <span className="text-gray-500">{t.profile.fields.phone}:</span>
                       <div className="flex-1 ml-2">
-                        <InlineEditField
-                          value={profile.primaryPhone}
-                          fieldName="primaryPhone"
-                          fieldType="tel"
-                          placeholder={t.profile.placeholders.phone}
-                          onSave={handleFieldUpdate}
-                          displayClassName="text-gray-900 text-right"
-                          inputClassName="text-right"
-                          maxLength={20}
-                        />
+                        <span className="text-gray-900 text-right">
+                          {profile.primaryPhone || t.profile.placeholders.phone}
+                        </span>
                       </div>
                     </div>
                     <div className="flex items-center justify-between text-sm">
                       <span className="text-gray-500">{t.profile.fields.wechat}:</span>
                       <div className="flex-1 ml-2">
-                        <InlineEditField
-                          value={profile.wechatId}
-                          fieldName="wechatId"
-                          fieldType="text"
-                          placeholder={t.profile.placeholders.wechat}
-                          onSave={handleFieldUpdate}
-                          displayClassName="text-gray-900 text-right"
-                          inputClassName="text-right"
-                          maxLength={50}
-                        />
+                        <span className="text-gray-900 text-right">
+                          {profile.wechatId || t.profile.placeholders.wechat}
+                        </span>
                       </div>
                     </div>
                     <div className="flex items-center justify-between text-sm">
                       <span className="text-gray-500">{t.profile.fields.location}:</span>
                       <div className="flex-1 ml-2">
-                        <InlineEditField
-                          value={profile.city && profile.province ? `${profile.city}, ${profile.province}` : profile.city}
-                          fieldName="city"
-                          fieldType="text"
-                          placeholder={t.profile.placeholders.city}
-                          onSave={handleFieldUpdate}
-                          displayClassName="text-gray-900 text-right"
-                          inputClassName="text-right"
-                          maxLength={50}
-                        />
+                        <span className="text-gray-900 text-right">
+                          {profile.city && profile.province 
+                            ? `${profile.city}, ${profile.province}` 
+                            : profile.city || t.profile.placeholders.city}
+                        </span>
                       </div>
                     </div>
                   </div>
