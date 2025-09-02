@@ -6,6 +6,8 @@ import { useParams } from 'next/navigation';
 import { UserDto } from '@/lib/api';
 import ImageUploadSection from './ImageUploadSection';
 import LanguageSelector from '../../ui/LanguageSelector';
+import SpecializationSelector from '../../ui/SpecializationSelector';
+import ServiceSelector from '../../ui/ServiceSelector';
 
 interface ProfileEditModalProps {
   isOpen: boolean;
@@ -54,7 +56,7 @@ export default function ProfileEditModal({
         languages: profile.languages,
         specializations: profile.specializations,
         servicesOffered: profile.servicesOffered,
-        certifications: profile.certifications,
+
         aboutMe: profile.aboutMe,
         professionalExperience: profile.professionalExperience,
 
@@ -144,13 +146,10 @@ export default function ProfileEditModal({
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 {t.profile.professional.specializations}
               </label>
-              <textarea
+              <SpecializationSelector
                 value={formData.specializations || ''}
-                onChange={(e) => handleInputChange('specializations', e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none"
+                onChange={(value) => handleInputChange('specializations', value)}
                 placeholder={t.profile.placeholders.specializations}
-                rows={4}
-                maxLength={500}
               />
             </div>
 
@@ -159,30 +158,14 @@ export default function ProfileEditModal({
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 {t.profile.professional.servicesOffered}
               </label>
-              <textarea
+              <ServiceSelector
                 value={formData.servicesOffered || ''}
-                onChange={(e) => handleInputChange('servicesOffered', e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none"
+                onChange={(value) => handleInputChange('servicesOffered', value)}
                 placeholder={t.profile.placeholders.servicesOffered}
-                rows={4}
-                maxLength={500}
               />
             </div>
 
-            {/* Certifications */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                {t.profile.professional.certifications}
-              </label>
-              <textarea
-                value={formData.certifications || ''}
-                onChange={(e) => handleInputChange('certifications', e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none"
-                placeholder={t.profile.placeholders.certifications}
-                rows={3}
-                maxLength={300}
-              />
-            </div>
+
           </div>
         );
 

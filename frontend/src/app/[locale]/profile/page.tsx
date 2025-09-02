@@ -357,10 +357,7 @@ export default function ProfilePage() {
                       <label className="text-sm font-medium text-gray-500">{t.profile.professional.servicesOffered}</label>
                       <p className="mt-1 text-gray-900 whitespace-pre-wrap">{profile.servicesOffered || t.profile.fields.notSet}</p>
                     </div>
-                    <div>
-                      <label className="text-sm font-medium text-gray-500">{t.profile.professional.certifications}</label>
-                      <p className="mt-1 text-gray-900 whitespace-pre-wrap">{profile.certifications || t.profile.fields.notSet}</p>
-                    </div>
+
                   </div>
                 </div>
               </div>

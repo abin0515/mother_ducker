@@ -196,8 +196,7 @@
       "ratingDisplay": "{rating}★ ({reviews}条评价)",
       "noRating": "暂无评价",
       "specializations": "专业特长",
-      "servicesOffered": "服务范围",
-      "certifications": "证书资质"
+      "servicesOffered": "服务范围"
     },
     
     "sections": {
@@ -253,6 +252,30 @@
       "hindi": "印地语"
     },
     
+    "specializations": {
+      "presets": "常用专业特长",
+      "custom": "自定义输入",
+      "addSpecialization": "添加专业特长",
+      "newbornCare": "新生儿护理",
+      "breastfeedingSupport": "母乳喂养指导",
+      "confinementMeals": "月子餐制作",
+      "postpartumRecovery": "产后恢复",
+      "lactationConsultant": "催乳师",
+      "infantCareSpecialist": "育婴师",
+      "infantMassage": "婴儿按摩",
+      "nutritionalPlanning": "营养搭配"
+    },
+    
+    "services": {
+      "presets": "常用服务类型",
+      "custom": "自定义输入",
+      "addService": "添加服务类型",
+      "yuesao": "月嫂",
+      "lactationSpecialist": "通乳师",
+      "liveinNanny": "住家育儿嫂",
+      "commutingCook": "通勤做饭阿姨"
+    },
+    
     "editing": {
       "save": "保存",
       "cancel": "取消",
@@ -287,7 +310,7 @@
       "languages": "例如：普通话、粤语、英语",
       "specializations": "请描述您的专业特长和优势",
       "servicesOffered": "请详细描述您提供的服务内容",
-      "certifications": "请列出您的相关证书和资质",
+
       "aboutMe": "请简单介绍一下您自己",
       "professionalExperience": "请详细描述您的工作经历和经验",
 
