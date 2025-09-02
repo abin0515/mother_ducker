@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useState, useRef, useEffect } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { getTranslations, type Locale } from '@/lib/i18n';
-import LanguageSwitcher from '@/components/LanguageSwitcher';
+import LanguageSwitcher from '@/components/ui/LanguageSwitcher';
 
 interface NavigationProps {
   locale: Locale;

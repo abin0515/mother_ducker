@@ -1,5 +1,5 @@
 import { Suspense } from 'react';
-import UserProfileForm from '@/components/UserProfileForm';
+import UserProfileForm from '@/components/features/auth/UserProfileForm';
 import { getTranslations } from '@/lib/i18n';
 
 interface CompleteProfilePageProps {

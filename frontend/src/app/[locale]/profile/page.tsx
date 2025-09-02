@@ -5,9 +5,9 @@ import { useRouter, useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { getTranslations, type Locale } from '@/lib/i18n';
 import { apiService, UserDto } from '@/lib/api';
-import InlineEditField from '@/components/profile/InlineEditField';
-import ProfileEditModal from '@/components/profile/ProfileEditModal';
-import ProfileAvatar from '@/components/profile/ProfileAvatar';
+
+import ProfileEditModal from '@/components/features/profile/ProfileEditModal';
+import ProfileAvatar from '@/components/features/profile/ProfileAvatar';
 
 export default function ProfilePage() {
   const params = useParams();

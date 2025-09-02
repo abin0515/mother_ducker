@@ -210,14 +210,14 @@
       "educationEmpty": "No education background yet",
       "specialSkills": "Special Skills",
       "specialSkillsEmpty": "No special skills yet",
-      "gallery": "Gallery",
+      "gallery": "Photo Gallery",
       "certificates": "Certificates",
       "experienceAndEducation": "Experience & Education"
     },
     
     "photoTypes": {
       "profile": "Profile",
-      "gallery": "Gallery",
+      "gallery": "Gallery Photo",
       "certificate": "Certificate"
     },
     
@@ -226,7 +226,7 @@
       "cancel": "Cancel",
       "edit": "Edit",
       "saving": "Saving...",
-      "clickToEdit": "Click to edit",
+
       "managePhotos": "Manage Photos",
       "manageCertificates": "Manage Certificates",
       "changeAvatar": "Change Avatar",

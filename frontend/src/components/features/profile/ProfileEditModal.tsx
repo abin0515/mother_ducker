@@ -40,6 +40,14 @@ export default function ProfileEditModal({
   useEffect(() => {
     if (isOpen) {
       setFormData({
+        // Basic information fields
+        fullName: profile.fullName,
+        displayName: profile.displayName,
+        age: profile.age,
+        primaryPhone: profile.primaryPhone,
+        wechatId: profile.wechatId,
+        city: profile.city,
+        // Professional fields
         yearsOfExperience: profile.yearsOfExperience,
         hourlyRate: profile.hourlyRate,
         languages: profile.languages,

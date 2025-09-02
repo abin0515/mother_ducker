@@ -210,7 +210,7 @@
       "educationEmpty": "暂未填写教育背景",
       "specialSkills": "特殊技能",
       "specialSkillsEmpty": "暂未填写特殊技能",
-      "gallery": "作品展示",
+      "gallery": "图片展示",
       "certificates": "证书资质",
       "experienceAndEducation": "工作经历与教育背景"
     },
@@ -226,7 +226,7 @@
       "cancel": "取消",
       "edit": "编辑",
       "saving": "保存中...",
-      "clickToEdit": "点击编辑",
+
       "managePhotos": "管理照片",
       "manageCertificates": "管理证书",
       "changeAvatar": "更换头像",
