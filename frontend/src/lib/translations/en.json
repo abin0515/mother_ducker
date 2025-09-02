@@ -206,13 +206,12 @@
       "aboutMeEmpty": "No personal introduction yet",
       "workExperience": "Work Experience",
       "workExperienceEmpty": "No work experience yet",
-      "education": "Education",
-      "educationEmpty": "No education background yet",
+
       "specialSkills": "Special Skills",
       "specialSkillsEmpty": "No special skills yet",
       "gallery": "Photo Gallery",
       "certificates": "Certificates",
-      "experienceAndEducation": "Experience & Education"
+      "workExperienceAndSkills": "Work Experience & Skills"
     },
     
     "photoTypes": {
@@ -233,6 +232,25 @@
       "photoLoadError": "Failed to load photo",
       "morePhotos": "more photos",
       "swipeHint": "Swipe left or right to navigate"
+    },
+    
+    "languages": {
+      "presets": "Common Languages",
+      "custom": "Custom Input",
+      "addLanguage": "Add Language",
+      "chinese": "Chinese",
+      "english": "English", 
+      "spanish": "Spanish",
+      "cantonese": "Cantonese",
+      "french": "French",
+      "japanese": "Japanese",
+      "korean": "Korean",
+      "german": "German",
+      "italian": "Italian",
+      "portuguese": "Portuguese",
+      "russian": "Russian",
+      "arabic": "Arabic",
+      "hindi": "Hindi"
     },
     
     "editing": {
@@ -272,7 +290,7 @@
       "certifications": "List your relevant certificates and qualifications",
       "aboutMe": "Tell us about yourself",
       "professionalExperience": "Describe your work experience in detail",
-      "educationBackground": "Describe your educational background",
+
       "specialSkills": "Describe your special skills and talents"
     },
     

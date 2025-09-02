@@ -206,13 +206,12 @@
       "aboutMeEmpty": "暂未填写个人简介",
       "workExperience": "工作经历",
       "workExperienceEmpty": "暂未填写工作经历",
-      "education": "教育背景",
-      "educationEmpty": "暂未填写教育背景",
+
       "specialSkills": "特殊技能",
       "specialSkillsEmpty": "暂未填写特殊技能",
       "gallery": "图片展示",
       "certificates": "证书资质",
-      "experienceAndEducation": "工作经历与教育背景"
+      "workExperienceAndSkills": "工作经历与技能"
     },
     
     "photoTypes": {
@@ -233,6 +232,25 @@
       "photoLoadError": "照片加载失败",
       "morePhotos": "更多照片",
       "swipeHint": "左右滑动浏览照片"
+    },
+    
+    "languages": {
+      "presets": "常用语言",
+      "custom": "自定义输入",
+      "addLanguage": "添加语言",
+      "chinese": "中文",
+      "english": "英语", 
+      "spanish": "西班牙语",
+      "cantonese": "粤语",
+      "french": "法语",
+      "japanese": "日语",
+      "korean": "韩语",
+      "german": "德语",
+      "italian": "意大利语",
+      "portuguese": "葡萄牙语",
+      "russian": "俄语",
+      "arabic": "阿拉伯语",
+      "hindi": "印地语"
     },
     
     "editing": {
@@ -272,7 +290,7 @@
       "certifications": "请列出您的相关证书和资质",
       "aboutMe": "请简单介绍一下您自己",
       "professionalExperience": "请详细描述您的工作经历和经验",
-      "educationBackground": "请描述您的教育背景和学习经历",
+
       "specialSkills": "请描述您的特殊技能和才艺"
     },
     

@@ -335,12 +335,7 @@ export default function ProfilePage() {
                         {profile.yearsOfExperience ? formatWithParams(t.profile.professional.experienceYears, { years: profile.yearsOfExperience }) : t.profile.fields.notSet}
                       </p>
                     </div>
-                    <div>
-                      <label className="text-sm font-medium text-gray-500">{t.profile.professional.serviceRate}</label>
-                      <p className="mt-1 text-gray-900">
-                        {profile.hourlyRate ? formatWithParams(t.profile.professional.hourlyRate, { rate: profile.hourlyRate }) : t.profile.fields.notSet}
-                      </p>
-                    </div>
+
                     <div>
                       <label className="text-sm font-medium text-gray-500">{t.profile.professional.languages}</label>
                       <p className="mt-1 text-gray-900">{profile.languages || t.profile.fields.notSet}</p>
@@ -404,24 +399,14 @@ export default function ProfilePage() {
               </div>
             )}
 
-            {/* Education & Skills (for Caregivers) */}
+            {/* Special Skills (for Caregivers) */}
             {profile.userType === 'CAREGIVER' && (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="bg-white overflow-hidden shadow rounded-lg">
-                  <div className="px-4 py-5 sm:p-6">
-                    <h3 className="text-lg font-medium text-gray-900 mb-4">{t.profile.sections.education}</h3>
-                    <p className="text-gray-900 whitespace-pre-wrap">
-                      {profile.educationBackground || t.profile.sections.educationEmpty}
-                    </p>
-                  </div>
-                </div>
-                <div className="bg-white overflow-hidden shadow rounded-lg">
-                  <div className="px-4 py-5 sm:p-6">
-                    <h3 className="text-lg font-medium text-gray-900 mb-4">{t.profile.sections.specialSkills}</h3>
-                    <p className="text-gray-900 whitespace-pre-wrap">
-                      {profile.specialSkills || t.profile.sections.specialSkillsEmpty}
-                    </p>
-                  </div>
+              <div className="bg-white overflow-hidden shadow rounded-lg">
+                <div className="px-4 py-5 sm:p-6">
+                  <h3 className="text-lg font-medium text-gray-900 mb-4">{t.profile.sections.specialSkills}</h3>
+                  <p className="text-gray-900 whitespace-pre-wrap">
+                    {profile.specialSkills || t.profile.sections.specialSkillsEmpty}
+                  </p>
                 </div>
               </div>
             )}

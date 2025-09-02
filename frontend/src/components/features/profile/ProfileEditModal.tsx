@@ -5,6 +5,7 @@ import { getTranslations, Locale } from '@/lib/i18n';
 import { useParams } from 'next/navigation';
 import { UserDto } from '@/lib/api';
 import ImageUploadSection from './ImageUploadSection';
+import LanguageSelector from '../../ui/LanguageSelector';
 
 interface ProfileEditModalProps {
   isOpen: boolean;
@@ -49,14 +50,14 @@ export default function ProfileEditModal({
         city: profile.city,
         // Professional fields
         yearsOfExperience: profile.yearsOfExperience,
-        hourlyRate: profile.hourlyRate,
+
         languages: profile.languages,
         specializations: profile.specializations,
         servicesOffered: profile.servicesOffered,
         certifications: profile.certifications,
         aboutMe: profile.aboutMe,
         professionalExperience: profile.professionalExperience,
-        educationBackground: profile.educationBackground,
+
         specialSkills: profile.specialSkills,
         galleryPhotos: profile.galleryPhotos,
         certificatesPhotos: profile.certificatesPhotos
@@ -96,7 +97,7 @@ export default function ProfileEditModal({
     switch (section) {
       case 'basic': return t.profile.sections.basicInfo;
       case 'professional': return t.profile.professional.title;
-      case 'experience': return t.profile.sections.experienceAndEducation;
+      case 'experience': return t.profile.sections.workExperienceAndSkills;
       case 'photos': return t.profile.sections.gallery;
       case 'certificates': return t.profile.sections.certificates;
       default: return t.profile.editProfile;
@@ -124,38 +125,17 @@ export default function ProfileEditModal({
               />
             </div>
 
-            {/* Hourly Rate */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                {t.profile.professional.serviceRate}
-              </label>
-              <div className="flex items-center">
-                <span className="text-gray-500 mr-2">¥</span>
-                <input
-                  type="number"
-                  value={formData.hourlyRate || ''}
-                  onChange={(e) => handleInputChange('hourlyRate', parseFloat(e.target.value) || 0)}
-                  className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  placeholder={t.profile.placeholders.hourlyRate}
-                  min="0"
-                  step="0.01"
-                />
-                <span className="text-gray-500 ml-2">/小时</span>
-              </div>
-            </div>
+
 
             {/* Languages */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 {t.profile.professional.languages}
               </label>
-              <input
-                type="text"
+              <LanguageSelector
                 value={formData.languages || ''}
-                onChange={(e) => handleInputChange('languages', e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                onChange={(value) => handleInputChange('languages', value)}
                 placeholder={t.profile.placeholders.languages}
-                maxLength={200}
               />
             </div>
 
@@ -219,7 +199,7 @@ export default function ProfileEditModal({
                 onChange={(e) => handleInputChange('aboutMe', e.target.value)}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none"
                 placeholder={t.profile.placeholders.aboutMe}
-                rows={4}
+                rows={6}
                 maxLength={500}
               />
             </div>
@@ -239,20 +219,7 @@ export default function ProfileEditModal({
               />
             </div>
 
-            {/* Education Background */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                {t.profile.sections.education}
-              </label>
-              <textarea
-                value={formData.educationBackground || ''}
-                onChange={(e) => handleInputChange('educationBackground', e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none"
-                placeholder={t.profile.placeholders.educationBackground}
-                rows={4}
-                maxLength={500}
-              />
-            </div>
+
 
             {/* Special Skills */}
             <div>
