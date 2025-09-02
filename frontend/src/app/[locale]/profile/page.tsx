@@ -246,16 +246,16 @@ export default function ProfilePage() {
                       </button>
                     </div>
                     <div className="space-y-3">
-                      {/* Full Name */}
-                      <div className="flex items-center justify-center space-x-2">
-                        <span className="text-sm font-medium text-gray-700">{t.profile.fields.fullName}:</span>
-                        <span className="text-gray-900 text-right">{profile.fullName || t.profile.placeholders.fullName}</span>
-                      </div>
-                      {/* Display Name */}
-                      <div className="flex items-center justify-center space-x-2">
-                        <span className="text-sm font-medium text-gray-700">{t.profile.fields.displayName}:</span>
-                        <span className="text-gray-900 text-right">{profile.displayName || t.profile.placeholders.displayName}</span>
-                      </div>
+                                             {/* Full Name */}
+                       <div className="text-center">
+                         <span className="text-sm font-medium text-gray-700">{t.profile.fields.fullName}: </span>
+                         <span className="text-xl font-bold text-gray-900">{profile.fullName || t.profile.placeholders.fullName}</span>
+                       </div>
+                       {/* Display Name */}
+                       <div className="text-center">
+                         <span className="text-sm font-medium text-gray-700">{t.profile.fields.displayName}: </span>
+                         <span className="text-gray-900">{profile.displayName || t.profile.placeholders.displayName}</span>
+                       </div>
                     </div>
                     <div className="mt-2 flex justify-center">
                       <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
@@ -272,7 +272,9 @@ export default function ProfilePage() {
                   <div className="mt-6 space-y-3">
                     <div className="flex items-center justify-between text-sm">
                       <span className="text-gray-500">{t.profile.fields.age}:</span>
-                      <span className="text-gray-900 text-right">{profile.age || t.profile.placeholders.age}</span>
+                      <div className="flex-1 text-center">
+                        <span className="text-gray-900 font-medium">{profile.age || t.profile.placeholders.age}</span>
+                      </div>
                     </div>
                     <div className="flex items-center justify-between text-sm">
                       <span className="text-gray-500">{t.profile.fields.phone}:</span>
