@@ -25,7 +25,7 @@ export default function ImageUploadSection({
   title,
   images,
   category,
-  maxImages = category === 'profile' ? 1 : 10,
+  maxImages = category === 'profile' ? 1 : 20,
   onImagesUpdate,
   className = '',
   aspectRatio = 'square',

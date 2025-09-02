@@ -278,7 +278,7 @@ export default function ProfileEditModal({
               title={t.profile.sections.gallery}
               images={formData.galleryPhotos ? JSON.parse(formData.galleryPhotos) : []}
               category="gallery"
-              maxImages={10}
+              maxImages={20}
               onImagesUpdate={(urls) => handleImagesUpdate('galleryPhotos', urls)}
               aspectRatio="square"
             />

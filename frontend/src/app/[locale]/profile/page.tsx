@@ -8,6 +8,7 @@ import { apiService, UserDto } from '@/lib/api';
 
 import ProfileEditModal from '@/components/features/profile/ProfileEditModal';
 import ProfileAvatar from '@/components/features/profile/ProfileAvatar';
+import PhotoGallery from '@/components/ui/PhotoGallery';
 
 export default function ProfilePage() {
   const params = useParams();
@@ -440,19 +441,14 @@ export default function ProfilePage() {
                     <span>{t.profile.editing.managePhotos}</span>
                   </button>
                 </div>
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                  {profile.galleryPhotos ? (
-                    JSON.parse(profile.galleryPhotos).map((photo: string, index: number) => (
-                      <div key={index} className="aspect-square bg-gray-100 rounded-lg overflow-hidden">
-                        <img src={photo} alt={`Gallery ${index + 1}`} className="w-full h-full object-cover" />
-                      </div>
-                    ))
-                  ) : (
-                    <div className="col-span-2 md:col-span-3">
-                      {formatPhotoPlaceholder(t.profile.photoTypes.gallery)}
-                    </div>
-                  )}
-                </div>
+                <PhotoGallery
+                  photos={profile.galleryPhotos ? JSON.parse(profile.galleryPhotos) : []}
+                  title={t.profile.sections.gallery}
+                  gridCols={3}
+                  aspectRatio="square"
+                  showCount={false}
+                  className="mt-4"
+                />
               </div>
             </div>
 
@@ -472,19 +468,14 @@ export default function ProfilePage() {
                       <span>{t.profile.editing.manageCertificates}</span>
                     </button>
                   </div>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {profile.certificatesPhotos ? (
-                      JSON.parse(profile.certificatesPhotos).map((cert: string, index: number) => (
-                        <div key={index} className="aspect-video bg-gray-100 rounded-lg overflow-hidden">
-                          <img src={cert} alt={`Certificate ${index + 1}`} className="w-full h-full object-cover" />
-                        </div>
-                      ))
-                    ) : (
-                      <div className="col-span-1 md:col-span-2">
-                        {formatPhotoPlaceholder(t.profile.photoTypes.certificate)}
-                      </div>
-                    )}
-                  </div>
+                  <PhotoGallery
+                    photos={profile.certificatesPhotos ? JSON.parse(profile.certificatesPhotos) : []}
+                    title={t.profile.sections.certificates}
+                    gridCols={2}
+                    aspectRatio="video"
+                    showCount={false}
+                    className="mt-4"
+                  />
                 </div>
               </div>
             )}

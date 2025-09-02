@@ -221,6 +221,20 @@
       "certificate": "证书"
     },
     
+    "gallery": {
+      "viewPhoto": "查看照片",
+      "previousPhoto": "上一张",
+      "nextPhoto": "下一张",
+      "closeGallery": "关闭相册",
+      "photoCount": "张照片",
+      "singlePhoto": "张照片",
+      "noPhotos": "暂无照片",
+      "loadingPhoto": "加载中...",
+      "photoLoadError": "照片加载失败",
+      "morePhotos": "更多照片",
+      "swipeHint": "左右滑动浏览照片"
+    },
+    
     "editing": {
       "save": "保存",
       "cancel": "取消",
@@ -234,6 +248,7 @@
       "avatarUploadFailed": "头像上传失败",
       "avatarFormats": "支持 JPG、PNG 格式，最大 3MB",
       "cannotUpdateAvatar": "无法更新头像",
+      "close": "关闭",
       "updateFailed": "更新失败，请重试",
       "loginRequired": "用户未登录",
       "uploadFailed": "上传失败，请重试",

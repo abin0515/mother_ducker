@@ -221,6 +221,20 @@
       "certificate": "Certificate"
     },
     
+    "gallery": {
+      "viewPhoto": "View Photo",
+      "previousPhoto": "Previous",
+      "nextPhoto": "Next",
+      "closeGallery": "Close Gallery",
+      "photoCount": "photos",
+      "singlePhoto": "photo",
+      "noPhotos": "No photos available",
+      "loadingPhoto": "Loading...",
+      "photoLoadError": "Failed to load photo",
+      "morePhotos": "more photos",
+      "swipeHint": "Swipe left or right to navigate"
+    },
+    
     "editing": {
       "save": "Save",
       "cancel": "Cancel",
@@ -234,6 +248,7 @@
       "avatarUploadFailed": "Avatar upload failed",
       "avatarFormats": "Supports JPG, PNG formats, max 3MB",
       "cannotUpdateAvatar": "Cannot update avatar",
+      "close": "Close",
       "updateFailed": "Update failed, please try again",
       "loginRequired": "User not logged in",
       "uploadFailed": "Upload failed, please try again",
