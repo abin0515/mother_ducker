@@ -8,6 +8,7 @@ import ImageUploadSection from './ImageUploadSection';
 import LanguageSelector from '../../ui/LanguageSelector';
 import SpecializationSelector from '../../ui/SpecializationSelector';
 import ServiceSelector from '../../ui/ServiceSelector';
+import ProvinceSelector from '../../ui/ProvinceSelector';
 
 interface ProfileEditModalProps {
   isOpen: boolean;
@@ -49,7 +50,7 @@ export default function ProfileEditModal({
         age: profile.age,
         primaryPhone: profile.primaryPhone,
         wechatId: profile.wechatId,
-        city: profile.city,
+        province: profile.province,
         // Professional fields
         yearsOfExperience: profile.yearsOfExperience,
 
@@ -333,13 +334,10 @@ export default function ProfileEditModal({
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 {t.profile.fields.location}
               </label>
-              <input
-                type="text"
-                value={formData.city || ''}
-                onChange={(e) => handleInputChange('city', e.target.value)}
-                placeholder={t.profile.placeholders.city}
-                maxLength={50}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              <ProvinceSelector
+                value={formData.province || ''}
+                onChange={(value) => handleInputChange('province', value)}
+                placeholder={t.profile.placeholders.province}
               />
             </div>
           </div>

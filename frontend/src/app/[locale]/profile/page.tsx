@@ -297,9 +297,7 @@ export default function ProfilePage() {
                       <span className="text-gray-500">{t.profile.fields.location}:</span>
                       <div className="flex-1 ml-2">
                         <span className="text-gray-900 text-right">
-                          {profile.city && profile.province 
-                            ? `${profile.city}, ${profile.province}` 
-                            : profile.city || t.profile.placeholders.city}
+                          {profile.province || t.profile.placeholders.province}
                         </span>
                       </div>
                     </div>
