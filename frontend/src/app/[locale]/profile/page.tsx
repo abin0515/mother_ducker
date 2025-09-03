@@ -10,6 +10,7 @@ import ProfileEditModal from '@/components/features/profile/ProfileEditModal';
 import ProfileAvatar from '@/components/features/profile/ProfileAvatar';
 import PhotoGallery from '@/components/ui/PhotoGallery';
 import CurrentLocationMap from '@/components/ui/CurrentLocationMap';
+import { parseLocationString, openGoogleMaps, hasCoordinates } from '@/lib/mapUtils';
 
 export default function ProfilePage() {
   const params = useParams();
@@ -306,10 +307,8 @@ export default function ProfilePage() {
                 </div>
               </div>
             </div>
-          </div>
-
-          {/* Current Location Map */}
-          <div className="lg:col-span-1">
+            {/* Current Location Map */}
+          <div className="lg:col-span-1 mt-6">
             <div className="bg-white overflow-hidden shadow rounded-lg">
               <div className="px-4 py-5 sm:p-6">
                 <div className="flex items-center justify-between mb-4">
@@ -326,11 +325,76 @@ export default function ProfilePage() {
                   </button>
                 </div>
                 
-                <CurrentLocationMap
-                  value={profile.currentLocation}
-                  readonly={true}
-                  className="mb-4"
-                />
+                {/* Current Location Display */}
+                {profile.currentLocation && hasCoordinates(profile.currentLocation) ? (
+                  <div>
+                    {/* Clickable Address Block */}
+                    <div 
+                      onClick={() => {
+                        const location = parseLocationString(profile.currentLocation);
+                        if (location) {
+                          openGoogleMaps(location, `${profile.displayName || profile.fullName}的位置`);
+                        }
+                      }}
+                      className="mb-4 p-3 bg-blue-50 border border-blue-200 rounded-lg cursor-pointer hover:bg-blue-100 transition-colors relative group"
+                      title={t.profile.location.clickToViewDistance}
+                    >
+                      <div className="flex items-start space-x-2">
+                        <svg className="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                        </svg>
+                        <div className="flex-1 min-w-0">
+                          <p className="text-sm font-medium text-blue-900">{t.profile.location.currentLocation}</p>
+                          <p className="text-sm text-blue-700 break-words">{parseLocationString(profile.currentLocation)?.address}</p>
+                        </div>
+                        
+                        {/* Click Indicator */}
+                        <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                          <svg className="w-4 h-4 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                          </svg>
+                        </div>
+                      </div>
+                      
+                      {/* Hover Tooltip */}
+                      <div className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap z-10">
+                        {t.profile.location.clickToViewDistance}
+                      </div>
+                    </div>
+                    
+                    {/* Non-clickable Map Display */}
+                    <CurrentLocationMap
+                      value={profile.currentLocation}
+                      readonly={true}
+                      className="mb-4"
+                    />
+                  </div>
+                ) : (
+                  // Non-clickable display for locations without coordinates
+                  <div>
+                    {profile.currentLocation && (
+                      <div className="mb-4 p-3 bg-gray-50 border border-gray-200 rounded-lg">
+                        <div className="flex items-start space-x-2">
+                          <svg className="w-5 h-5 text-gray-600 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                          </svg>
+                          <div className="flex-1 min-w-0">
+                            <p className="text-sm font-medium text-gray-900">{t.profile.location.currentLocation}</p>
+                            <p className="text-sm text-gray-700 break-words">{profile.currentLocation}</p>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                    
+                    <CurrentLocationMap
+                      value={profile.currentLocation}
+                      readonly={true}
+                      className="mb-4"
+                    />
+                  </div>
+                )}
                 
                 {!profile.currentLocation && (
                   <div className="text-center py-8 text-gray-500">
@@ -344,6 +408,9 @@ export default function ProfilePage() {
               </div>
             </div>
           </div>
+          </div>
+
+          
 
           {/* Right Column - Detailed Info */}
           <div className="lg:col-span-2 space-y-6">

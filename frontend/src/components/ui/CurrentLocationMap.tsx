@@ -276,20 +276,20 @@ export default function CurrentLocationMap({
 
   return (
     <div className={`current-location-map ${className}`}>
-      {/* Current Location Display */}
-      {currentLocation && (
+      {/* Current Location Display - Only show in editing mode */}
+      {!readonly && currentLocation && (
         <div className="mb-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
           <div className="flex items-start space-x-2">
             <svg className="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 616 0z" />
             </svg>
             <div className="flex-1 min-w-0">
               <p className="text-sm font-medium text-blue-900">{t.profile.location.currentLocation}</p>
               <p className="text-sm text-blue-700 break-words">{currentLocation.address}</p>
-              {/* <p className="text-xs text-blue-600 mt-1">
+              <p className="text-xs text-blue-600 mt-1">
                 {t.profile.location.coordinates}: {currentLocation.coordinates.lat.toFixed(6)}, {currentLocation.coordinates.lng.toFixed(6)}
-              </p> */}
+              </p>
             </div>
           </div>
         </div>

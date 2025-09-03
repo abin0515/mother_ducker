@@ -393,7 +393,12 @@
       "geolocationNotSupported": "Your browser doesn't support geolocation",
       "instructions": "Click on the map to set location, or use 'Get Current Location' button",
       "dragHint": "You can also drag the marker on the map to adjust the position",
-      "noLocationSet": "Current location not set"
+      "noLocationSet": "Current location not set",
+      "clickToViewDistance": "Click to view distance details",
+      "viewOnGoogleMaps": "View on Google Maps",
+      "getDirections": "Get Directions",
+      "distanceFrom": "Distance from you",
+      "openingMaps": "Opening maps..."
     }
   }
 }

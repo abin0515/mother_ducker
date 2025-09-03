@@ -393,7 +393,12 @@
       "geolocationNotSupported": "您的浏览器不支持定位功能",
       "instructions": "点击地图设置位置，或使用\"获取当前位置\"按钮",
       "dragHint": "您也可以拖拽地图上的标记来调整位置",
-      "noLocationSet": "尚未设置当前位置"
+      "noLocationSet": "尚未设置当前位置",
+      "clickToViewDistance": "点击查看距离详情",
+      "viewOnGoogleMaps": "在谷歌地图中查看",
+      "getDirections": "获取路线",
+      "distanceFrom": "距离您",
+      "openingMaps": "正在打开地图..."
     }
   }
 }
