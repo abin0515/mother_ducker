@@ -10,6 +10,10 @@ import ProfileEditModal from '@/components/features/profile/ProfileEditModal';
 import ProfileAvatar from '@/components/features/profile/ProfileAvatar';
 import PhotoGallery from '@/components/ui/PhotoGallery';
 import CurrentLocationMap from '@/components/ui/CurrentLocationMap';
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/Card';
+import Button from '@/components/ui/Button';
+import Badge from '@/components/ui/Badge';
+import SectionHeader from '@/components/ui/SectionHeader';
 import { parseLocationString, openGoogleMaps, hasCoordinates } from '@/lib/mapUtils';
 
 export default function ProfilePage() {
@@ -52,17 +56,17 @@ export default function ProfilePage() {
   };
 
   const getVerificationBadge = (status?: string) => {
-    const badges = {
-      VERIFIED: { bg: 'bg-green-100', text: 'text-green-800', label: t.profile.verification.verified },
-      PENDING: { bg: 'bg-yellow-100', text: 'text-yellow-800', label: t.profile.verification.pending },
-      UNVERIFIED: { bg: 'bg-gray-100', text: 'text-gray-800', label: t.profile.verification.unverified }
+    const badgeConfig = {
+      VERIFIED: { variant: 'success' as const, label: t.profile.verification.verified },
+      PENDING: { variant: 'warning' as const, label: t.profile.verification.pending },
+      UNVERIFIED: { variant: 'default' as const, label: t.profile.verification.unverified }
     };
-    const badge = badges[status as keyof typeof badges] || badges.UNVERIFIED;
+    const config = badgeConfig[status as keyof typeof badgeConfig] || badgeConfig.UNVERIFIED;
     
     return (
-      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${badge.bg} ${badge.text}`}>
-        {badge.label}
-      </span>
+      <Badge variant={config.variant} size="sm">
+        {config.label}
+      </Badge>
     );
   };
 
@@ -219,114 +223,107 @@ export default function ProfilePage() {
           
           {/* Left Column - Basic Info */}
           <div className="lg:col-span-1">
-            <div className="bg-white overflow-hidden shadow rounded-lg">
-              <div className="px-4 py-5 sm:p-6">
-                <div className="text-center">
-                  {/* Profile Photo */}
-                  <div className="flex justify-center">
-                    <ProfileAvatar
-                      profilePhotoUrl={profile.profilePhotoUrl}
-                      fullName={profile.fullName}
-                      displayName={profile.displayName}
-                      isEditable={true}
-                      size="large"
-                      onAvatarUpdate={handleAvatarUpdate}
-                    />
-                  </div>
-                  
-                  {/* Basic Info */}
-                  <div className="mt-4">
-                    <div className="flex items-center justify-between mb-4">
-                      <h3 className="text-lg font-medium text-gray-900">{t.profile.sections.basicInfo}</h3>
-                      <button
-                        onClick={() => openEditModal('basic')}
-                        className="text-blue-600 hover:text-blue-700 text-sm font-medium flex items-center space-x-1"
-                      >
+            <Card variant="elevated" padding="lg">
+              <div className="text-center">
+                {/* Profile Photo */}
+                <div className="flex justify-center">
+                  <ProfileAvatar
+                    profilePhotoUrl={profile.profilePhotoUrl}
+                    fullName={profile.fullName}
+                    displayName={profile.displayName}
+                    isEditable={true}
+                    size="large"
+                    onAvatarUpdate={handleAvatarUpdate}
+                  />
+                </div>
+                
+                {/* Basic Info */}
+                <div className="mt-6">
+                  <CardHeader>
+                    <CardTitle level={3}>{t.profile.sections.basicInfo}</CardTitle>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => openEditModal('basic')}
+                      icon={
                         <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                         </svg>
-                        <span>{t.profile.editing.edit}</span>
-                      </button>
+                      }
+                    >
+                      {t.profile.editing.edit}
+                    </Button>
+                  </CardHeader>
+                  
+                  <CardContent>
+                    {/* Name Information */}
+                    <div className="text-center space-y-2 mb-4">
+                      <div>
+                        <span className="text-sm font-medium text-gray-700">{t.profile.fields.fullName}: </span>
+                        <span className="text-xl font-bold text-gray-900">{profile.fullName || t.profile.placeholders.fullName}</span>
+                      </div>
+                      <div>
+                        <span className="text-sm font-medium text-gray-700">{t.profile.fields.displayName}: </span>
+                        <span className="text-gray-900 font-medium">{profile.displayName || t.profile.placeholders.displayName}</span>
+                      </div>
                     </div>
-                    <div className="space-y-3">
-                                             {/* Full Name */}
-                       <div className="text-center">
-                         <span className="text-sm font-medium text-gray-700">{t.profile.fields.fullName}: </span>
-                         <span className="text-xl font-bold text-gray-900">{profile.fullName || t.profile.placeholders.fullName}</span>
-                       </div>
-                       {/* Display Name */}
-                       <div className="text-center">
-                         <span className="text-sm font-medium text-gray-700">{t.profile.fields.displayName}: </span>
-                         <span className="text-gray-900">{profile.displayName || t.profile.placeholders.displayName}</span>
-                       </div>
-                    </div>
-                    <div className="mt-2 flex justify-center">
-                      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                        profile.userType === 'CAREGIVER' 
-                          ? 'bg-purple-100 text-purple-800' 
-                          : 'bg-blue-100 text-blue-800'
-                      }`}>
-                        {profile.userType === 'CAREGIVER' ? t.profile.userTypes.caregiver : t.profile.userTypes.parent}
-                      </span>
-                    </div>
-                  </div>
 
-                  {/* Contact Info */}
-                  <div className="mt-6 space-y-3">
-                    <div className="flex items-center justify-between text-sm">
-                      <span className="text-gray-500">{t.profile.fields.age}:</span>
-                      <div className="flex-1 text-center">
-                        <span className="text-gray-900 font-medium">{profile.age || t.profile.placeholders.age}</span>
+                    {/* User Type Badge */}
+                    <div className="flex justify-center mb-6">
+                      <Badge 
+                        variant={profile.userType === 'CAREGIVER' ? 'purple' : 'info'} 
+                        size="md"
+                      >
+                        {profile.userType === 'CAREGIVER' ? t.profile.userTypes.caregiver : t.profile.userTypes.parent}
+                      </Badge>
+                    </div>
+
+                    {/* Contact Information */}
+                    <div className="space-y-3 pt-4 border-t border-gray-100">
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm font-medium text-gray-600">{t.profile.fields.age}</span>
+                        <span className="text-sm font-semibold text-gray-900">{profile.age || t.profile.placeholders.age}</span>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm font-medium text-gray-600">{t.profile.fields.phone}</span>
+                        <span className="text-sm text-gray-900">{profile.primaryPhone || t.profile.placeholders.phone}</span>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm font-medium text-gray-600">{t.profile.fields.wechat}</span>
+                        <span className="text-sm text-gray-900">{profile.wechatId || t.profile.placeholders.wechat}</span>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm font-medium text-gray-600">{t.profile.fields.location}</span>
+                        <span className="text-sm text-gray-900">{profile.province || t.profile.placeholders.province}</span>
                       </div>
                     </div>
-                    <div className="flex items-center justify-between text-sm">
-                      <span className="text-gray-500">{t.profile.fields.phone}:</span>
-                      <div className="flex-1 ml-2">
-                        <span className="text-gray-900 text-right">
-                          {profile.primaryPhone || t.profile.placeholders.phone}
-                        </span>
-                      </div>
-                    </div>
-                    <div className="flex items-center justify-between text-sm">
-                      <span className="text-gray-500">{t.profile.fields.wechat}:</span>
-                      <div className="flex-1 ml-2">
-                        <span className="text-gray-900 text-right">
-                          {profile.wechatId || t.profile.placeholders.wechat}
-                        </span>
-                      </div>
-                    </div>
-                    <div className="flex items-center justify-between text-sm">
-                      <span className="text-gray-500">{t.profile.fields.location}:</span>
-                      <div className="flex-1 ml-2">
-                        <span className="text-gray-900 text-right">
-                          {profile.province || t.profile.placeholders.province}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
+                  </CardContent>
                 </div>
               </div>
-            </div>
+            </Card>
             {/* Current Location Map */}
-          <div className="lg:col-span-1 mt-6">
-            <div className="bg-white overflow-hidden shadow rounded-lg">
-              <div className="px-4 py-5 sm:p-6">
-                <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-lg font-medium text-gray-900">{t.profile.location.currentLocation}</h3>
-                  <button
+            <div className="mt-6">
+              <Card variant="elevated" padding="md">
+                <CardHeader>
+                  <CardTitle level={3}>{t.profile.location.currentLocation}</CardTitle>
+                  <Button
+                    variant="ghost"
+                    size="sm"
                     onClick={() => openEditModal('location')}
-                    className="text-blue-600 hover:text-blue-700 text-sm font-medium flex items-center space-x-1"
+                    icon={
+                      <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                      </svg>
+                    }
                   >
-                    <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                    </svg>
-                    <span>{t.profile.editing.edit}</span>
-                  </button>
-                </div>
+                    {t.profile.editing.edit}
+                  </Button>
+                </CardHeader>
                 
-                {/* Current Location Display */}
-                {profile.currentLocation && hasCoordinates(profile.currentLocation) ? (
+                <CardContent>
+                  {/* Current Location Display */}
+                  {profile.currentLocation && hasCoordinates(profile.currentLocation) ? (
                   <div>
                     {/* Clickable Address Block */}
                     <div 
@@ -396,18 +393,18 @@ export default function ProfilePage() {
                   </div>
                 )}
                 
-                {!profile.currentLocation && (
-                  <div className="text-center py-8 text-gray-500">
-                    <svg className="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                    </svg>
-                    <p className="mt-1">{t.profile.location.noLocationSet}</p>
-                  </div>
-                )}
-              </div>
+                  {!profile.currentLocation && (
+                    <div className="text-center py-8 text-gray-500">
+                      <svg className="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                      </svg>
+                      <p className="mt-1">{t.profile.location.noLocationSet}</p>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
             </div>
-          </div>
           </div>
 
           
@@ -417,152 +414,172 @@ export default function ProfilePage() {
             
             {/* Professional Info (for Caregivers) */}
             {profile.userType === 'CAREGIVER' && (
-              <div className="bg-white overflow-hidden shadow rounded-lg">
-                <div className="px-4 py-5 sm:p-6">
-                  <div className="flex items-center justify-between mb-4">
-                    <h3 className="text-lg font-medium text-gray-900">{t.profile.professional.title}</h3>
-                    <button
-                      onClick={() => openEditModal('professional')}
-                      className="text-blue-600 hover:text-blue-700 text-sm font-medium flex items-center space-x-1"
-                    >
+              <Card variant="elevated" padding="lg">
+                <CardHeader>
+                  <CardTitle level={3}>{t.profile.professional.title}</CardTitle>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => openEditModal('professional')}
+                    icon={
                       <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                       </svg>
-                      <span>{t.profile.editing.edit}</span>
-                    </button>
-                  </div>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    }
+                  >
+                    {t.profile.editing.edit}
+                  </Button>
+                </CardHeader>
+                
+                <CardContent>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                      <label className="text-sm font-medium text-gray-500">{t.profile.professional.experience}</label>
-                      <p className="mt-1 text-gray-900">
+                      <label className="text-sm font-semibold text-gray-600">{t.profile.professional.experience}</label>
+                      <p className="mt-2 text-gray-900 font-medium">
                         {profile.yearsOfExperience ? formatWithParams(t.profile.professional.experienceYears, { years: profile.yearsOfExperience }) : t.profile.fields.notSet}
                       </p>
                     </div>
 
                     <div>
-                      <label className="text-sm font-medium text-gray-500">{t.profile.professional.languages}</label>
-                      <p className="mt-1 text-gray-900">{profile.languages || t.profile.fields.notSet}</p>
+                      <label className="text-sm font-semibold text-gray-600">{t.profile.professional.languages}</label>
+                      <p className="mt-2 text-gray-900">{profile.languages || t.profile.fields.notSet}</p>
                     </div>
+                    
                     <div>
-                      <label className="text-sm font-medium text-gray-500">{t.profile.professional.rating}</label>
-                      <p className="mt-1 text-gray-900">
+                      <label className="text-sm font-semibold text-gray-600">{t.profile.professional.rating}</label>
+                      <p className="mt-2 text-gray-900">
                         {profile.totalRating ? formatWithParams(t.profile.professional.ratingDisplay, { rating: profile.totalRating, reviews: profile.totalReviews }) : t.profile.professional.noRating}
                       </p>
                     </div>
                   </div>
                   
-                  <div className="mt-4 space-y-4">
+                  <div className="mt-6 space-y-6 pt-6 border-t border-gray-100">
                     <div>
-                      <label className="text-sm font-medium text-gray-500">{t.profile.professional.specializations}</label>
-                      <p className="mt-1 text-gray-900 whitespace-pre-wrap">{profile.specializations || t.profile.fields.notSet}</p>
+                      <label className="text-sm font-semibold text-gray-600">{t.profile.professional.specializations}</label>
+                      <p className="mt-2 text-gray-900 whitespace-pre-wrap leading-relaxed">{profile.specializations || t.profile.fields.notSet}</p>
                     </div>
                     <div>
-                      <label className="text-sm font-medium text-gray-500">{t.profile.professional.servicesOffered}</label>
-                      <p className="mt-1 text-gray-900 whitespace-pre-wrap">{profile.servicesOffered || t.profile.fields.notSet}</p>
+                      <label className="text-sm font-semibold text-gray-600">{t.profile.professional.servicesOffered}</label>
+                      <p className="mt-2 text-gray-900 whitespace-pre-wrap leading-relaxed">{profile.servicesOffered || t.profile.fields.notSet}</p>
                     </div>
-
                   </div>
-                </div>
-              </div>
+                </CardContent>
+              </Card>
             )}
 
             {/* About Me */}
-            <div className="bg-white overflow-hidden shadow rounded-lg">
-              <div className="px-4 py-5 sm:p-6">
-                <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-lg font-medium text-gray-900">{t.profile.sections.aboutMe}</h3>
-                  <button
-                    onClick={() => openEditModal('experience')}
-                    className="text-blue-600 hover:text-blue-700 text-sm font-medium flex items-center space-x-1"
-                  >
+            <Card variant="elevated" padding="lg">
+              <CardHeader>
+                <CardTitle level={3}>{t.profile.sections.aboutMe}</CardTitle>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => openEditModal('experience')}
+                  icon={
                     <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                     </svg>
-                    <span>{t.profile.editing.edit}</span>
-                  </button>
-                </div>
-                <p className="text-gray-900 whitespace-pre-wrap">
+                  }
+                >
+                  {t.profile.editing.edit}
+                </Button>
+              </CardHeader>
+              
+              <CardContent>
+                <p className="text-gray-900 whitespace-pre-wrap leading-relaxed">
                   {profile.aboutMe || t.profile.sections.aboutMeEmpty}
                 </p>
-              </div>
-            </div>
+              </CardContent>
+            </Card>
 
             {/* Professional Experience (for Caregivers) */}
             {profile.userType === 'CAREGIVER' && (
-              <div className="bg-white overflow-hidden shadow rounded-lg">
-                <div className="px-4 py-5 sm:p-6">
-                  <h3 className="text-lg font-medium text-gray-900 mb-4">{t.profile.sections.workExperience}</h3>
-                  <p className="text-gray-900 whitespace-pre-wrap">
+              <Card variant="elevated" padding="lg">
+                <CardHeader>
+                  <CardTitle level={3}>{t.profile.sections.workExperience}</CardTitle>
+                </CardHeader>
+                
+                <CardContent>
+                  <p className="text-gray-900 whitespace-pre-wrap leading-relaxed">
                     {profile.professionalExperience || t.profile.sections.workExperienceEmpty}
                   </p>
-                </div>
-              </div>
+                </CardContent>
+              </Card>
             )}
 
             {/* Special Skills (for Caregivers) */}
             {profile.userType === 'CAREGIVER' && (
-              <div className="bg-white overflow-hidden shadow rounded-lg">
-                <div className="px-4 py-5 sm:p-6">
-                  <h3 className="text-lg font-medium text-gray-900 mb-4">{t.profile.sections.specialSkills}</h3>
-                  <p className="text-gray-900 whitespace-pre-wrap">
+              <Card variant="elevated" padding="lg">
+                <CardHeader>
+                  <CardTitle level={3}>{t.profile.sections.specialSkills}</CardTitle>
+                </CardHeader>
+                
+                <CardContent>
+                  <p className="text-gray-900 whitespace-pre-wrap leading-relaxed">
                     {profile.specialSkills || t.profile.sections.specialSkillsEmpty}
                   </p>
-                </div>
-              </div>
+                </CardContent>
+              </Card>
             )}
 
             {/* Gallery Photos */}
-            <div className="bg-white overflow-hidden shadow rounded-lg">
-              <div className="px-4 py-5 sm:p-6">
-                <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-lg font-medium text-gray-900">{t.profile.sections.gallery}</h3>
-                  <button
-                    onClick={() => openEditModal('photos')}
-                    className="text-blue-600 hover:text-blue-700 text-sm font-medium flex items-center space-x-1"
-                  >
+            <Card variant="elevated" padding="lg">
+              <CardHeader>
+                <CardTitle level={3}>{t.profile.sections.gallery}</CardTitle>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => openEditModal('photos')}
+                  icon={
                     <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 16m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                     </svg>
-                    <span>{t.profile.editing.managePhotos}</span>
-                  </button>
-                </div>
+                  }
+                >
+                  {t.profile.editing.managePhotos}
+                </Button>
+              </CardHeader>
+              
+              <CardContent>
                 <PhotoGallery
                   photos={profile.galleryPhotos ? JSON.parse(profile.galleryPhotos) : []}
                   title={t.profile.sections.gallery}
                   gridCols={3}
                   aspectRatio="square"
                   showCount={false}
-                  className="mt-4"
                 />
-              </div>
-            </div>
+              </CardContent>
+            </Card>
 
             {/* Certificates (for Caregivers) */}
             {profile.userType === 'CAREGIVER' && (
-              <div className="bg-white overflow-hidden shadow rounded-lg">
-                <div className="px-4 py-5 sm:p-6">
-                  <div className="flex items-center justify-between mb-4">
-                    <h3 className="text-lg font-medium text-gray-900">{t.profile.sections.certificates}</h3>
-                    <button
-                      onClick={() => openEditModal('certificates')}
-                      className="text-blue-600 hover:text-blue-700 text-sm font-medium flex items-center space-x-1"
-                    >
+              <Card variant="elevated" padding="lg">
+                <CardHeader>
+                  <CardTitle level={3}>{t.profile.sections.certificates}</CardTitle>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => openEditModal('certificates')}
+                    icon={
                       <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                       </svg>
-                      <span>{t.profile.editing.manageCertificates}</span>
-                    </button>
-                  </div>
+                    }
+                  >
+                    {t.profile.editing.manageCertificates}
+                  </Button>
+                </CardHeader>
+                
+                <CardContent>
                   <PhotoGallery
                     photos={profile.certificatesPhotos ? JSON.parse(profile.certificatesPhotos) : []}
                     title={t.profile.sections.certificates}
                     gridCols={2}
                     aspectRatio="video"
                     showCount={false}
-                    className="mt-4"
                   />
-                </div>
-              </div>
+                </CardContent>
+              </Card>
             )}
 
           </div>
