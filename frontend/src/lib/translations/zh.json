@@ -414,5 +414,24 @@
     "avatar": {
       "altText": "的头像"
     }
+  },
+
+  "search": {
+    "title": "护理师搜索",
+    "filters": "筛选条件",
+    "results": "搜索结果",
+    "empty": "没有符合条件的护理师",
+    "province": "省份",
+    "languages": "语言",
+    "services": "服务范围",
+    "specializations": "专业特长",
+    "minExperience": "最低工作年限",
+    "ageMin": "最小年龄",
+    "ageMax": "最大年龄",
+    "sortRelevance": "相关度",
+    "sortNewest": "最新",
+    "sortExperience": "经验",
+    "badgeAge": "年龄",
+    "badgeYears": "年"
   }
 }

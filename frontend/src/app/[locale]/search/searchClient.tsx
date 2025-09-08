@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useEffect, useMemo, useState } from 'react';
+import Link from 'next/link';
 import { 
   SectionContainer, Section, SectionHeaderLayout, SectionTitle, SectionContent,
   Card, CardContent, CardHeader, CardTitle, Badge, Button, Form, FormField, FormLabel, FormActions,
@@ -9,6 +10,7 @@ import {
 } from '@/components/ui';
 
 import { apiService } from '@/lib/api';
+import type { CaregiverSearchItem, SearchResultsDto } from '@/types/search';
 
 interface Labels {
   title: string;
@@ -47,7 +49,7 @@ export default function SearchPageClient({ locale, labels }: Props) {
   const [size, setSize] = useState<number>(12);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
-  const [items, setItems] = useState<any[]>([]);
+  const [items, setItems] = useState<CaregiverSearchItem[]>([]);
   const [total, setTotal] = useState<number>(0);
 
   const queryString = useMemo(() => {
@@ -69,7 +71,7 @@ export default function SearchPageClient({ locale, labels }: Props) {
     setLoading(true);
     setError(null);
     try {
-      const res = await apiService.get<{ items: any[]; total: number; page: number; size: number }>(`/api/v1/users/search/caregivers?${queryString}`);
+      const res = await apiService.get<SearchResultsDto<CaregiverSearchItem>>(`/api/v1/users/search/caregivers?${queryString}`);
       setItems(res?.items ?? []);
       setTotal(res?.total ?? 0);
     } catch (e: any) {
@@ -186,21 +188,42 @@ export default function SearchPageClient({ locale, labels }: Props) {
                     )}
                     <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-card">
                       {items.map((it) => (
-                        <Card key={it.id} variant="outlined" padding="lg">
-                          <CardHeader>
-                            <CardTitle level={4}>{it.displayName ?? 'Unknown'}</CardTitle>
-                          </CardHeader>
-                          <CardContent>
-                            <div className="flex flex-wrap gap-2">
-                              {it.province && <Badge variant="info">{it.province}</Badge>}
-                              {typeof it.age === 'number' && <Badge variant="info">{labels.badgeAge} {it.age}</Badge>}
-                              {typeof it.yearsOfExperience === 'number' && <Badge variant="success">{it.yearsOfExperience} {labels.badgeYears}</Badge>}
-                            </div>
-                            <div className="mt-2 text-secondary-600 text-medical-sm line-clamp-3">
-                              {it.specializations || it.servicesOffered || it.languages}
-                            </div>
-                          </CardContent>
-                        </Card>
+                        <Link key={it.id} href={`/${locale}/caregiver/${it.id}`}>
+                          <Card variant="outlined" padding="lg" className="hover:shadow-medical-lg transition-shadow duration-200 cursor-pointer">
+                            <CardHeader>
+                              <div className="flex items-center gap-medical-md">
+                                {it.profilePhotoUrl && (
+                                  <img 
+                                    src={it.profilePhotoUrl} 
+                                    alt={`${it.displayName ?? 'Caregiver'}'s avatar`}
+                                    className="w-12 h-12 rounded-full object-cover border-2 border-primary-100"
+                                  />
+                                )}
+                                <div className="flex-1">
+                                  <CardTitle level={4}>{it.displayName ?? 'Unknown'}</CardTitle>
+                                  {it.totalRating && it.totalReviews && it.totalReviews > 0 && (
+                                    <div className="text-medical-sm text-secondary-600 mt-1">
+                                      {it.totalRating.toFixed(1)}★ ({it.totalReviews} reviews)
+                                    </div>
+                                  )}
+                                </div>
+                              </div>
+                            </CardHeader>
+                            <CardContent>
+                              <div className="flex flex-wrap gap-2 mb-medical-md">
+                                {it.province && <Badge variant="info">{it.province}</Badge>}
+                                {typeof it.age === 'number' && <Badge variant="info">{labels.badgeAge} {it.age}</Badge>}
+                                {typeof it.yearsOfExperience === 'number' && <Badge variant="success">{it.yearsOfExperience} {labels.badgeYears}</Badge>}
+                                {it.profileCompletionPercentage && it.profileCompletionPercentage >= 80 && (
+                                  <Badge variant="success">Complete Profile</Badge>
+                                )}
+                              </div>
+                              <div className="text-secondary-600 text-medical-sm line-clamp-3">
+                                {it.specializations || it.servicesOffered || it.languages || 'Professional caregiver'}
+                              </div>
+                            </CardContent>
+                          </Card>
+                        </Link>
                       ))}
                     </div>
                     <div className="mt-card flex items-center justify-between">

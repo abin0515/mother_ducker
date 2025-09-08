@@ -90,17 +90,6 @@ class ApiService {
     };
   }
 
-  async get<T>(path: string): Promise<T> {
-    const headers = await this.getAuthHeaders();
-    const url = path.startsWith('http') ? path : `${API_BASE_URL}${path.startsWith('/') ? '' : '/'}${path}`;
-    const response = await fetch(url, { method: 'GET', headers });
-    if (!response.ok) {
-      const errorData = await response.json().catch(() => ({}));
-      throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
-    }
-    const result: ApiResponse<T> = await response.json();
-    return result.data;
-  }
 
   async createUser(userData: CreateUserRequest): Promise<UserDto> {
     const headers = await this.getAuthHeaders();
@@ -207,6 +196,35 @@ class ApiService {
     }
 
     const result: ApiResponse<{ percentage: number; missingFields: string[] }> = await response.json();
+    return result.data;
+  }
+
+  // Generic GET method for any endpoint
+  async get<T>(path: string, opts?: { requireAuth?: boolean; throwOnError?: boolean }): Promise<T> {
+    const requireAuth = opts?.requireAuth !== undefined ? opts.requireAuth : true;
+    const throwOnError = opts?.throwOnError !== undefined ? opts.throwOnError : true;
+
+    let headers: HeadersInit = { 'Content-Type': 'application/json' };
+    if (requireAuth) {
+      headers = await this.getAuthHeaders();
+    }
+
+    const url = path.startsWith('http') ? path : `${API_BASE_URL}${path}`;
+    const response = await fetch(url, {
+      method: 'GET',
+      headers,
+    });
+
+    if (!response.ok) {
+      if (throwOnError) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
+      }
+      // return undefined as any to satisfy generic without throwing; caller should handle
+      return undefined as any as T;
+    }
+
+    const result: ApiResponse<T> = await response.json();
     return result.data;
   }
 }

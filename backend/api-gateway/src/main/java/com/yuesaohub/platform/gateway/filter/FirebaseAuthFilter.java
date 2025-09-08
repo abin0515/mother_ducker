@@ -71,7 +71,10 @@ public class FirebaseAuthFilter implements GlobalFilter, Ordered {
     private boolean isPublicEndpoint(String path) {
         return path.startsWith("/api/public/") || 
                path.startsWith("/actuator/") ||
-               path.equals("/health");
+               path.equals("/health") ||
+               // Allow public read access to user profiles and search
+               path.matches("/api/v1/users/\\d+") ||
+               path.startsWith("/api/v1/users/search/");
     }
 
     private String extractToken(ServerHttpRequest request) {

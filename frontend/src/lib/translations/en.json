@@ -414,5 +414,24 @@
     "avatar": {
       "altText": "'s avatar"
     }
+  },
+
+  "search": {
+    "title": "Caregiver Search",
+    "filters": "Filters",
+    "results": "Results",
+    "empty": "No caregivers match your filters",
+    "province": "Province",
+    "languages": "Languages",
+    "services": "Services",
+    "specializations": "Specializations",
+    "minExperience": "Min Experience (years)",
+    "ageMin": "Age Min",
+    "ageMax": "Age Max",
+    "sortRelevance": "Relevance",
+    "sortNewest": "Newest",
+    "sortExperience": "Experience",
+    "badgeAge": "Age",
+    "badgeYears": "yrs"
   }
 }

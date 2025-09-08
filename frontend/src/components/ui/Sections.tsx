@@ -128,8 +128,8 @@ export interface SectionTitleProps extends HTMLAttributes<HTMLHeadingElement> {
 
 const SectionTitle = forwardRef<HTMLHeadingElement, SectionTitleProps>(
   ({ className, children, level = 2, size = 'lg', ...props }, ref) => {
-    const Component = `h${level}` as keyof JSX.IntrinsicElements;
-    
+    const Tag = `h${level}` as any;
+
     const sizeStyles = {
       sm: 'text-medical-xl',
       md: 'text-medical-2xl',
@@ -137,18 +137,18 @@ const SectionTitle = forwardRef<HTMLHeadingElement, SectionTitleProps>(
       xl: 'text-4xl'
     };
 
-    return (
-      <Component
-        ref={ref}
-        className={cn(
+    return React.createElement(
+      Tag as any,
+      {
+        ref,
+        className: cn(
           'font-bold text-secondary-900 leading-tight',
           sizeStyles[size],
           className
-        )}
-        {...props}
-      >
-        {children}
-      </Component>
+        ),
+        ...props
+      } as any,
+      children
     );
   }
 );
