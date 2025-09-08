@@ -74,6 +74,12 @@ export default function Navigation({ locale }: NavigationProps) {
               {t.navigation.about}
             </Link>
             <Link 
+              href={`/${locale}/search`} 
+              className="text-gray-600 hover:text-gray-900 transition-colors duration-200"
+            >
+              {t.navigation.search ?? 'Search'}
+            </Link>
+            <Link 
               href={`/${locale}/contact`} 
               className="text-gray-600 hover:text-gray-900 transition-colors duration-200"
             >

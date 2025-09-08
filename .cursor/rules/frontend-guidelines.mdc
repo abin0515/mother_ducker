@@ -44,11 +44,6 @@ This is the main frontend guidelines file that references focused rule files for
 - Form validation and error messages
 - Adding and removing features with i18n
 
-### 📁 **i18n-quick-reference.mdc**
-- Quick reference card for common i18n patterns
-- Essential commands and debugging tools
-- Fast access to most-used code snippets
-- Common mistakes and best practices
 
 ## Quick Reference
 

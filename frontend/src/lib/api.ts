@@ -90,6 +90,18 @@ class ApiService {
     };
   }
 
+  async get<T>(path: string): Promise<T> {
+    const headers = await this.getAuthHeaders();
+    const url = path.startsWith('http') ? path : `${API_BASE_URL}${path.startsWith('/') ? '' : '/'}${path}`;
+    const response = await fetch(url, { method: 'GET', headers });
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
+    }
+    const result: ApiResponse<T> = await response.json();
+    return result.data;
+  }
+
   async createUser(userData: CreateUserRequest): Promise<UserDto> {
     const headers = await this.getAuthHeaders();
     

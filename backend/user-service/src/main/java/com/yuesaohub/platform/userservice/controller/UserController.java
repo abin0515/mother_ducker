@@ -1,6 +1,8 @@
 package com.yuesaohub.platform.userservice.controller;
 
 import com.yuesaohub.platform.userservice.dto.CreateUserRequest;
+import com.yuesaohub.platform.userservice.dto.CaregiverSearchItemDto;
+import com.yuesaohub.platform.userservice.dto.SearchResultsDto;
 import com.yuesaohub.platform.userservice.dto.FieldUpdateRequest;
 import com.yuesaohub.platform.userservice.dto.UpdateProfileRequest;
 import com.yuesaohub.platform.userservice.dto.UserDto;
@@ -118,5 +120,26 @@ public class UserController {
             .filter(user -> user.getIsActive() != null && user.getIsActive())
             .toList();
         return ResponseEntity.ok(ApiResponse.success(caregivers));
+    }
+
+    // Search endpoint with age filters
+    @GetMapping("/search/caregivers")
+    public ResponseEntity<ApiResponse<SearchResultsDto<CaregiverSearchItemDto>>> searchCaregivers(
+            @RequestParam(required = false) String province,
+            @RequestParam(required = false) String languages,
+            @RequestParam(required = false) String services,
+            @RequestParam(required = false) String specializations,
+            @RequestParam(required = false) Integer minExperience,
+            @RequestParam(required = false) Boolean available,
+            @RequestParam(required = false) Integer ageMin,
+            @RequestParam(required = false) Integer ageMax,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "20") int size,
+            @RequestParam(defaultValue = "relevance") String sort
+    ) {
+        SearchResultsDto<CaregiverSearchItemDto> results = userService.searchCaregivers(
+            province, languages, services, specializations, minExperience, available, ageMin, ageMax, page, size, sort
+        );
+        return ResponseEntity.ok(ApiResponse.success(results));
     }
 }

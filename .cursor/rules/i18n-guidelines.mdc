@@ -157,6 +157,69 @@ export default async function NewFeaturePage({ params }: NewFeaturePageProps) {
 - [ ] No hardcoded English text remains in Chinese mode
 - [ ] No hardcoded Chinese text remains in English mode
 
+## 🚀 Quick Reference
+
+### Essential Commands
+```bash
+# Add new feature with i18n
+# 1. Add translation keys first
+# 2. Create page under [locale]/
+# 3. Use locale-aware routing
+# 4. Test both languages
+```
+
+### Debug i18n Issues
+```bash
+# Find hardcoded English text
+grep -r "Create\|Sign\|Login\|Register" src/app/[locale]/
+
+# Find hardcoded Chinese text  
+grep -r "创建\|注册\|登录\|首页" src/app/[locale]/
+
+# Find missing locale prefixes
+grep -r "href=\"/[^$]" src/app/[locale]/
+```
+
+### Translation Structure
+```json
+{
+  "featureName": {
+    "title": "Feature Title",
+    "description": "Description",
+    "actions": {
+      "save": "Save",
+      "cancel": "Cancel"
+    },
+    "validation": {
+      "required": "Required field"
+    },
+    "errors": {
+      "network": "Network error"
+    }
+  }
+}
+```
+
+### Translation Files
+- **`lib/translations/en.json`**: English translations
+- **`lib/translations/zh.json`**: Chinese translations
+
+## 🚨 Common Mistakes
+
+1. **404 Errors**: Page not under `[locale]/` directory
+2. **Missing Translations**: Keys not in both language files
+3. **Hardcoded Text**: English/Chinese text in quotes
+4. **Wrong Navigation**: Missing `/${locale}/` prefix
+5. **Server Component**: Forgetting to `await params`
+
+## 🎯 Best Practices
+
+- **Think multi-language first** when designing features
+- **Add translations before implementing** features
+- **Use semantic key names** that are reusable
+- **Test both languages** before considering complete
+- **Keep translation files organized** and well-structured
+
 ## Key Principles
 - **Always think in terms of multiple languages** when designing features
 - **Translation keys should be semantic and reusable**

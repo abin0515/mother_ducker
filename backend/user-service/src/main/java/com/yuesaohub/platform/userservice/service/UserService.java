@@ -2,6 +2,8 @@ package com.yuesaohub.platform.userservice.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.yuesaohub.platform.userservice.dto.CreateUserRequest;
+import com.yuesaohub.platform.userservice.dto.CaregiverSearchItemDto;
+import com.yuesaohub.platform.userservice.dto.SearchResultsDto;
 import com.yuesaohub.platform.userservice.dto.UpdateProfileRequest;
 import com.yuesaohub.platform.userservice.dto.UserDto;
 import com.yuesaohub.platform.userservice.entity.User;
@@ -12,10 +14,16 @@ import com.yuesaohub.platform.shared.exception.UserNotFoundException;
 
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.ArrayList;
 
 @Service
 @Transactional
@@ -114,6 +122,80 @@ public class UserService {
             .orElseThrow(() -> new UserNotFoundException("User not found with Firebase UID: " + firebaseUid));
         
         return calculateProfileCompletion(user);
+    }
+
+    // Search caregivers with filters including age range
+    public SearchResultsDto<CaregiverSearchItemDto> searchCaregivers(
+            String province,
+            String languages,
+            String services,
+            String specializations,
+            Integer minExperience,
+            Boolean available,
+            Integer ageMin,
+            Integer ageMax,
+            int page,
+            int size,
+            String sort
+    ) {
+        Specification<User> spec = (root, query, cb) -> cb.equal(root.get("userType"), UserType.CAREGIVER);
+
+        if (province != null && !province.isBlank()) {
+            spec = spec.and((root, q, cb) -> cb.equal(root.get("province"), province));
+        }
+        if (available != null) {
+            spec = spec.and((root, q, cb) -> cb.equal(root.get("isActive"), available));
+        }
+        if (minExperience != null) {
+            spec = spec.and((root, q, cb) -> cb.greaterThanOrEqualTo(root.get("yearsOfExperience"), minExperience));
+        }
+        if (ageMin != null) {
+            spec = spec.and((root, q, cb) -> cb.greaterThanOrEqualTo(root.get("age"), ageMin));
+        }
+        if (ageMax != null) {
+            spec = spec.and((root, q, cb) -> cb.lessThanOrEqualTo(root.get("age"), ageMax));
+        }
+        if (languages != null && !languages.isBlank()) {
+            spec = spec.and((root, q, cb) -> cb.like(cb.lower(root.get("languages")), "%" + languages.toLowerCase() + "%"));
+        }
+        if (services != null && !services.isBlank()) {
+            spec = spec.and((root, q, cb) -> cb.like(cb.lower(root.get("servicesOffered")), "%" + services.toLowerCase() + "%"));
+        }
+        if (specializations != null && !specializations.isBlank()) {
+            spec = spec.and((root, q, cb) -> cb.like(cb.lower(root.get("specializations")), "%" + specializations.toLowerCase() + "%"));
+        }
+
+        Sort sortBy;
+        if ("experience".equalsIgnoreCase(sort)) {
+            sortBy = Sort.by(Sort.Direction.DESC, "yearsOfExperience");
+        } else if ("newest".equalsIgnoreCase(sort)) {
+            sortBy = Sort.by(Sort.Direction.DESC, "updatedAt");
+        } else {
+            sortBy = Sort.by(Sort.Direction.DESC, "profileCompletionPercentage");
+        }
+
+        Pageable pageable = PageRequest.of(Math.max(page, 0), Math.max(size, 1), sortBy);
+        Page<User> resultPage = userRepository.findAll(spec, pageable);
+
+        List<CaregiverSearchItemDto> items = new ArrayList<>();
+        for (User u : resultPage.getContent()) {
+            CaregiverSearchItemDto item = new CaregiverSearchItemDto();
+            item.setId(u.getId());
+            item.setDisplayName(u.getDisplayName());
+            item.setProfilePhotoUrl(u.getProfilePhotoUrl());
+            item.setProvince(u.getProvince());
+            item.setLanguages(u.getLanguages());
+            item.setServicesOffered(u.getServicesOffered());
+            item.setSpecializations(u.getSpecializations());
+            item.setYearsOfExperience(u.getYearsOfExperience());
+            item.setAge(u.getAge());
+            item.setProfileCompletionPercentage(u.getProfileCompletionPercentage());
+            item.setTotalRating(u.getTotalRating());
+            item.setTotalReviews(u.getTotalReviews());
+            items.add(item);
+        }
+
+        return new SearchResultsDto<>(items, resultPage.getTotalElements(), resultPage.getNumber(), resultPage.getSize());
     }
 
     private void validateCreateUserRequest(CreateUserRequest request) {

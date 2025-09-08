@@ -4,10 +4,12 @@
 /Users/shawn/Desktop/bin/code/mother_ducker/mother_ducker/backend/user-service/src/main/java/com/yuesaohub/platform/userservice/dto/FieldUpdateRequest.java
 /Users/shawn/Desktop/bin/code/mother_ducker/mother_ducker/backend/user-service/src/main/java/com/yuesaohub/platform/userservice/repository/UserRepository.java
 /Users/shawn/Desktop/bin/code/mother_ducker/mother_ducker/backend/user-service/src/main/java/com/yuesaohub/platform/userservice/entity/User.java
+/Users/shawn/Desktop/bin/code/mother_ducker/mother_ducker/backend/user-service/src/main/java/com/yuesaohub/platform/userservice/dto/CaregiverSearchItemDto.java
 /Users/shawn/Desktop/bin/code/mother_ducker/mother_ducker/backend/user-service/src/main/java/com/yuesaohub/platform/userservice/dto/UpdateProfileRequest.java
 /Users/shawn/Desktop/bin/code/mother_ducker/mother_ducker/backend/user-service/src/main/java/com/yuesaohub/platform/userservice/UserServiceApplication.java
 /Users/shawn/Desktop/bin/code/mother_ducker/mother_ducker/backend/user-service/src/main/java/com/yuesaohub/platform/userservice/service/UserService.java
 /Users/shawn/Desktop/bin/code/mother_ducker/mother_ducker/backend/user-service/src/main/java/com/yuesaohub/platform/userservice/entity/VerificationStatus.java
 /Users/shawn/Desktop/bin/code/mother_ducker/mother_ducker/backend/user-service/src/main/java/com/yuesaohub/platform/userservice/controller/UserController.java
+/Users/shawn/Desktop/bin/code/mother_ducker/mother_ducker/backend/user-service/src/main/java/com/yuesaohub/platform/userservice/dto/SearchResultsDto.java
 /Users/shawn/Desktop/bin/code/mother_ducker/mother_ducker/backend/user-service/src/main/java/com/yuesaohub/platform/userservice/dto/CreateUserRequest.java
 /Users/shawn/Desktop/bin/code/mother_ducker/mother_ducker/backend/user-service/src/main/java/com/yuesaohub/platform/userservice/event/UserCreatedEvent.java
