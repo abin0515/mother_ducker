@@ -14,16 +14,17 @@ const Badge = forwardRef<HTMLDivElement, BadgeProps>(
     
     const baseStyles = [
       'inline-flex items-center font-medium rounded-full',
-      'transition-colors duration-200'
+      'transition-all duration-250 transform-gpu',
+      'hover:scale-105 hover:shadow-medical' // Subtle hover effects
     ];
 
     const variantStyles = {
-      default: ['bg-gray-100 text-gray-800 border border-gray-200'],
-      success: ['bg-green-100 text-green-800 border border-green-200'],
-      warning: ['bg-yellow-100 text-yellow-800 border border-yellow-200'],
-      danger: ['bg-red-100 text-red-800 border border-red-200'],
-      info: ['bg-blue-100 text-blue-800 border border-blue-200'],
-      purple: ['bg-purple-100 text-purple-800 border border-purple-200']
+      default: ['bg-secondary-100 text-secondary-800 border border-secondary-200'],
+      success: ['bg-success-50 text-success-700 border border-success-500/20'],
+      warning: ['bg-warning-50 text-warning-700 border border-warning-500/20'],
+      danger: ['bg-error-50 text-error-700 border border-error-500/20'],
+      info: ['bg-info-50 text-info-700 border border-info-500/20'],
+      purple: ['bg-primary-50 text-primary-800 border border-primary-200']
     };
 
     const sizeStyles = {

@@ -13,13 +13,13 @@ const Card = forwardRef<HTMLDivElement, CardProps>(
   ({ className, variant = 'default', padding = 'md', children, ...props }, ref) => {
     
     const baseStyles = [
-      'bg-white rounded-lg transition-all duration-200'
+      'bg-white rounded-card transition-all duration-200'
     ];
 
     const variantStyles = {
-      default: ['border border-gray-200 shadow-sm'],
-      elevated: ['shadow-lg hover:shadow-xl border border-gray-100'],
-      outlined: ['border-2 border-gray-200 hover:border-gray-300'],
+      default: ['border border-secondary-200 shadow-medical'],
+      elevated: ['shadow-medical-lg hover:shadow-medical-xl border border-secondary-100'],
+      outlined: ['border-2 border-secondary-200 hover:border-primary-300'],
       ghost: ['border-0 shadow-none']
     };
 
@@ -77,8 +77,6 @@ export interface CardTitleProps extends HTMLAttributes<HTMLHeadingElement> {
 
 const CardTitle = forwardRef<HTMLHeadingElement, CardTitleProps>(
   ({ className, children, level = 3, ...props }, ref) => {
-    const Component = `h${level}` as keyof JSX.IntrinsicElements;
-    
     const levelStyles = {
       1: 'text-3xl font-bold',
       2: 'text-2xl font-bold', 
@@ -88,19 +86,25 @@ const CardTitle = forwardRef<HTMLHeadingElement, CardTitleProps>(
       6: 'text-xs font-semibold'
     };
 
-    return (
-      <Component
-        ref={ref}
-        className={cn(
-          'text-gray-900 leading-tight',
-          levelStyles[level],
-          className
-        )}
-        {...props}
-      >
-        {children}
-      </Component>
-    );
+    const commonProps = {
+      ref,
+      className: cn(
+        'text-secondary-900 leading-tight',
+        levelStyles[level],
+        className
+      ),
+      ...props
+    };
+
+    switch (level) {
+      case 1: return <h1 {...commonProps}>{children}</h1>;
+      case 2: return <h2 {...commonProps}>{children}</h2>;
+      case 3: return <h3 {...commonProps}>{children}</h3>;
+      case 4: return <h4 {...commonProps}>{children}</h4>;
+      case 5: return <h5 {...commonProps}>{children}</h5>;
+      case 6: return <h6 {...commonProps}>{children}</h6>;
+      default: return <h3 {...commonProps}>{children}</h3>;
+    }
   }
 );
 
@@ -115,7 +119,7 @@ const CardContent = forwardRef<HTMLDivElement, CardContentProps>(
   ({ className, children, ...props }, ref) => (
     <div
       ref={ref}
-      className={cn('text-gray-700', className)}
+      className={cn('text-secondary-600', className)}
       {...props}
     >
       {children}

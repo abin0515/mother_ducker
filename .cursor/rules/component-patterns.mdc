@@ -129,5 +129,8 @@ router.push('/dashboard');             // ❌ Incorrect
 - **Follow single responsibility** principle
 - **Use TypeScript interfaces** for all props
 - **Implement proper error handling** and loading states
+- **Use healthcare design system** components from `@/components/ui` (40+ components available)
+- **Apply medical styling** with `primary-*`, `medical-*`, and healthcare animations
+- **Prefer composition** with Dialog, Form, Menu, Tabs for complex interactions
 
-**Why**: Proper component patterns ensure maintainable code, good performance, and consistent user experience across the application.
+**Why**: Proper component patterns ensure maintainable code, good performance, and consistent healthcare professional user experience across the application.

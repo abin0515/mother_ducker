@@ -29,6 +29,69 @@ import SpinnerComponent, { LoadingOverlay as LoadingOverlayComponent } from './S
 import AlertComponent, { InfoAlert as InfoAlertComponent, SuccessAlert as SuccessAlertComponent, WarningAlert as WarningAlertComponent, ErrorAlert as ErrorAlertComponent } from './Alert';
 import TooltipComponent, { SimpleTooltip as SimpleTooltipComponent, HelpTooltip as HelpTooltipComponent } from './Tooltip';
 
+// New core components
+import { 
+  Dialog as DialogComponent,
+  DialogContent as DialogContentComponent,
+  DialogHeader as DialogHeaderComponent,
+  DialogTitle as DialogTitleComponent,
+  DialogClose as DialogCloseComponent,
+  DialogBody as DialogBodyComponent,
+  DialogFooter as DialogFooterComponent
+} from './Dialog';
+import { 
+  Form as FormComponent,
+  FormField as FormFieldComponent,
+  FormLabel as FormLabelComponent,
+  FormError as FormErrorComponent,
+  FormHelp as FormHelpComponent,
+  FormGroup as FormGroupComponent,
+  FormActions as FormActionsComponent
+} from './Form';
+import { 
+  Menu as MenuComponent,
+  MenuTrigger as MenuTriggerComponent,
+  MenuContent as MenuContentComponent,
+  MenuItem as MenuItemComponent,
+  MenuSeparator as MenuSeparatorComponent,
+  MenuLabel as MenuLabelComponent,
+  DropdownMenu as DropdownMenuComponent
+} from './Menu';
+import { 
+  Notification as NotificationComponent,
+  NotificationContainer as NotificationContainerComponent,
+  toast
+} from './Notification';
+import { 
+  Pagination as PaginationComponent,
+  PaginationInfo as PaginationInfoComponent
+} from './Pagination';
+import { 
+  Section as SectionComponent,
+  SectionContainer as SectionContainerComponent,
+  SectionHeaderLayout as SectionHeaderLayoutComponent,
+  SectionTitle as SectionTitleComponent,
+  SectionSubtitle as SectionSubtitleComponent,
+  SectionContent as SectionContentComponent,
+  SectionGrid as SectionGridComponent,
+  SectionActions as SectionActionsComponent
+} from './Sections';
+import { 
+  Tabs as TabsComponent,
+  TabsList as TabsListComponent,
+  TabsTrigger as TabsTriggerComponent,
+  TabsContent as TabsContentComponent,
+  TabsHeader as TabsHeaderComponent,
+  TabsTitle as TabsTitleComponent,
+  TabsDescription as TabsDescriptionComponent
+} from './Tabs';
+import { 
+  Tag as TagComponent,
+  TagList as TagListComponent,
+  TagInput as TagInputComponent,
+  TagFilter as TagFilterComponent
+} from './Tags';
+
 // ===== CORE COMPONENTS =====
 // Essential building blocks for consistent UI
 
@@ -93,6 +156,125 @@ export {
   HelpTooltipComponent as HelpTooltip
 };
 export type { TooltipProps, SimpleTooltipProps, HelpTooltipProps } from './Tooltip';
+
+// New core components exports
+export { 
+  DialogComponent as Dialog,
+  DialogContentComponent as DialogContent,
+  DialogHeaderComponent as DialogHeader,
+  DialogTitleComponent as DialogTitle,
+  DialogCloseComponent as DialogClose,
+  DialogBodyComponent as DialogBody,
+  DialogFooterComponent as DialogFooter
+};
+export type { 
+  DialogProps,
+  DialogContentProps,
+  DialogHeaderProps,
+  DialogTitleProps,
+  DialogCloseProps,
+  DialogBodyProps,
+  DialogFooterProps
+} from './Dialog';
+
+export { 
+  FormComponent as Form,
+  FormFieldComponent as FormField,
+  FormLabelComponent as FormLabel,
+  FormErrorComponent as FormError,
+  FormHelpComponent as FormHelp,
+  FormGroupComponent as FormGroup,
+  FormActionsComponent as FormActions
+};
+export type { 
+  FormProps,
+  FormFieldProps,
+  FormLabelProps,
+  FormErrorProps,
+  FormHelpProps,
+  FormGroupProps,
+  FormActionsProps
+} from './Form';
+
+export { 
+  MenuComponent as Menu,
+  MenuTriggerComponent as MenuTrigger,
+  MenuContentComponent as MenuContent,
+  MenuItemComponent as MenuItem,
+  MenuSeparatorComponent as MenuSeparator,
+  MenuLabelComponent as MenuLabel,
+  DropdownMenuComponent as DropdownMenu
+};
+export type { 
+  MenuProps,
+  MenuTriggerProps,
+  MenuContentProps,
+  MenuItemProps,
+  MenuSeparatorProps,
+  MenuLabelProps,
+  DropdownMenuProps
+} from './Menu';
+
+export { 
+  NotificationComponent as Notification,
+  NotificationContainerComponent as NotificationContainer,
+  toast
+};
+export type { NotificationProps, NotificationContainerProps, ToastProps } from './Notification';
+
+export { 
+  PaginationComponent as Pagination,
+  PaginationInfoComponent as PaginationInfo
+};
+export type { PaginationProps, PaginationInfoProps } from './Pagination';
+
+export { 
+  SectionComponent as Section,
+  SectionContainerComponent as SectionContainer,
+  SectionHeaderLayoutComponent as SectionHeaderLayout,
+  SectionTitleComponent as SectionTitle,
+  SectionSubtitleComponent as SectionSubtitle,
+  SectionContentComponent as SectionContent,
+  SectionGridComponent as SectionGrid,
+  SectionActionsComponent as SectionActions
+};
+export type { 
+  SectionProps,
+  SectionContainerProps,
+  SectionHeaderProps as SectionHeaderLayoutProps,
+  SectionTitleProps,
+  SectionSubtitleProps,
+  SectionContentProps,
+  SectionGridProps,
+  SectionActionsProps
+} from './Sections';
+
+export { 
+  TabsComponent as Tabs,
+  TabsListComponent as TabsList,
+  TabsTriggerComponent as TabsTrigger,
+  TabsContentComponent as TabsContent,
+  TabsHeaderComponent as TabsHeader,
+  TabsTitleComponent as TabsTitle,
+  TabsDescriptionComponent as TabsDescription
+};
+export type { 
+  TabsProps,
+  TabsListProps,
+  TabsTriggerProps,
+  TabsContentProps,
+  TabsHeaderProps,
+  TabsTitleProps,
+  TabsDescriptionProps
+} from './Tabs';
+
+export { 
+  TagComponent as Tag,
+  TagListComponent as TagList,
+  TagInputComponent as TagInput,
+  TagFilterComponent as TagFilter
+};
+export type { TagProps, TagListProps, TagInputProps, TagFilterProps } from './Tags';
 
 // ===== FORM COMPONENTS =====
 // Interactive elements for data input and selection
@@ -164,7 +346,45 @@ export const CoreComponents = {
   ErrorAlert: ErrorAlertComponent,
   Tooltip: TooltipComponent,
   SimpleTooltip: SimpleTooltipComponent,
-  HelpTooltip: HelpTooltipComponent
+  HelpTooltip: HelpTooltipComponent,
+  // New core components
+  Dialog: DialogComponent,
+  DialogContent: DialogContentComponent,
+  DialogHeader: DialogHeaderComponent,
+  DialogTitle: DialogTitleComponent,
+  DialogClose: DialogCloseComponent,
+  DialogBody: DialogBodyComponent,
+  DialogFooter: DialogFooterComponent,
+  Menu: MenuComponent,
+  MenuTrigger: MenuTriggerComponent,
+  MenuContent: MenuContentComponent,
+  MenuItem: MenuItemComponent,
+  MenuSeparator: MenuSeparatorComponent,
+  MenuLabel: MenuLabelComponent,
+  DropdownMenu: DropdownMenuComponent,
+  Notification: NotificationComponent,
+  NotificationContainer: NotificationContainerComponent,
+  Pagination: PaginationComponent,
+  PaginationInfo: PaginationInfoComponent,
+  Section: SectionComponent,
+  SectionContainer: SectionContainerComponent,
+  SectionHeaderLayout: SectionHeaderLayoutComponent,
+  SectionTitle: SectionTitleComponent,
+  SectionSubtitle: SectionSubtitleComponent,
+  SectionContent: SectionContentComponent,
+  SectionGrid: SectionGridComponent,
+  SectionActions: SectionActionsComponent,
+  Tabs: TabsComponent,
+  TabsList: TabsListComponent,
+  TabsTrigger: TabsTriggerComponent,
+  TabsContent: TabsContentComponent,
+  TabsHeader: TabsHeaderComponent,
+  TabsTitle: TabsTitleComponent,
+  TabsDescription: TabsDescriptionComponent,
+  Tag: TagComponent,
+  TagList: TagListComponent,
+  TagInput: TagInputComponent,
+  TagFilter: TagFilterComponent
 } as const;
 
 /**
@@ -172,10 +392,19 @@ export const CoreComponents = {
  */
 export const FormComponents = {
   Input: InputComponent,
+  Form: FormComponent,
+  FormField: FormFieldComponent,
+  FormLabel: FormLabelComponent,
+  FormError: FormErrorComponent,
+  FormHelp: FormHelpComponent,
+  FormGroup: FormGroupComponent,
+  FormActions: FormActionsComponent,
   LanguageSelector: LanguageSelectorComponent,
   SpecializationSelector: SpecializationSelectorComponent,
   ServiceSelector: ServiceSelectorComponent,
-  ProvinceSelector: ProvinceSelectorComponent
+  ProvinceSelector: ProvinceSelectorComponent,
+  TagInput: TagInputComponent,
+  TagFilter: TagFilterComponent
 } as const;
 
 /**

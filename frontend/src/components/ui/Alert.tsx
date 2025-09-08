@@ -31,19 +31,19 @@ const Alert = ({
     'rounded-lg border flex items-start space-x-3 transition-all duration-200'
   ];
 
-  // Variant styles
+  // Healthcare Professional Variant Styles
   const variantStyles = {
     info: [
-      'bg-blue-50 border-blue-200 text-blue-800'
+      'bg-info-50 border-info-500/20 text-info-700'
     ],
     success: [
-      'bg-green-50 border-green-200 text-green-800'
+      'bg-success-50 border-success-500/20 text-success-700'
     ],
     warning: [
-      'bg-yellow-50 border-yellow-200 text-yellow-800'
+      'bg-warning-50 border-warning-500/20 text-warning-700'
     ],
     error: [
-      'bg-red-50 border-red-200 text-red-800'
+      'bg-error-50 border-error-500/20 text-error-700'
     ]
   };
 
@@ -54,12 +54,12 @@ const Alert = ({
     lg: 'p-6 text-lg'
   };
 
-  // Icon styles
+  // Healthcare Professional Icon Styles
   const iconStyles = {
-    info: 'text-blue-500',
-    success: 'text-green-500',
-    warning: 'text-yellow-500',
-    error: 'text-red-500'
+    info: 'text-info-500',
+    success: 'text-success-500',
+    warning: 'text-warning-500',
+    error: 'text-error-500'
   };
 
   // Default icons

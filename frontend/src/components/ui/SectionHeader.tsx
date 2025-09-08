@@ -15,19 +15,19 @@ const SectionHeader = forwardRef<HTMLDivElement, SectionHeaderProps>(
     
     const variantStyles = {
       default: {
-        container: 'border-b border-gray-200 pb-4 mb-6',
-        title: 'text-lg font-semibold text-gray-900',
-        subtitle: 'text-sm text-gray-600 mt-1'
+        container: 'border-b border-secondary-200 pb-4 mb-6',
+        title: 'text-lg font-semibold text-secondary-900',
+        subtitle: 'text-sm text-secondary-600 mt-1'
       },
       prominent: {
-        container: 'border-b-2 border-blue-200 pb-6 mb-8',
-        title: 'text-xl font-bold text-gray-900',
-        subtitle: 'text-base text-gray-600 mt-2'
+        container: 'border-b-2 border-primary-200 pb-6 mb-8',
+        title: 'text-xl font-bold text-secondary-900',
+        subtitle: 'text-base text-secondary-600 mt-2'
       },
       subtle: {
         container: 'mb-4',
-        title: 'text-base font-medium text-gray-900',
-        subtitle: 'text-sm text-gray-500 mt-1'
+        title: 'text-base font-medium text-secondary-900',
+        subtitle: 'text-sm text-secondary-500 mt-1'
       }
     };
 

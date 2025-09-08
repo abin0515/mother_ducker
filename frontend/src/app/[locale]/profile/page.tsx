@@ -200,25 +200,28 @@ export default function ProfilePage() {
   const profile = profileData || backendUser;
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <div className="bg-white shadow">
+    <div className="min-h-screen bg-secondary-50">
+      {/* Healthcare Professional Header */}
+      <div className="bg-white shadow-medical animate-slide-down">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center py-6">
-            <h1 className="text-2xl font-bold text-gray-900">{t.profile.title}</h1>
+          <div className="flex justify-between items-center py-medical-lg">
+            <h1 className="text-medical-3xl font-bold text-secondary-900">{t.profile.title}</h1>
             <div className="flex items-center space-x-4">
               <Tooltip content={t.profile.tooltips.verificationStatus} position="bottom">
                 {getVerificationBadge(profile.verificationStatus)}
               </Tooltip>
               <Tooltip content={t.profile.tooltips.completionRate} position="bottom">
                 <div className="text-right cursor-help">
-                  <div className="text-sm font-medium text-gray-900">
+                  <div className="text-medical-sm font-medium text-secondary-900">
                     {t.profile.completionRate}: {profile.profileCompletionPercentage || 0}%
                   </div>
-                  <div className="w-32 bg-gray-200 rounded-full h-2 mt-1">
+                  <div className="w-32 bg-secondary-200 rounded-full h-2 mt-1 overflow-hidden">
                     <div 
-                      className="bg-blue-600 h-2 rounded-full" 
-                      style={{ width: `${profile.profileCompletionPercentage || 0}%` }}
+                      className="bg-primary-500 h-2 rounded-full animate-progress-fill transition-all duration-600" 
+                      style={{ 
+                        '--progress-width': `${profile.profileCompletionPercentage || 0}%`,
+                        width: `${profile.profileCompletionPercentage || 0}%` 
+                      } as React.CSSProperties}
                     ></div>
                   </div>
                 </div>
@@ -228,13 +231,13 @@ export default function ProfilePage() {
         </div>
       </div>
 
-      {/* Main Content */}
-      <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      {/* Healthcare Professional Main Content */}
+      <div className="max-w-7xl mx-auto py-section px-4 sm:px-6 lg:px-8 animate-fade-in">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-card mobile:gap-medical-md sm:gap-medical-lg lg:gap-card">
           
           {/* Left Column - Basic Info */}
-          <div className="lg:col-span-1">
-            <Card variant="elevated" padding="lg">
+          <div className="lg:col-span-1 animate-slide-up">
+            <Card variant="elevated" padding="lg" className="hover:shadow-medical-xl transition-all duration-350 hover:-translate-y-1">
               <div className="text-center">
                 {/* Profile Photo */}
                 <div className="flex justify-center">
@@ -249,9 +252,9 @@ export default function ProfilePage() {
                 </div>
                 
                 {/* Basic Info */}
-                <div className="mt-6">
+                <div className="mt-medical-lg">
                   <CardHeader>
-                    <CardTitle level={3}>{t.profile.sections.basicInfo}</CardTitle>
+                    <CardTitle level={3} className="text-medical-2xl">{t.profile.sections.basicInfo}</CardTitle>
                     <Button
                       variant="ghost"
                       size="sm"
@@ -267,45 +270,45 @@ export default function ProfilePage() {
                   </CardHeader>
                   
                   <CardContent>
-                    {/* Name Information */}
-                    <div className="text-center space-y-2 mb-4">
+                    {/* Name Information - Healthcare Professional Layout */}
+                    <div className="text-center space-y-medical-sm mb-medical-md">
                       <div>
-                        <span className="text-sm font-medium text-gray-700">{t.profile.fields.fullName}: </span>
-                        <span className="text-xl font-bold text-gray-900">{profile.fullName || t.profile.placeholders.fullName}</span>
+                        <span className="text-medical-sm font-medium text-secondary-600">{t.profile.fields.fullName}: </span>
+                        <span className="text-medical-2xl font-bold text-secondary-900">{profile.fullName || t.profile.placeholders.fullName}</span>
                       </div>
                       <div>
-                        <span className="text-sm font-medium text-gray-700">{t.profile.fields.displayName}: </span>
-                        <span className="text-gray-900 font-medium">{profile.displayName || t.profile.placeholders.displayName}</span>
+                        <span className="text-medical-sm font-medium text-secondary-600">{t.profile.fields.displayName}: </span>
+                        <span className="text-medical-lg text-secondary-800 font-medium">{profile.displayName || t.profile.placeholders.displayName}</span>
                       </div>
                     </div>
 
                     {/* User Type Badge */}
-                    <div className="flex justify-center mb-6">
+                    <div className="flex justify-center mb-medical-lg">
                       <Badge 
                         variant={profile.userType === 'CAREGIVER' ? 'purple' : 'info'} 
-                        size="md"
+                        size="lg"
                       >
                         {profile.userType === 'CAREGIVER' ? t.profile.userTypes.caregiver : t.profile.userTypes.parent}
                       </Badge>
                     </div>
 
-                    {/* Contact Information */}
-                    <div className="space-y-3 pt-4 border-t border-gray-100">
-                      <div className="flex items-center justify-between">
-                        <span className="text-sm font-medium text-gray-600">{t.profile.fields.age}</span>
-                        <span className="text-sm font-semibold text-gray-900">{profile.age || t.profile.placeholders.age}</span>
+                    {/* Contact Information - Healthcare Professional Layout */}
+                    <div className="space-y-medical-sm pt-medical-md border-t border-secondary-200">
+                      <div className="flex items-center justify-between py-medical-xs">
+                        <span className="text-medical-sm font-medium text-secondary-600">{t.profile.fields.age}</span>
+                        <span className="text-medical-sm font-semibold text-secondary-900">{profile.age || t.profile.placeholders.age}</span>
                       </div>
-                      <div className="flex items-center justify-between">
-                        <span className="text-sm font-medium text-gray-600">{t.profile.fields.phone}</span>
-                        <span className="text-sm text-gray-900">{profile.primaryPhone || t.profile.placeholders.phone}</span>
+                      <div className="flex items-center justify-between py-medical-xs">
+                        <span className="text-medical-sm font-medium text-secondary-600">{t.profile.fields.phone}</span>
+                        <span className="text-medical-sm text-secondary-900">{profile.primaryPhone || t.profile.placeholders.phone}</span>
                       </div>
-                      <div className="flex items-center justify-between">
-                        <span className="text-sm font-medium text-gray-600">{t.profile.fields.wechat}</span>
-                        <span className="text-sm text-gray-900">{profile.wechatId || t.profile.placeholders.wechat}</span>
+                      <div className="flex items-center justify-between py-medical-xs">
+                        <span className="text-medical-sm font-medium text-secondary-600">{t.profile.fields.wechat}</span>
+                        <span className="text-medical-sm text-secondary-900">{profile.wechatId || t.profile.placeholders.wechat}</span>
                       </div>
-                      <div className="flex items-center justify-between">
-                        <span className="text-sm font-medium text-gray-600">{t.profile.fields.location}</span>
-                        <span className="text-sm text-gray-900">{profile.province || t.profile.placeholders.province}</span>
+                      <div className="flex items-center justify-between py-medical-xs">
+                        <span className="text-medical-sm font-medium text-secondary-600">{t.profile.fields.location}</span>
+                        <span className="text-medical-sm text-secondary-900">{profile.province || t.profile.placeholders.province}</span>
                       </div>
                     </div>
                   </CardContent>
@@ -313,10 +316,10 @@ export default function ProfilePage() {
               </div>
             </Card>
             {/* Current Location Map */}
-            <div className="mt-6">
-              <Card variant="elevated" padding="md">
+            <div className="mt-card">
+              <Card variant="elevated" padding="lg" className="hover:shadow-medical-xl transition-all duration-350 hover:-translate-y-1">
                 <CardHeader>
-                  <CardTitle level={3}>{t.profile.location.currentLocation}</CardTitle>
+                  <CardTitle level={3} className="text-medical-xl">{t.profile.location.currentLocation}</CardTitle>
                   <Button
                     variant="ghost"
                     size="sm"
@@ -420,14 +423,14 @@ export default function ProfilePage() {
 
           
 
-          {/* Right Column - Detailed Info */}
-          <div className="lg:col-span-2 space-y-6">
+          {/* Right Column - Healthcare Professional Detailed Info */}
+          <div className="lg:col-span-2 space-y-card mobile:space-y-medical-md sm:space-y-medical-lg lg:space-y-card">
             
             {/* Professional Info (for Caregivers) */}
             {profile.userType === 'CAREGIVER' && (
-              <Card variant="elevated" padding="lg">
+              <Card variant="elevated" padding="lg" className="hover:shadow-medical-xl transition-all duration-350 hover:-translate-y-1 animate-slide-up" style={{ animationDelay: '0.1s' }}>
                 <CardHeader>
-                  <CardTitle level={3}>{t.profile.professional.title}</CardTitle>
+                  <CardTitle level={3} className="text-medical-2xl">{t.profile.professional.title}</CardTitle>
                   <Button
                     variant="ghost"
                     size="sm"
@@ -443,35 +446,35 @@ export default function ProfilePage() {
                 </CardHeader>
                 
                 <CardContent>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                      <label className="text-sm font-semibold text-gray-600">{t.profile.professional.experience}</label>
-                      <p className="mt-2 text-gray-900 font-medium">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-medical-lg mobile:gap-medical-md">
+                    <div className="space-y-medical-xs">
+                      <label className="text-medical-sm font-semibold text-secondary-600">{t.profile.professional.experience}</label>
+                      <p className="text-medical-lg text-secondary-900 font-medium">
                         {profile.yearsOfExperience ? formatWithParams(t.profile.professional.experienceYears, { years: profile.yearsOfExperience }) : t.profile.fields.notSet}
                       </p>
                     </div>
 
-                    <div>
-                      <label className="text-sm font-semibold text-gray-600">{t.profile.professional.languages}</label>
-                      <p className="mt-2 text-gray-900">{profile.languages || t.profile.fields.notSet}</p>
+                    <div className="space-y-medical-xs">
+                      <label className="text-medical-sm font-semibold text-secondary-600">{t.profile.professional.languages}</label>
+                      <p className="text-medical-base text-secondary-900">{profile.languages || t.profile.fields.notSet}</p>
                     </div>
                     
-                    <div>
-                      <label className="text-sm font-semibold text-gray-600">{t.profile.professional.rating}</label>
-                      <p className="mt-2 text-gray-900">
+                    <div className="space-y-medical-xs md:col-span-2">
+                      <label className="text-medical-sm font-semibold text-secondary-600">{t.profile.professional.rating}</label>
+                      <p className="text-medical-base text-secondary-900">
                         {profile.totalRating ? formatWithParams(t.profile.professional.ratingDisplay, { rating: profile.totalRating, reviews: profile.totalReviews }) : t.profile.professional.noRating}
                       </p>
                     </div>
                   </div>
                   
-                  <div className="mt-6 space-y-6 pt-6 border-t border-gray-100">
-                    <div>
-                      <label className="text-sm font-semibold text-gray-600">{t.profile.professional.specializations}</label>
-                      <p className="mt-2 text-gray-900 whitespace-pre-wrap leading-relaxed">{profile.specializations || t.profile.fields.notSet}</p>
+                  <div className="mt-medical-lg space-y-medical-lg pt-medical-lg border-t border-secondary-200">
+                    <div className="space-y-medical-xs">
+                      <label className="text-medical-sm font-semibold text-secondary-600">{t.profile.professional.specializations}</label>
+                      <p className="text-medical-base text-secondary-900 whitespace-pre-wrap leading-relaxed">{profile.specializations || t.profile.fields.notSet}</p>
                     </div>
-                    <div>
-                      <label className="text-sm font-semibold text-gray-600">{t.profile.professional.servicesOffered}</label>
-                      <p className="mt-2 text-gray-900 whitespace-pre-wrap leading-relaxed">{profile.servicesOffered || t.profile.fields.notSet}</p>
+                    <div className="space-y-medical-xs">
+                      <label className="text-medical-sm font-semibold text-secondary-600">{t.profile.professional.servicesOffered}</label>
+                      <p className="text-medical-base text-secondary-900 whitespace-pre-wrap leading-relaxed">{profile.servicesOffered || t.profile.fields.notSet}</p>
                     </div>
                   </div>
                 </CardContent>
@@ -479,9 +482,9 @@ export default function ProfilePage() {
             )}
 
             {/* About Me */}
-            <Card variant="elevated" padding="lg">
+            <Card variant="elevated" padding="lg" className="hover:shadow-medical-xl transition-all duration-350 hover:-translate-y-1 animate-slide-up" style={{ animationDelay: '0.2s' }}>
               <CardHeader>
-                <CardTitle level={3}>{t.profile.sections.aboutMe}</CardTitle>
+                <CardTitle level={3} className="text-medical-2xl">{t.profile.sections.aboutMe}</CardTitle>
                 <Button
                   variant="ghost"
                   size="sm"
@@ -497,7 +500,7 @@ export default function ProfilePage() {
               </CardHeader>
               
               <CardContent>
-                <p className="text-gray-900 whitespace-pre-wrap leading-relaxed">
+                <p className="text-medical-base text-secondary-900 whitespace-pre-wrap leading-relaxed">
                   {profile.aboutMe || t.profile.sections.aboutMeEmpty}
                 </p>
               </CardContent>
@@ -505,13 +508,13 @@ export default function ProfilePage() {
 
             {/* Professional Experience (for Caregivers) */}
             {profile.userType === 'CAREGIVER' && (
-              <Card variant="elevated" padding="lg">
+              <Card variant="elevated" padding="lg" className="hover:shadow-medical-xl transition-all duration-350 hover:-translate-y-1 animate-slide-up" style={{ animationDelay: '0.3s' }}>
                 <CardHeader>
-                  <CardTitle level={3}>{t.profile.sections.workExperience}</CardTitle>
+                  <CardTitle level={3} className="text-medical-2xl">{t.profile.sections.workExperience}</CardTitle>
                 </CardHeader>
                 
                 <CardContent>
-                  <p className="text-gray-900 whitespace-pre-wrap leading-relaxed">
+                  <p className="text-medical-base text-secondary-900 whitespace-pre-wrap leading-relaxed">
                     {profile.professionalExperience || t.profile.sections.workExperienceEmpty}
                   </p>
                 </CardContent>

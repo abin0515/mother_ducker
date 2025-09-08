@@ -21,20 +21,31 @@
 ">
 ```
 
-### Component Styling Patterns
+### Healthcare Professional Styling Patterns
 ```typescript
-// ✅ Good: Consistent button variants
+// ✅ Good: Healthcare professional button variants
 const buttonVariants = {
-  primary: "bg-blue-600 text-white hover:bg-blue-700 focus:ring-blue-500",
-  secondary: "bg-gray-200 text-gray-900 hover:bg-gray-300 focus:ring-gray-500",
-  danger: "bg-red-600 text-white hover:bg-red-700 focus:ring-red-500",
-  outline: "border border-gray-300 text-gray-700 hover:bg-gray-50 focus:ring-gray-500",
+  primary: "bg-primary-500 text-white hover:bg-primary-600 hover:shadow-medical-lg focus:ring-primary-500/20",
+  secondary: "bg-secondary-100 text-secondary-700 hover:bg-secondary-200 hover:shadow-medical-lg focus:ring-secondary-500/20",
+  danger: "bg-error-500 text-white hover:bg-error-600 hover:shadow-medical-lg focus:ring-error-500/20",
+  outline: "border border-secondary-200 text-secondary-700 hover:bg-secondary-50 focus:ring-secondary-500/20",
 } as const;
 
 const buttonSizes = {
-  sm: "px-3 py-1.5 text-sm",
-  md: "px-4 py-2 text-base",
-  lg: "px-6 py-3 text-lg",
+  sm: "px-3 py-1.5 text-medical-sm",
+  md: "px-4 py-2 text-medical-base", 
+  lg: "px-6 py-3 text-medical-lg",
+} as const;
+
+// ✅ Healthcare spacing and typography
+const medicalSpacing = {
+  xs: "medical-xs",    // 0.375rem - 6px
+  sm: "medical-sm",    // 0.75rem - 12px  
+  md: "medical-md",    // 1.25rem - 20px
+  lg: "medical-lg",    // 2rem - 32px
+  xl: "medical-xl",    // 3rem - 48px
+  section: "section",  // 2.5rem - 40px
+  card: "card",       // 1.5rem - 24px
 } as const;
 ```
 
@@ -61,16 +72,16 @@ const buttonSizes = {
 
 ## Interactive States
 
-### Hover, Focus, Active States
+### Healthcare Professional Interactive States
 ```typescript
-// ✅ Good: Complete interactive states
+// ✅ Good: Healthcare professional interactive states
 <button className="
-  bg-blue-600 text-white
-  hover:bg-blue-700
-  focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2
-  active:bg-blue-800
+  bg-primary-500 text-white shadow-medical rounded-medical
+  hover:bg-primary-600 hover:shadow-medical-lg hover:-translate-y-0.5
+  focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:ring-offset-2
+  active:scale-95 active:bg-primary-700
   disabled:opacity-50 disabled:cursor-not-allowed
-  transition-colors duration-200
+  transition-all duration-250 transform-gpu
 ">
 ```
 
@@ -105,7 +116,60 @@ const buttonSizes = {
 - **Include all interactive states** (hover, focus, active, disabled)
 - **Support dark mode** with `dark:` prefix
 - **Ensure accessibility** with proper focus management
-- **Use consistent spacing** and sizing scales
+- **Use healthcare professional spacing** (`medical-*`, `section`, `card`)
+- **Apply healthcare animations** (`animate-fade-in`, `animate-slide-up`, `animate-medical-spin`)
+- **Use medical color palette** (`primary-*`, `secondary-*`, `success/warning/error/info`)
 - **Leverage Tailwind's utility classes** instead of custom CSS
 
-**Why**: Consistent styling patterns improve maintainability, ensure responsive design, and provide better user experience across devices and themes.
+## Healthcare Professional Animations
+```typescript
+// ✅ Page entrance animations
+className="animate-fade-in"           // Gentle fade with upward movement
+className="animate-slide-up"          // Slides up from below
+className="animate-slide-down"        // Slides down from above
+
+// ✅ Loading states
+className="animate-medical-spin"      // Smooth medical-grade spinner
+className="animate-medical-pulse"     // Gentle pulsing for loading
+className="animate-progress-fill"     // Progress bar animation
+
+// ✅ Hover effects
+className="hover:-translate-y-0.5 hover:shadow-medical-lg transition-all duration-250"
+```
+
+## Component Examples
+
+```typescript
+// ✅ Dialog with healthcare styling
+<Dialog open={isOpen} onOpenChange={setIsOpen}>
+  <DialogContent>
+    <DialogHeader>
+      <DialogTitle>Medical Information</DialogTitle>
+      <DialogClose onClose={() => setIsOpen(false)} />
+    </DialogHeader>
+    <DialogBody>Content with medical-base typography</DialogBody>
+  </DialogContent>
+</Dialog>
+
+// ✅ Form with medical spacing
+<Form spacing="md">
+  <FormField>
+    <FormLabel required>Patient Name</FormLabel>
+    <Input className="text-medical-base" />
+    <FormError>Error with medical-sm text</FormError>
+  </FormField>
+</Form>
+
+// ✅ Tabs with healthcare colors
+<Tabs defaultValue="info">
+  <TabsList>
+    <TabsTrigger value="info">Information</TabsTrigger>
+    <TabsTrigger value="care">Care Plans</TabsTrigger>
+  </TabsList>
+  <TabsContent value="info" className="animate-fade-in">
+    Content with healthcare styling
+  </TabsContent>
+</Tabs>
+```
+
+**Why**: Healthcare professional styling patterns build trust, improve elderly user experience, and provide consistent medical-grade visual design across 40+ components.

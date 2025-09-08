@@ -36,11 +36,11 @@ const Spinner = ({
     yellow: 'text-yellow-600'
   };
 
-  // Default spinner (rotating circle)
+  // Default spinner (rotating circle) - Healthcare Professional
   const DefaultSpinner = () => (
     <svg
       className={cn(
-        'animate-spin',
+        'animate-medical-spin',
         sizeStyles[size],
         colorStyles[color],
         className
@@ -176,7 +176,7 @@ const LoadingOverlay = ({
       {children}
       
       {isLoading && (
-        <div className="absolute inset-0 bg-white bg-opacity-75 flex flex-col items-center justify-center z-10">
+        <div className="absolute inset-0 bg-white bg-opacity-80 backdrop-blur-medical flex flex-col items-center justify-center z-10 animate-fade-in">
           <Spinner {...spinner} />
           {message && (
             <p className="mt-3 text-sm text-gray-600 font-medium">

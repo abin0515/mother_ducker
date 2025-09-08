@@ -22,45 +22,48 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     ...props 
   }, ref) => {
     
-    // Base button styles
+    // Base button styles - Healthcare Professional Design
     const baseStyles = [
       'inline-flex items-center justify-center',
-      'font-medium rounded-lg transition-all duration-200',
+      'font-medium rounded-medical transition-all duration-250',
       'focus:outline-none focus:ring-2 focus:ring-offset-2',
       'disabled:opacity-50 disabled:cursor-not-allowed',
-      'active:scale-95' // Subtle press effect
+      'active:scale-95 transform-gpu', // Subtle press effect with GPU acceleration
+      'shadow-medical hover:shadow-medical-lg', // Enhanced shadow on hover
+      'hover:-translate-y-0.5' // Subtle lift effect
     ];
 
-    // Variant styles
+    // Healthcare Professional Variant Styles
     const variantStyles = {
       primary: [
-        'bg-blue-600 text-white shadow-sm',
-        'hover:bg-blue-700 hover:shadow-md',
-        'focus:ring-blue-500',
-        'disabled:hover:bg-blue-600'
+        'bg-primary-500 text-white',
+        'hover:bg-primary-600 hover:shadow-medical-lg',
+        'focus:ring-primary-500/20',
+        'disabled:hover:bg-primary-500'
       ],
       secondary: [
-        'bg-gray-100 text-gray-900 shadow-sm',
-        'hover:bg-gray-200 hover:shadow-md',
-        'focus:ring-gray-500',
-        'disabled:hover:bg-gray-100'
+        'bg-secondary-100 text-secondary-700',
+        'hover:bg-secondary-200 hover:shadow-medical-lg',
+        'focus:ring-secondary-500/20',
+        'disabled:hover:bg-secondary-100'
       ],
       ghost: [
-        'bg-transparent text-gray-700',
-        'hover:bg-gray-100 hover:text-gray-900',
-        'focus:ring-gray-500'
+        'bg-transparent text-secondary-600',
+        'hover:bg-secondary-100 hover:text-secondary-700',
+        'focus:ring-secondary-500/20',
+        'shadow-none'
       ],
       danger: [
-        'bg-red-600 text-white shadow-sm',
-        'hover:bg-red-700 hover:shadow-md',
-        'focus:ring-red-500',
-        'disabled:hover:bg-red-600'
+        'bg-error-500 text-white',
+        'hover:bg-error-600 hover:shadow-medical-lg',
+        'focus:ring-error-500/20',
+        'disabled:hover:bg-error-500'
       ],
       success: [
-        'bg-green-600 text-white shadow-sm',
-        'hover:bg-green-700 hover:shadow-md',
-        'focus:ring-green-500',
-        'disabled:hover:bg-green-600'
+        'bg-success-500 text-white',
+        'hover:bg-success-600 hover:shadow-medical-lg',
+        'focus:ring-success-500/20',
+        'disabled:hover:bg-success-500'
       ]
     };
 
