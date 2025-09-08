@@ -169,7 +169,7 @@ export default function ProfileAvatar({
         {currentAvatarUrl ? (
           <img
             src={currentAvatarUrl}
-            alt={`${fullName || displayName || 'User'} 的头像`}
+            alt={`${fullName || displayName || 'User'}${t.profile.avatar.altText}`}
             className={`${getSizeClasses()} rounded-full object-cover border-4 border-white shadow-lg ${
               isEditable ? 'cursor-pointer hover:opacity-90 transition-opacity' : ''
             }`}

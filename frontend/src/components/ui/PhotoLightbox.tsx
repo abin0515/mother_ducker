@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { getTranslations, Locale } from '@/lib/i18n';
 import { useParams } from 'next/navigation';
 
-interface PhotoLightboxProps {
+export interface PhotoLightboxProps {
   isOpen: boolean;
   photos: string[];
   currentIndex: number;

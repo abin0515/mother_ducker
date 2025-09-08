@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { getTranslations, Locale } from '@/lib/i18n';
 import { useParams } from 'next/navigation';
 
-interface SpecializationSelectorProps {
+export interface SpecializationSelectorProps {
   value: string;
   onChange: (value: string) => void;
   placeholder?: string;

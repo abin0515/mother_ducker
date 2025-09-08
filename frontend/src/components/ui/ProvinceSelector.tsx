@@ -2,7 +2,7 @@
 import { getTranslations, Locale } from '@/lib/i18n';
 import { useParams } from 'next/navigation';
 
-interface ProvinceSelectorProps {
+export interface ProvinceSelectorProps {
   value: string;
   onChange: (value: string) => void;
   placeholder?: string;

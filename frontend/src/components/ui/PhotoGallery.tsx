@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import PhotoLightbox from './PhotoLightbox';
 
-interface PhotoGalleryProps {
+export interface PhotoGalleryProps {
   photos: string[];
   title?: string;
   className?: string;

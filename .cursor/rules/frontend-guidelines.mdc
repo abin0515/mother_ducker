@@ -27,6 +27,7 @@ This is the main frontend guidelines file that references focused rule files for
 - Dark mode support
 - Accessibility patterns
 
+
 ### 📁 **app-router-patterns.mdc**
 - Next.js 13+ App Router file structure
 - Page components and layouts
@@ -65,6 +66,7 @@ This is the main frontend guidelines file that references focused rule files for
 **For Full Frontend Development:**
 - Apply all focused rule files or mention "frontend-guidelines"
 
+
 **For Internationalization:**
 - Apply `i18n-guidelines.mdc` + `component-patterns.mdc`
 
@@ -102,12 +104,34 @@ This is the main frontend guidelines file that references focused rule files for
 
 ### Core Directories
 - **`app/`**: Next.js App Router with locale-aware structure
-- **`components/`**: Reusable UI components including `LanguageSwitcher.tsx`
+- **`components/`**: Organized component structure:
+  - **`components/ui/`**: Design system components (Button, Card, Modal, Input, etc.)
+  - **`components/features/`**: Business logic components (ProfileEditModal, UserProfileForm, etc.)
+  - **`components/layout/`**: Page structure components (Navigation, etc.)
 - **`hooks/`**: Custom React hooks
 - **`lib/`**: Library configurations and utilities
 - **`types/`**: TypeScript type definitions
 
-*Note: Additional directories will be created as the project grows. Focus on maintaining the i18n structure and following the established patterns.*
+### Design System Components
+```typescript
+// ✅ Always import from centralized index
+import { Button, Card, Input, Modal, Alert, Spinner } from '@/components/ui';
+
+// ✅ Available components by category:
+// Core: Button, Card, Badge, SectionHeader
+// Forms: Input, Modal, LanguageSelector, SpecializationSelector, ServiceSelector, ProvinceSelector  
+// Media: PhotoGallery, PhotoLightbox, CurrentLocationMap
+// Feedback: Spinner, Alert, Tooltip
+// Navigation: LanguageSwitcher
+```
+
+**Design System Rules:**
+- ✅ **Prefer `@/components/ui` imports** for centralized management
+- ✅ **Use existing design system components** when they meet requirements
+- ✅ **Follow component composition patterns** (Card + CardHeader + CardContent)
+- ✅ **Extend design system** when creating new reusable components
+- ⚠️ **Avoid one-off custom components** - consider if they should be added to design system
+- ❌ **Don't duplicate existing functionality** without good reason
 
 ## File Naming Conventions
 
@@ -127,12 +151,13 @@ This is the main frontend guidelines file that references focused rule files for
 2. **Performance**: Leverage Server Components and automatic optimizations
 3. **Accessibility**: Follow WCAG guidelines and use semantic HTML
 4. **Responsive Design**: Mobile-first approach with Tailwind CSS
-5. **Code Organization**: Clear separation of concerns and consistent patterns
-6. **Error Handling**: Graceful error states and user feedback
-7. **SEO**: Proper metadata and semantic structure
-8. **Internationalization**: All user-facing content must support multiple languages
-9. **Locale-Aware Routing**: All pages must be under `[locale]` directory
-10. **Translation Management**: Use semantic translation keys and maintain both language files
+5. **Design System First**: Prefer components from `@/components/ui` when available, extend thoughtfully when needed
+6. **Code Organization**: Clear separation of concerns and consistent patterns
+7. **Error Handling**: Graceful error states and user feedback
+8. **SEO**: Proper metadata and semantic structure
+9. **Internationalization**: All user-facing content must support multiple languages
+10. **Locale-Aware Routing**: All pages must be under `[locale]` directory
+11. **Translation Management**: Use semantic translation keys and maintain both language files
 
 ## Quick Start Commands
 
@@ -146,6 +171,15 @@ This is the main frontend guidelines file that references focused rule files for
 "Follow tailwind-guidelines for styling"
 "Use app-router-patterns for Next.js structure"
 "Follow i18n-guidelines for multi-language support"
+
+# Design system usage
+"Use design system components from @/components/ui"
+"Create a form using Input, Button, and Modal components"
+"Build a page using Card, Badge, and SectionHeader components"
+
+# When to extend design system
+"Create a new reusable component and add it to @/components/ui"
+"Build a custom component for specific business logic in @/components/features"
 ```
 
 ## Important Notes

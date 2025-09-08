@@ -322,6 +322,7 @@
       "selectFiles": "Click to select files",
       "dragHere": "Drag images here, or",
       "dropToUpload": "Drop to upload images",
+      "uploadImages": "Upload Images",
       "uploading": "Uploading images...",
       "uploadProgress": "Upload Progress",
       "removeImage": "Remove image",
@@ -331,6 +332,7 @@
       "maxCount": "Up to {count} more",
       "selectImageFile": "Please select an image file",
       "fileTooLarge": "Image size cannot exceed {size}MB",
+      "tooManyFiles": "Maximum {count} images allowed",
       "unsupportedFormat": "Supported formats: JPG, PNG, WebP",
       "uploadTips": "Upload Tips:",
       "tip1": "Choose clear, well-lit photos",
@@ -398,7 +400,18 @@
       "viewOnGoogleMaps": "View on Google Maps",
       "getDirections": "Get Directions",
       "distanceFrom": "Distance from you",
-      "openingMaps": "Opening maps..."
+      "openingMaps": "Opening maps...",
+      "userLocation": "'s location"
+    },
+
+    "tooltips": {
+      "verificationStatus": "Account verification status",
+      "completionRate": "Complete more information to improve visibility",
+      "experienceHelper": "Please enter your years of experience"
+    },
+
+    "avatar": {
+      "altText": "'s avatar"
     }
   }
 }

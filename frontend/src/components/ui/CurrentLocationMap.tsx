@@ -11,7 +11,7 @@ declare global {
   }
 }
 
-interface CurrentLocationMapProps {
+export interface CurrentLocationMapProps {
   value?: string; // Format: "address|lat,lng" or just "lat,lng"
   onChange?: (location: string) => void;
   readonly?: boolean;

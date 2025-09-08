@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import { locales, type Locale, getPathnameWithoutLocale } from '@/lib/i18n';
 
-interface LanguageSwitcherProps {
+export interface LanguageSwitcherProps {
   currentLocale: Locale;
 }
 
@@ -25,7 +25,7 @@ export default function LanguageSwitcher({ currentLocale }: LanguageSwitcherProp
       case 'en':
         return 'English';
       case 'zh':
-        return '中文';
+        return 'Chinese';
       default:
         return locale;
     }

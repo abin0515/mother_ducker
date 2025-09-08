@@ -10,10 +10,17 @@ import ProfileEditModal from '@/components/features/profile/ProfileEditModal';
 import ProfileAvatar from '@/components/features/profile/ProfileAvatar';
 import PhotoGallery from '@/components/ui/PhotoGallery';
 import CurrentLocationMap from '@/components/ui/CurrentLocationMap';
-import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/Card';
-import Button from '@/components/ui/Button';
-import Badge from '@/components/ui/Badge';
-import SectionHeader from '@/components/ui/SectionHeader';
+import { 
+  Card, 
+  CardHeader, 
+  CardTitle, 
+  CardContent,
+  Button,
+  Badge,
+  SectionHeader,
+  Spinner,
+  Tooltip
+} from '@/components/ui';
 import { parseLocationString, openGoogleMaps, hasCoordinates } from '@/lib/mapUtils';
 
 export default function ProfilePage() {
@@ -158,7 +165,7 @@ export default function ProfilePage() {
   if (loading || loadingProfile) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900"></div>
+        <Spinner size="lg" />
       </div>
     );
   }
@@ -200,18 +207,22 @@ export default function ProfilePage() {
           <div className="flex justify-between items-center py-6">
             <h1 className="text-2xl font-bold text-gray-900">{t.profile.title}</h1>
             <div className="flex items-center space-x-4">
-              {getVerificationBadge(profile.verificationStatus)}
-              <div className="text-right">
-                <div className="text-sm font-medium text-gray-900">
-                  {t.profile.completionRate}: {profile.profileCompletionPercentage || 0}%
+              <Tooltip content={t.profile.tooltips.verificationStatus} position="bottom">
+                {getVerificationBadge(profile.verificationStatus)}
+              </Tooltip>
+              <Tooltip content={t.profile.tooltips.completionRate} position="bottom">
+                <div className="text-right cursor-help">
+                  <div className="text-sm font-medium text-gray-900">
+                    {t.profile.completionRate}: {profile.profileCompletionPercentage || 0}%
+                  </div>
+                  <div className="w-32 bg-gray-200 rounded-full h-2 mt-1">
+                    <div 
+                      className="bg-blue-600 h-2 rounded-full" 
+                      style={{ width: `${profile.profileCompletionPercentage || 0}%` }}
+                    ></div>
+                  </div>
                 </div>
-                <div className="w-32 bg-gray-200 rounded-full h-2 mt-1">
-                  <div 
-                    className="bg-blue-600 h-2 rounded-full" 
-                    style={{ width: `${profile.profileCompletionPercentage || 0}%` }}
-                  ></div>
-                </div>
-              </div>
+              </Tooltip>
             </div>
           </div>
         </div>
@@ -330,7 +341,7 @@ export default function ProfilePage() {
                       onClick={() => {
                         const location = parseLocationString(profile.currentLocation);
                         if (location) {
-                          openGoogleMaps(location, `${profile.displayName || profile.fullName}的位置`);
+                          openGoogleMaps(location, `${profile.displayName || profile.fullName}${t.profile.location.userLocation}`);
                         }
                       }}
                       className="mb-4 p-3 bg-blue-50 border border-blue-200 rounded-lg cursor-pointer hover:bg-blue-100 transition-colors relative group"

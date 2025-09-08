@@ -10,6 +10,7 @@ import SpecializationSelector from '../../ui/SpecializationSelector';
 import ServiceSelector from '../../ui/ServiceSelector';
 import ProvinceSelector from '../../ui/ProvinceSelector';
 import CurrentLocationMap from '../../ui/CurrentLocationMap';
+import { Button, Input, Alert, Modal, ModalHeader, ModalBody, ModalFooter } from '../../ui';
 
 interface ProfileEditModalProps {
   isOpen: boolean;
@@ -21,7 +22,7 @@ interface ProfileEditModalProps {
 
 /**
  * Modal for editing complex profile sections
- * Optimized for 月嫂 with large interface and clear navigation
+ * Optimized for postpartum caregivers with large interface and clear navigation
  */
 export default function ProfileEditModal({
   isOpen,
@@ -116,20 +117,16 @@ export default function ProfileEditModal({
         return (
           <div className="space-y-6">
             {/* Years of Experience */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                {t.profile.professional.experience}
-              </label>
-              <input
-                type="number"
-                value={formData.yearsOfExperience || ''}
-                onChange={(e) => handleInputChange('yearsOfExperience', parseInt(e.target.value) || 0)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                placeholder={t.profile.placeholders.experience}
-                min="0"
-                max="50"
-              />
-            </div>
+            <Input
+              label={t.profile.professional.experience}
+              type="number"
+              value={formData.yearsOfExperience || ''}
+              onChange={(e) => handleInputChange('yearsOfExperience', parseInt(e.target.value) || 0)}
+              placeholder={t.profile.placeholders.experience}
+              min="0"
+              max="50"
+              helperText={t.profile.tooltips.experienceHelper}
+            />
 
 
 
@@ -257,80 +254,65 @@ export default function ProfileEditModal({
         return (
           <div className="space-y-6">
             {/* Full Name */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                {t.profile.fields.fullName}
-              </label>
-              <input
-                type="text"
-                value={formData.fullName || ''}
-                onChange={(e) => handleInputChange('fullName', e.target.value)}
-                placeholder={t.profile.placeholders.fullName}
-                maxLength={50}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              />
-            </div>
+            <Input
+              label={t.profile.fields.fullName}
+              type="text"
+              value={formData.fullName || ''}
+              onChange={(e) => handleInputChange('fullName', e.target.value)}
+              placeholder={t.profile.placeholders.fullName}
+              maxLength={50}
+            />
 
             {/* Display Name */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                {t.profile.fields.displayName}
-              </label>
-              <input
-                type="text"
-                value={formData.displayName || ''}
-                onChange={(e) => handleInputChange('displayName', e.target.value)}
-                placeholder={t.profile.placeholders.displayName}
-                maxLength={30}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              />
-            </div>
+            <Input
+              label={t.profile.fields.displayName}
+              type="text"
+              value={formData.displayName || ''}
+              onChange={(e) => handleInputChange('displayName', e.target.value)}
+              placeholder={t.profile.placeholders.displayName}
+              maxLength={30}
+            />
 
             {/* Age */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                {t.profile.fields.age}
-              </label>
-              <input
-                type="number"
-                value={formData.age || ''}
-                onChange={(e) => handleInputChange('age', parseInt(e.target.value) || 0)}
-                placeholder={t.profile.placeholders.age}
-                min={18}
-                max={80}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              />
-            </div>
+            <Input
+              label={t.profile.fields.age}
+              type="number"
+              value={formData.age || ''}
+              onChange={(e) => handleInputChange('age', parseInt(e.target.value) || 0)}
+              placeholder={t.profile.placeholders.age}
+              min={18}
+              max={80}
+            />
 
             {/* Phone */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                {t.profile.fields.phone}
-              </label>
-              <input
-                type="tel"
-                value={formData.primaryPhone || ''}
-                onChange={(e) => handleInputChange('primaryPhone', e.target.value)}
-                placeholder={t.profile.placeholders.phone}
-                maxLength={20}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              />
-            </div>
+            <Input
+              label={t.profile.fields.phone}
+              type="tel"
+              value={formData.primaryPhone || ''}
+              onChange={(e) => handleInputChange('primaryPhone', e.target.value)}
+              placeholder={t.profile.placeholders.phone}
+              maxLength={20}
+              leftIcon={
+                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                </svg>
+              }
+            />
 
             {/* WeChat ID */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                {t.profile.fields.wechat}
-              </label>
-              <input
-                type="text"
-                value={formData.wechatId || ''}
-                onChange={(e) => handleInputChange('wechatId', e.target.value)}
-                placeholder={t.profile.placeholders.wechat}
-                maxLength={50}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              />
-            </div>
+            <Input
+              label={t.profile.fields.wechat}
+              type="text"
+              value={formData.wechatId || ''}
+              onChange={(e) => handleInputChange('wechatId', e.target.value)}
+              placeholder={t.profile.placeholders.wechat}
+              maxLength={50}
+              leftIcon={
+                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                </svg>
+              }
+            />
 
             {/* City */}
             <div>
@@ -369,70 +351,53 @@ export default function ProfileEditModal({
   };
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto">
-      {/* Backdrop */}
-      <div className="fixed inset-0 bg-black bg-opacity-50" onClick={onClose}></div>
+    <Modal
+      isOpen={isOpen}
+      onClose={onClose}
+      size="lg"
+      title={getSectionTitle()}
+    >
       
-      {/* Modal */}
-      <div className="relative min-h-screen flex items-center justify-center p-4">
-        <div className="relative bg-white rounded-lg shadow-xl w-full max-w-2xl max-h-[90vh] flex flex-col">
-          
-          {/* Header */}
-          <div className="flex items-center justify-between p-6 border-b border-gray-200">
-            <h2 className="text-xl font-semibold text-gray-900">
-              {getSectionTitle()}
-            </h2>
-            <button
-              onClick={onClose}
-              className="text-gray-400 hover:text-gray-600 transition-colors"
+      <ModalBody className="max-h-[60vh] overflow-y-auto">
+        {renderSectionContent()}
+      </ModalBody>
+      
+      <ModalFooter>
+        {/* Error Message */}
+        {error && (
+          <div className="w-full mb-4">
+            <Alert
+              variant="error"
+              dismissible
+              onDismiss={() => setError('')}
             >
-              <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            </button>
+              {error}
+            </Alert>
           </div>
-          
-          {/* Content */}
-          <div className="flex-1 overflow-y-auto p-6">
-            {renderSectionContent()}
-          </div>
-          
-          {/* Footer */}
-          <div className="flex items-center justify-between p-6 border-t border-gray-200">
-            {/* Error Message */}
-            {error && (
-              <div className="flex items-center text-red-600 text-sm">
-                <svg className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-                {error}
-              </div>
-            )}
-            
-            {/* Buttons */}
-            <div className="flex items-center space-x-3 ml-auto">
-              <button
-                onClick={onClose}
-                disabled={isSaving}
-                className="px-4 py-2 text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-              >
-                {t.profile.editing.cancel}
-              </button>
-              <button
-                onClick={handleSave}
-                disabled={isSaving}
-                className="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-2 transition-colors min-w-[80px] justify-center"
-              >
-                {isSaving ? (
-                  <div className="animate-spin h-4 w-4 border-2 border-white border-t-transparent rounded-full"></div>
-                ) : (
-                  <span>{t.profile.editing.save}</span>
-                )}
-              </button>
-            </div>
-          </div>
+        )}
+        
+        {/* Buttons */}
+        <div className="flex items-center space-x-3 ml-auto">
+          <Button
+            variant="secondary"
+            size="md"
+            onClick={onClose}
+            disabled={isSaving}
+          >
+            {t.profile.editing.cancel}
+          </Button>
+          <Button
+            variant="primary"
+            size="md"
+            onClick={handleSave}
+            disabled={isSaving}
+            loading={isSaving}
+            className="min-w-[80px]"
+          >
+            {t.profile.editing.save}
+          </Button>
         </div>
-      </div>
-    </div>
+      </ModalFooter>
+    </Modal>
   );
 }

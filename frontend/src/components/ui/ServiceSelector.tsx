@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { getTranslations, Locale } from '@/lib/i18n';
 import { useParams } from 'next/navigation';
 
-interface ServiceSelectorProps {
+export interface ServiceSelectorProps {
   value: string;
   onChange: (value: string) => void;
   placeholder?: string;

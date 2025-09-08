@@ -57,7 +57,7 @@ export default function ImageUploadSection({
     
     // Check if adding these files would exceed the limit
     if (images.length + fileArray.length > maxImages) {
-      setError(`最多只能上传 ${maxImages} 张图片`);
+      setError(t.profile.imageUpload.tooManyFiles.replace('{count}', maxImages.toString()));
       return;
     }
 
@@ -252,7 +252,7 @@ export default function ImageUploadSection({
               
               <div className="text-gray-600">
                 <div className="text-lg font-medium mb-2">
-                  {dragActive ? t.profile.imageUpload.dropToUpload : '上传图片'}
+                  {dragActive ? t.profile.imageUpload.dropToUpload : t.profile.imageUpload.uploadImages}
                 </div>
                 <div className="text-sm">
                   {t.profile.imageUpload.dragHere}
